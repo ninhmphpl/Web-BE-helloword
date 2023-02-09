@@ -2,28 +2,34 @@ package com.spring.web.service.impl;
 
 import com.spring.web.model.Province;
 import com.spring.web.service.IProvinceService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+@Service
 
 public class ProvinceService implements IProvinceService {
+    @Autowired
+    private asdfsRepository repository;
     @Override
     public Optional<Province> findById(Long aLong) {
-        return Optional.empty();
+        return repository.findById();
     }
 
     @Override
     public List<Province> findAll() {
-        return null;
+        return repository.findAll();
     }
 
     @Override
     public Province save(Province province) {
-        return null;
+        return repository.save(province);
     }
 
     @Override
     public void delete(Long aLong) {
+        repository.deleteById(aLong);
 
     }
 }

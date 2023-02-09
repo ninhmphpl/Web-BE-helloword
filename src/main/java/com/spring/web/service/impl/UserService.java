@@ -2,28 +2,34 @@ package com.spring.web.service.impl;
 
 import com.spring.web.model.User;
 import com.spring.web.service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+@Service
 
 public class UserService implements IUserService {
+    @Autowired
+    private asdfsRepository repository;
     @Override
     public Optional<User> findById(Long aLong) {
-        return Optional.empty();
+        return repository.findById();
     }
 
     @Override
     public List<User> findAll() {
-        return null;
+        return repository.findAll();
     }
 
     @Override
     public User save(User user) {
-        return null;
+        return repository.save(user);
     }
 
     @Override
     public void delete(Long aLong) {
+        repository.deleteById(aLong);
 
     }
 }
