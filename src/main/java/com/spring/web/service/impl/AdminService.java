@@ -1,6 +1,7 @@
 package com.spring.web.service.impl;
 
 import com.spring.web.model.Admin;
+import com.spring.web.repository.AdminRepository;
 import com.spring.web.service.IAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,12 +12,12 @@ import java.util.Optional;
 
 public class AdminService implements IAdminService {
     @Autowired
-    private asdfsRepository repository;
+    private AdminRepository repository;
 
     @Override
     public Optional<Admin> findById(Long aLong) {
 
-        return repository.findById();
+        return repository.findById(aLong);
     }
 
     @Override
@@ -33,7 +34,7 @@ public class AdminService implements IAdminService {
 
     @Override
     public void delete(Long aLong) {
-        repository.save(aLong)
+        repository.deleteById(aLong);
 
     }
 }

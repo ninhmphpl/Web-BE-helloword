@@ -1,6 +1,7 @@
 package com.spring.web.service.impl;
 
 import com.spring.web.model.Employee;
+import com.spring.web.repository.EmployeeRepository;
 import com.spring.web.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import java.util.Optional;
 @Service
 public class EmployeeService implements IEmployeeService {
     @Autowired
-    private asdfsRepository repository;
+    private EmployeeRepository repository;
     @Override
     public Optional<Employee> findById(Long aLong) {
         return repository.findById();

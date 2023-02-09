@@ -1,6 +1,7 @@
 package com.spring.web.service.impl;
 
 import com.spring.web.model.District;
+import com.spring.web.repository.DistricRepository;
 import com.spring.web.service.IDistrictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,10 +12,10 @@ import java.util.Optional;
 
 public class DistrictService implements IDistrictService {
     @Autowired
-    private asdfsRepository repository;
+    private DistricRepository repository;
     @Override
     public Optional<District> findById(Long aLong) {
-        return repository.findById()
+        return repository.findById(aLong);
     }
 
     @Override

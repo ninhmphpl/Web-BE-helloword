@@ -1,6 +1,7 @@
 package com.spring.web.service.impl;
 
 import com.spring.web.model.Role;
+import com.spring.web.repository.RoleRepository;
 import com.spring.web.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 public class RoleService implements IRoleService {
     @Autowired
-    private asdfsRepository repository;
+    private RoleRepository repository;
     @Override
     public Optional<Role> findById(Long aLong) {
         return repository.findById();

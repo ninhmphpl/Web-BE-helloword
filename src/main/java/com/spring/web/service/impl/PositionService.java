@@ -1,6 +1,7 @@
 package com.spring.web.service.impl;
 
 import com.spring.web.model.Position;
+import com.spring.web.repository.PositionRepository;
 import com.spring.web.service.IPositionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 public class PositionService implements IPositionService {
     @Autowired
-    private asdfsRepository repository;
+    private PositionRepository repository;
     @Override
     public Optional<Position> findById(Long aLong) {
         return repository.findById();

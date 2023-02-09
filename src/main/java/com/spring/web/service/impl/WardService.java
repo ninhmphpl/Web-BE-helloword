@@ -1,6 +1,8 @@
 package com.spring.web.service.impl;
 
 import com.spring.web.model.Ward;
+import com.spring.web.repository.AdminRepository;
+import com.spring.web.repository.WardRepository;
 import com.spring.web.service.IWardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +13,7 @@ import java.util.Optional;
 
 public class WardService implements IWardService {
     @Autowired
-    private asdfsRepository repository;
+    private WardRepository repository;
     @Override
     public Optional<Ward> findById(Long aLong) {
         return repository.findById();

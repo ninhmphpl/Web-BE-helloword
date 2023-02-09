@@ -1,6 +1,7 @@
 package com.spring.web.service.impl;
 
 import com.spring.web.model.Status;
+import com.spring.web.repository.StatusRepository;
 import com.spring.web.service.IStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 public class StatusService implements IStatusService {
     @Autowired
-    private asdfsRepository repository;
+    private StatusRepository repository;
     @Override
     public Optional<Status> findById(Long aLong) {
         return repository.findById();

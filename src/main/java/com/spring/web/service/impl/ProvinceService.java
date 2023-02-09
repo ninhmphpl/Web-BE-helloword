@@ -1,6 +1,7 @@
 package com.spring.web.service.impl;
 
 import com.spring.web.model.Province;
+import com.spring.web.repository.ProvinceRepository;
 import com.spring.web.service.IProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 public class ProvinceService implements IProvinceService {
     @Autowired
-    private asdfsRepository repository;
+    private ProvinceRepository repository;
     @Override
     public Optional<Province> findById(Long aLong) {
         return repository.findById();

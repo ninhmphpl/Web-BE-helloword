@@ -1,6 +1,7 @@
 package com.spring.web.service.impl;
 
 import com.spring.web.model.Seller;
+import com.spring.web.repository.SellerRepository;
 import com.spring.web.service.ISellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 public class SellerService implements ISellerService {
     @Autowired
-    private asdfsRepository repository;
+    private SellerRepository repository;
     @Override
     public Optional<Seller> findById(Long aLong) {
         return repository.findById();
