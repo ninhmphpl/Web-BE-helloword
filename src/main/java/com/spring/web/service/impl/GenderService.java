@@ -15,7 +15,7 @@ public class GenderService implements IGenderService {
     private GenderRepository repository;
     @Override
     public Optional<Gender> findById(Long aLong) {
-        return repository.findById();
+        return repository.findById(aLong);
     }
 
     @Override

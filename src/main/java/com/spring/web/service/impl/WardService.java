@@ -16,7 +16,7 @@ public class WardService implements IWardService {
     private WardRepository repository;
     @Override
     public Optional<Ward> findById(Long aLong) {
-        return repository.findById();
+        return repository.findById(aLong);
     }
 
     @Override

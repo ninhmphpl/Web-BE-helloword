@@ -1,6 +1,7 @@
 package com.spring.web.service.impl;
 
 import com.spring.web.model.User;
+import com.spring.web.repository.AddressRepository;
 import com.spring.web.repository.UserRepository;
 import com.spring.web.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,12 @@ import java.util.Optional;
 public class UserService implements IUserService {
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private AddressRepository addressRepository;
+
     @Override
     public Optional<User> findById(Long aLong) {
-        return repository.findById();
+        return repository.findById(aLong);
     }
 
     @Override

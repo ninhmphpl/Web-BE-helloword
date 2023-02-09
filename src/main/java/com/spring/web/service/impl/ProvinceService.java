@@ -15,7 +15,7 @@ public class ProvinceService implements IProvinceService {
     private ProvinceRepository repository;
     @Override
     public Optional<Province> findById(Long aLong) {
-        return repository.findById();
+        return repository.findById(aLong);
     }
 
     @Override

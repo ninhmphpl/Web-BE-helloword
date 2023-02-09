@@ -15,7 +15,7 @@ public class RoleService implements IRoleService {
     private RoleRepository repository;
     @Override
     public Optional<Role> findById(Long aLong) {
-        return repository.findById();
+        return repository.findById(aLong);
     }
 
     @Override

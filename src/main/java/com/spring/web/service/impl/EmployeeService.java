@@ -14,7 +14,7 @@ public class EmployeeService implements IEmployeeService {
     private EmployeeRepository repository;
     @Override
     public Optional<Employee> findById(Long aLong) {
-        return repository.findById();
+        return repository.findById(aLong);
     }
 
     @Override

@@ -15,7 +15,8 @@ public class PositionService implements IPositionService {
     private PositionRepository repository;
     @Override
     public Optional<Position> findById(Long aLong) {
-        return repository.findById();
+
+        return repository.findById(aLong);
     }
 
     @Override

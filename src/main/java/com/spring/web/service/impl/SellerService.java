@@ -15,7 +15,7 @@ public class SellerService implements ISellerService {
     private SellerRepository repository;
     @Override
     public Optional<Seller> findById(Long aLong) {
-        return repository.findById();
+        return repository.findById(aLong);
     }
 
     @Override
