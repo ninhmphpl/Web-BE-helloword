@@ -37,16 +37,16 @@ public class Employee {
   @Length(min = 10, max = 10)
   private String phoneNumber;
 
-  @Column(nullable = false)
   @ManyToOne
+  @JoinColumn(nullable = false)
   private Position position;
 
-  @Column(nullable = false)
   @ManyToOne
+  @JoinColumn(nullable = false)
   private Gender gender;
 
-  @Column(nullable = false)
   @ManyToOne
+  @JoinColumn(nullable = false)
   private Status status;
 
 

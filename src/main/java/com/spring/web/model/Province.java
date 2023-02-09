@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "province")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,5 +18,11 @@ public class Province {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false)
   private Long id;
+
+  @Column(name = "_name", nullable = false)
+  private String name;
+
+
+
 
 }

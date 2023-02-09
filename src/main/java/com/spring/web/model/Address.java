@@ -18,16 +18,16 @@ public class Address {
   @Column(nullable = false)
   private Long id;
 
-  @Column(nullable = false)
   @ManyToOne //>> tỉnh
+  @JoinColumn(name = "province_id")
   private Province province;
 
-  @Column(nullable = false)
   @ManyToOne //>> huyện
+  @JoinColumn(name = "district_id")
   private District district;
 
-  @Column(nullable = false)
   @ManyToOne //>> xã
+  @JoinColumn(name = "ward_id")
   private Ward ward;
 
   @Column(nullable = false)

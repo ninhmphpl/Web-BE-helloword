@@ -9,6 +9,7 @@ import javax.persistence.*;
 
 
 @Entity
+@Table(name = "district")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,7 +20,12 @@ public class District {
   @Column(nullable = false)
   private Long id;
 
-  @Column(nullable = false)
+  @Column(name = "_name",nullable = false)
   private String name;
+
+  @ManyToOne
+  @JoinColumn(name = "_province_id")
+  private Province province;
+
 }
 
