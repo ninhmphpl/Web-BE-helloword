@@ -8,5 +8,4 @@ import java.util.List;
 
 @Repository
 public interface StatusRepository extends JpaRepository<Status,Long> {
-    List<Status> findAllByNameContaining(String name);
 }

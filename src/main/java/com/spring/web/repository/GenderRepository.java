@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface GenderRepository extends JpaRepository<Gender,Long> {
-    List<Gender> findAllByNameContaining(String name);
 }

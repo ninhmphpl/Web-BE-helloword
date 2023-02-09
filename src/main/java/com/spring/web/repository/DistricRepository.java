@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface DistricRepository extends JpaRepository<District,Long> {
-    List<District> findAllByNameContaining(String name);
 }
