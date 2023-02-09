@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee,Long> {
+    Employee findEmployeeByName(String name);
 }

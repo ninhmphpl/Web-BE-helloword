@@ -12,6 +12,7 @@ import java.util.Optional;
 public class EmployeeService implements IEmployeeService {
     @Autowired
     private EmployeeRepository repository;
+
     @Override
     public Optional<Employee> findById(Long aLong) {
         return repository.findById(aLong);
@@ -29,6 +30,11 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public void delete(Long aLong) {
-    repository.deleteById(aLong);
+        repository.deleteById(aLong);
+    }
+
+
+    public Employee findEmployeeByName(String name) {
+        return repository.findEmployeeByName(name);
     }
 }
