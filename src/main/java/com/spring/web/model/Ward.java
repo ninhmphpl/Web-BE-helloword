@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "ward")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,6 +19,16 @@ public class Ward {
   @Column(nullable = false)
   private Long id;
 
-  @Column(nullable = false)
+  @Column(nullable = false, name = "_name")
   private String name;
+
+  @ManyToOne
+  @JoinColumn(name = "_district_id")
+  private District district;
+
+  @ManyToOne
+  @JoinColumn(name = "_province_id")
+  private Province province;
+
+
 }
