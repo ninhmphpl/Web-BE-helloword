@@ -1,6 +1,7 @@
 package com.spring.web.repository;
 
 import com.spring.web.model.Employee;
+import com.spring.web.model.EmployeeRender;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
