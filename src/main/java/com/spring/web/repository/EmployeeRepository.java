@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 @Transactional
 public interface EmployeeRepository extends JpaRepository<Employee,Long> {
-
+   List<Employee> findEmployeeByNameContaining(String name);
 }
