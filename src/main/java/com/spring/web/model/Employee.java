@@ -1,12 +1,11 @@
 package com.spring.web.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -29,7 +28,9 @@ public class Employee {
     private LocalDate birth;
 
     @Column(nullable = false)
-    @Size(min = 0, max = 100)
+   @Max(100)
+    @Min(16)
+    @Max(100)
     private Integer age;
 
     @Column(nullable = false)
@@ -49,9 +50,9 @@ public class Employee {
     @JoinColumn(nullable = false)
     private Status status;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(nullable = false)
-        private  User user;
+    private User user;
 
 
 }
