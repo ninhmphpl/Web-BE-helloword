@@ -32,4 +32,18 @@ public class ProductDetailService implements IProductDetailService {
     public void delete(Long aLong) {
 
     }
+
+    public ProductDetail addProduct(ProductDetail productDetail){
+        ProductDetail productDetail1= findById(productDetail.getId()).get();
+        productDetail1.setName(productDetail.getName());
+        productDetail1.setPrice(productDetail.getPrice());
+        productDetail1.setSold(productDetail.getSold());
+        productDetail1.setAvatar(productDetail.getAvatar());
+        productDetail1.setDescription(productDetail.getDescription());
+        productDetail1.setQuantity(productDetail.getQuantity());
+        productDetail1.setPicture(productDetail.getPicture());
+        productDetail.setCategory(productDetail.getCategory());
+        return repository.save(productDetail1);
+
+    }
 }

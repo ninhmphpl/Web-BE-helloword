@@ -21,4 +21,5 @@ public class Picture {
     @Column(nullable = false)
     private String name;
 
+
 }

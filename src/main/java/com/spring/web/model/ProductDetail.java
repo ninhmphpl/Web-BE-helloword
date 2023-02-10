@@ -50,6 +50,9 @@ public class ProductDetail {
     @ManyToOne
     private Category category;
 
+    @ManyToOne
+    private Status status;
+
 }
 
 
