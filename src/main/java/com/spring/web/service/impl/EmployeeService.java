@@ -34,7 +34,7 @@ public class EmployeeService implements IEmployeeService {
     }
 
 
-    public Employee findEmployeeByName(String name) {
-        return repository.findEmployeeByName(name);
+    public List<Employee> findAllByNameEmployee(String name) {
+        return repository.findEmployeeByNameContaining(name);
     }
 }
