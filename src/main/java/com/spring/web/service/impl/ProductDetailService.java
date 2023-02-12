@@ -40,17 +40,20 @@ public class ProductDetailService implements IProductDetailService {
      */
     @Override
     public ProductDetail updateProduct(ProductDetail productDetail){
-        ProductDetail productDetail1= findById(productDetail.getId()).get();
-        productDetail1.setName(productDetail.getName());
-        productDetail1.setPrice(productDetail.getPrice());
-        productDetail1.setSold(productDetail.getSold());
-        productDetail1.setAvatar(productDetail.getAvatar());
-        productDetail1.setDescription(productDetail.getDescription());
-        productDetail1.setQuantity(productDetail.getQuantity());
-        productDetail1.setPicture(productDetail.getPicture());
-        productDetail.setCategory(productDetail.getCategory());
-        return repository.save(productDetail1);
-
+        Optional<ProductDetail> productDetail1 = findById(productDetail.getId());
+        if(productDetail1.isPresent()){
+            ProductDetail result = productDetail1.get();
+            result.setName(productDetail.getName());
+            result.setPrice(productDetail.getPrice());
+            result.setSold(productDetail.getSold());
+            result.setAvatar(productDetail.getAvatar());
+            result.setDescription(productDetail.getDescription());
+            result.setQuantity(productDetail.getQuantity());
+            result.setPicture(productDetail.getPicture());
+            productDetail.setCategory(productDetail.getCategory());
+            return repository.save(result);
+        }
+        return null;
     }
 
     @Override
