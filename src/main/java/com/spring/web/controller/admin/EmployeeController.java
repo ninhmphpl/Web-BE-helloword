@@ -39,7 +39,7 @@ public class EmployeeController {
     private EmployeeService employeeServices;
 
     // Hiển thị toàn bộ emplooyee và phân trang
-    @GetMapping("/employee-list")
+        @GetMapping("/employee-list")
     public ResponseEntity<?> findAllPage(@PageableDefault(value = 5)
                                          @SortDefault(sort = "id", direction = DESC)
                                          Pageable pageable) {
@@ -73,6 +73,11 @@ public class EmployeeController {
     @GetMapping("/search")
     public ResponseEntity<List<Employee>> findSearch (@RequestParam("search") String search){
         return new ResponseEntity<>(employeeServices.findAllByNameEmployee(search), HttpStatus.OK);
+    }
+    @GetMapping("/get-employee/{id}")
+    public ResponseEntity<?>findEmployeeById(@PathVariable("id") Long id){
+            Employee employee =employeeService.findById(id).get();
+            return new ResponseEntity<>(employee,HttpStatus.OK);
     }
     @PostMapping
     public ResponseEntity<?> save (@RequestBody Employee employee){
