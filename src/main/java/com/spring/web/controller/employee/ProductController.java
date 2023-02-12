@@ -2,9 +2,9 @@ package com.spring.web.controller.employee;
 
 import com.spring.web.model.ProductDetail;
 import com.spring.web.model.ProductSimple;
+import com.spring.web.model.Status;
 import com.spring.web.service.IProductDetailService;
 import com.spring.web.service.IProductSimpleService;
-import com.spring.web.service.impl.ProductDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,9 +29,9 @@ public class ProductController {
     @Autowired
     private IProductDetailService productDetailService;
 
-    @Autowired
-    private ProductDetailService productDetailService2;
-
+    /**
+     * Tìm tất cả sản phẩm ở trang tùy chọn
+     */
     @GetMapping("/product-list")
     public ResponseEntity<?> findAllPage(@PageableDefault(value = 10)
                                              @SortDefault(sort = "id", direction = DESC)
@@ -46,6 +46,10 @@ public class ProductController {
 
         return new ResponseEntity<>(page , HttpStatus.OK);
     }
+
+    /**
+     * Tìm sản phẩm theo id của nó
+     */
     @GetMapping("/product-detail/{along}")
     public ResponseEntity<?> findOne(@PathVariable Long along) {
         Optional<ProductDetail> productDetail=productDetailService.findById(along);
@@ -54,6 +58,10 @@ public class ProductController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
     }
+
+    /**
+     * Tao sản phẩm
+     */
     @PostMapping("/product-create")
     public ResponseEntity<ProductDetail> create(@RequestBody ProductDetail productDetail){
         productDetail.setId(null);
@@ -61,30 +69,30 @@ public class ProductController {
         productDetailService.save(productDetail);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    @GetMapping("/product-edit/{along}")
-    public ResponseEntity<ProductDetail>edit(@PathVariable Long along){
-        Optional<ProductDetail>productDetail=productDetailService.findById(along);
-      if (productDetail.isPresent()){
-          return new ResponseEntity<>(productDetail.get(),HttpStatus.OK);
-      }
-        return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
-    }
-
+    /**
+     * Sửa thông tin sản phẩm
+     */
     @PutMapping("/product-edit/{along}")
     public ResponseEntity<ProductDetail> edit(@RequestBody ProductDetail productDetail) {
-        ProductDetail productDetail2 = productDetailService2.addProduct(productDetail);
+        ProductDetail productDetail2 = productDetailService.updateProduct(productDetail);
         return new ResponseEntity<>(productDetail2, HttpStatus.OK);
     }
 
+    /**
+     * Xóa 1 sản phẩm bằng cách sửa trạng thái của nó về startus có id = 2
+     */
     @DeleteMapping("/product-delete/{along}")
     public ResponseEntity<ProductDetail> delete(@PathVariable("along") Long along) {
         Optional<ProductDetail> productDetail = productDetailService.findById(along);
         if (productDetail.isPresent()) {
-            productDetailService.delete(along);
-            return new ResponseEntity<>(productDetail.get(), HttpStatus.OK);
+            ProductDetail result = productDetailService.deleteProductSetStatus(along, new Status(2L, null));
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
     }
+
+
+
+
 
 }

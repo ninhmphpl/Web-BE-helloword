@@ -1,6 +1,7 @@
 package com.spring.web.service.impl;
 
 import com.spring.web.model.ProductDetail;
+import com.spring.web.model.Status;
 import com.spring.web.repository.ProductDetailRepository;
 import com.spring.web.service.IProductDetailService;
 import lombok.extern.slf4j.Slf4j;
@@ -32,16 +33,13 @@ public class ProductDetailService implements IProductDetailService {
 
     @Override
     public void delete(Long aLong) {
-        ProductDetail productDetail= repository.findById(aLong).orElse(null);
-        if (productDetail != null) {
-            productDetail.setStatusId(Long.parseLong("2"));
-            log.info("=============> CAP NHAT THANH CONG BAN GHI CO THONG TIN MOI: " + productDetail);
-            repository.save(productDetail);
-        }
-
     }
 
-    public ProductDetail addProduct(ProductDetail productDetail){
+    /**
+     * Sửa thông tin cua sản phâm và lưu nó vào database
+     */
+    @Override
+    public ProductDetail updateProduct(ProductDetail productDetail){
         ProductDetail productDetail1= findById(productDetail.getId()).get();
         productDetail1.setName(productDetail.getName());
         productDetail1.setPrice(productDetail.getPrice());
@@ -53,5 +51,15 @@ public class ProductDetailService implements IProductDetailService {
         productDetail.setCategory(productDetail.getCategory());
         return repository.save(productDetail1);
 
+    }
+
+    @Override
+    public ProductDetail deleteProductSetStatus(Long product_id,Status status) {
+        ProductDetail productDetail= repository.findById(product_id).orElse(null);
+        if (productDetail != null) {
+            productDetail.setStatus(status);
+            productDetail = repository.save(productDetail);
+        }
+        return productDetail;
     }
 }

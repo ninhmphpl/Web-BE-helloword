@@ -53,10 +53,6 @@ public class ProductDetail {
     @ManyToOne
     private Status status;
 
-    @Column(name = "status_id")
-    @Transient
-    private Long statusId;
-
 }
 
 
