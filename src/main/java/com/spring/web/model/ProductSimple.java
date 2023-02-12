@@ -30,4 +30,8 @@ public class ProductSimple {
 
     @Column(nullable = false)
     private String avatar;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Category category;
 }
