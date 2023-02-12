@@ -1,5 +1,6 @@
 package com.spring.web.controller.employee;
 
+import com.spring.web.model.Category;
 import com.spring.web.model.ProductDetail;
 import com.spring.web.model.ProductSimple;
 import com.spring.web.model.Status;
@@ -89,6 +90,18 @@ public class ProductController {
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+    }
+
+    /**
+     * Tìm tất cả product theo category id
+     * Và hển thị theo trang
+     */
+    @GetMapping("/prodcut-list/category/{id}")
+    public ResponseEntity<?> findAllProductSimple (@PathVariable Long id,
+                                                   @PageableDefault(value = 10)
+                                                    @SortDefault(sort = "id", direction = DESC) Pageable pageable){
+        Page<ProductSimple> productSimples = productSimpleService.findAllPageAndCategory(pageable, new Category(id,null));
+        return new ResponseEntity<>(productSimples, HttpStatus.OK);
     }
 
 
