@@ -15,7 +15,9 @@ import java.util.Optional;
 public class ProductDetailService implements IProductDetailService {
 
     @Autowired
-    ProductDetailRepository repository;
+    private ProductDetailRepository repository;
+
+
     @Override
     public Optional<ProductDetail> findById(Long aLong) {
         return repository.findById(aLong);
@@ -53,6 +55,16 @@ public class ProductDetailService implements IProductDetailService {
             productDetail.setCategory(productDetail.getCategory());
             return repository.save(result);
         }
+        return null;
+    }
+
+    /**
+     * Thêm 1 product detail vào database
+     * @param productDetail
+     * @return
+     */
+    @Override
+    public ProductDetail createProduct(ProductDetail productDetail) {
         return null;
     }
 
