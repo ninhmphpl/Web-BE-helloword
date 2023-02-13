@@ -43,7 +43,7 @@ public class ProductDetail {
     @Min(0)
     private Integer quantity;
 
-    @OneToMany
+    @ManyToMany
     @JoinColumn(nullable = false)
     private List<Picture> picture;
 
