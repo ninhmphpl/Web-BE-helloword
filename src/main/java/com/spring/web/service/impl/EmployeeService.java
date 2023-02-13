@@ -54,9 +54,9 @@ public class EmployeeService implements IEmployeeService {
     public List<Employee> findAllByNameEmployee(String name) {
         return repository.findEmployeeByNameContaining(name);
     }
-    public EmployeeRender render(Employee employee){
-        return new EmployeeRender(repository.findAll(),
-                genderRepository.findAll(), positionRepository.findAll(),
-                employee);
-    }
+//    public EmployeeRender render(Employee employee){
+//        return new EmployeeRender(repository.findAll(),
+//                genderRepository.findAll(), positionRepository.findAll(),
+//                employee);
+//    }
 }

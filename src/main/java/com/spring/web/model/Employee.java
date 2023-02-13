@@ -28,9 +28,8 @@ public class Employee {
     private LocalDate birth;
 
     @Column(nullable = false)
-   @Max(100)
-    @Min(16)
     @Max(100)
+    @Min(16)
     private Integer age;
 
     @Column(nullable = false)

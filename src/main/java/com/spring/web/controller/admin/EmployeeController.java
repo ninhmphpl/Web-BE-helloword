@@ -1,12 +1,10 @@
 package com.spring.web.controller.admin;
 
-import com.spring.web.model.Employee;
-import com.spring.web.model.Position;
-import com.spring.web.model.Status;
+import com.spring.web.model.*;
 import com.spring.web.repository.EmployeeRepository;
 import com.spring.web.service.IEmployeeService;
-import com.spring.web.service.impl.EmployeeService;
-import com.spring.web.service.impl.PositionService;
+import com.spring.web.service.impl.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +35,23 @@ public class EmployeeController {
     private EmployeeRepository employeeRepository;
     @Autowired
     private EmployeeService employeeServices;
+    @Autowired
+    private GenderService gendersService;
+    @Autowired
+    private StatusService statusService;
+    @Autowired
+    private UserService userService;
+     @Autowired
+    private RoleService roleService;
+
+    @GetMapping("all-employee-render")
+    public ResponseEntity<?> findAllEmployeeRender() {
+        List <Gender> genders= gendersService.findAll();
+        List <Position> positions= positionService.findAll();
+        List <Status> statuses= statusService.findAll();
+        List <Role> roles= roleService.findAll();
+        return new ResponseEntity<>(new EmployeeRender(genders,positions,statuses,roles),HttpStatus.OK);
+        }
 
     // Hiển thị toàn bộ emplooyee và phân trang
         @GetMapping("/employee-list")

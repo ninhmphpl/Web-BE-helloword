@@ -14,9 +14,11 @@ import java.util.List;
 public class EmployeeRender {
     private List<Gender> genders;
     private List<Position> positions;
-    private Employee employee;
+    private List<Status> status;
+    private List<Role> roles;
+//    private Employee employee;
 
-    public EmployeeRender(List<Employee> all, List<Gender> all1, List<Position> all2, Employee employee) {
+    public EmployeeRender(List<Employee> all, List<Gender> all1, List<Position> all2, Employee employee,List<Status> all3,List<User> all4) {
     }
 
 }
