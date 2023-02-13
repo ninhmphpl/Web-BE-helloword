@@ -94,9 +94,9 @@ public class EmployeeController {
             Employee employee =employeeService.findById(id).get();
             return new ResponseEntity<>(employee,HttpStatus.OK);
     }
-    @PostMapping
-    public ResponseEntity<?> save (@RequestBody Employee employee){
-        employeeService.save(employee);
+    @PostMapping("/add")
+    public ResponseEntity<?> add (@RequestBody Employee employee){
+        employeeService.createEmployee(employee);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @PostMapping("employees")

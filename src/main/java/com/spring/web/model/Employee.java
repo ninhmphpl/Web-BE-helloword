@@ -9,6 +9,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -25,7 +26,7 @@ public class Employee {
     private String name;
 
     @Column(nullable = false)
-    private LocalDate birth;
+    private Date birth;
 
     @Column(nullable = false)
     @Max(100)

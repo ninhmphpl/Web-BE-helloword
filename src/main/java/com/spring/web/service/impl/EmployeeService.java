@@ -2,10 +2,13 @@ package com.spring.web.service.impl;
 
 import com.spring.web.model.Employee;
 import com.spring.web.model.EmployeeRender;
+import com.spring.web.model.User;
 import com.spring.web.repository.EmployeeRepository;
 import com.spring.web.repository.GenderRepository;
 import com.spring.web.repository.PositionRepository;
+import com.spring.web.repository.UserRepository;
 import com.spring.web.service.IEmployeeService;
+import com.spring.web.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +26,10 @@ public class EmployeeService implements IEmployeeService {
     private GenderRepository genderRepository;
     @Autowired
     private PositionRepository positionRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
 
     @Override
     public Optional<Employee> findById(Long aLong) {
@@ -49,6 +56,15 @@ public class EmployeeService implements IEmployeeService {
         return repository.findAll(pageable);
     }
 
+    @Override
+    public Employee createEmployee(Employee employee) {
+        employee.setId(null);
+        employee.getUser().setId(null);
+        User user = userRepository.save(employee.getUser());
+        employee.setUser(user);
+        Employee result = repository.save(employee);
+        return result;
+    }
 
 
     public List<Employee> findAllByNameEmployee(String name) {
