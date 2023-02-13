@@ -1,13 +1,16 @@
 package com.spring.web.service.impl;
 
+import com.spring.web.model.Picture;
 import com.spring.web.model.ProductDetail;
 import com.spring.web.model.Status;
+import com.spring.web.repository.PictureRepository;
 import com.spring.web.repository.ProductDetailRepository;
 import com.spring.web.service.IProductDetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -16,6 +19,8 @@ public class ProductDetailService implements IProductDetailService {
 
     @Autowired
     private ProductDetailRepository repository;
+    @Autowired
+    private PictureRepository pictureRepository;
 
 
     @Override
@@ -59,13 +64,25 @@ public class ProductDetailService implements IProductDetailService {
     }
 
     /**
-     * Thêm 1 product detail vào database
-     * @param productDetail
-     * @return
+     * Tạo 1 product detail vào database
      */
     @Override
     public ProductDetail createProduct(ProductDetail productDetail) {
-        return null;
+        //>> lưu ảnh mới vào trong database và gán lại id sau khi lưu vào cho nó
+        List<Picture> pictureList = new ArrayList<>();
+        for (Picture picture : productDetail.getPicture()){
+            //>> Loại bỏ trường hợp trùng id trong database gây ra nhầm ảnh
+            picture.setId(null);
+            pictureList.add(pictureRepository.save(picture));
+        }
+        productDetail.setId(null);
+        productDetail.setPicture(pictureList);
+        //>> đặt avata là ảnh đầu tiên của picture
+        productDetail.setAvatar(pictureList.get(0).getName());
+        productDetail.setSold(0);
+        //>> mặc định status là 1 (nghĩa là mở)
+        productDetail.setStatus(new Status(1L, null));
+        return  repository.save(productDetail);
     }
 
     @Override

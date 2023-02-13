@@ -65,10 +65,8 @@ public class ProductController {
      */
     @PostMapping("/product-create")
     public ResponseEntity<ProductDetail> create(@RequestBody ProductDetail productDetail){
-        productDetail.setId(null);
-        productDetail.setSold(0);
-        productDetailService.save(productDetail);
-        return new ResponseEntity<>(HttpStatus.OK);
+        ProductDetail productResult = productDetailService.createProduct(productDetail);
+        return new ResponseEntity<>(productResult, HttpStatus.OK);
     }
     /**
      * Sửa thông tin sản phẩm
