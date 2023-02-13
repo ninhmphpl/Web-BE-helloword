@@ -97,10 +97,20 @@ public class ProductController {
      * Và hển thị theo trang
      */
     @GetMapping("/prodcut-list/category/{id}")
-    public ResponseEntity<?> findAllProductSimple (@PathVariable Long id,
+    public ResponseEntity<?> findAllProductSimpleAndCategory (@PathVariable Long id,
                                                    @PageableDefault(value = 10)
                                                     @SortDefault(sort = "id", direction = DESC) Pageable pageable){
         Page<ProductSimple> productSimples = productSimpleService.findAllPageAndCategory(pageable, new Category(id,null));
+        return new ResponseEntity<>(productSimples, HttpStatus.OK);
+    }
+    /**
+     * Tìm tất cả product theo name
+     * Hiển thị theo trang
+     */
+    @GetMapping("/product-list/search")
+    public ResponseEntity<?> findAllProductSimpleAndSearch (@RequestParam(name = "search") String search,
+                                                   @PageableDefault(value = 10) Pageable pageable){
+        Page<ProductSimple> productSimples = productSimpleService.findAllPageAndNameContaining(pageable, search);
         return new ResponseEntity<>(productSimples, HttpStatus.OK);
     }
 
