@@ -26,7 +26,7 @@ public class Employee {
     private String name;
 
     @Column(nullable = false)
-    private Date birth;
+    private LocalDate birth;
 
     @Column(nullable = false)
     @Max(100)

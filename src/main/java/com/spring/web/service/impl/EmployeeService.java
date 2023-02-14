@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,11 +24,6 @@ import java.util.Optional;
 public class EmployeeService implements IEmployeeService {
     @Autowired
     private EmployeeRepository repository;
-    @Autowired
-    private GenderRepository genderRepository;
-    @Autowired
-    private PositionRepository positionRepository;
-
     @Autowired
     private UserRepository userRepository;
 
@@ -55,20 +52,26 @@ public class EmployeeService implements IEmployeeService {
     public Page<Employee> findAllPage(Pageable pageable) {
         return repository.findAll(pageable);
     }
-
     @Override
     public Employee createEmployee(Employee employee) {
         employee.setId(null);
         employee.getUser().setId(null);
         User user = userRepository.save(employee.getUser());
         employee.setUser(user);
+        LocalDate localDate =employee.getBirth();
+        int age = calculateAge(localDate);
+        System.out.println(age);
+        employee.setAge(age);
         Employee result = repository.save(employee);
         return result;
     }
+    public int calculateAge(
+            LocalDate birthDate) {
+        return Period.between(birthDate, LocalDate.now()).getYears();
+    }
 
-
-    public List<Employee> findAllByNameEmployee(String name) {
-        return repository.findEmployeeByNameContaining(name);
+    public Page <Employee> findAllByNameEmployee(String name,Pageable pageable) {
+        return repository.findEmployeeByNameContaining(name,pageable);
     }
 //    public EmployeeRender render(Employee employee){
 //        return new EmployeeRender(repository.findAll(),

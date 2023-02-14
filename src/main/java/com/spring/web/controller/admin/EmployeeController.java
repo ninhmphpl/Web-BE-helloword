@@ -30,31 +30,13 @@ public class EmployeeController {
     @Autowired
     private IEmployeeService employeeService;
     @Autowired
-    private PositionService positionService;
-    @Autowired
     private EmployeeRepository employeeRepository;
     @Autowired
     private EmployeeService employeeServices;
-    @Autowired
-    private GenderService gendersService;
-    @Autowired
-    private StatusService statusService;
-    @Autowired
-    private UserService userService;
-     @Autowired
-    private RoleService roleService;
 
-    @GetMapping("all-employee-render")
-    public ResponseEntity<?> findAllEmployeeRender() {
-        List <Gender> genders= gendersService.findAll();
-        List <Position> positions= positionService.findAll();
-        List <Status> statuses= statusService.findAll();
-        List <Role> roles= roleService.findAll();
-        return new ResponseEntity<>(new EmployeeRender(genders,positions,statuses,roles),HttpStatus.OK);
-        }
 
     // Hiển thị toàn bộ emplooyee và phân trang
-        @GetMapping("/employee-list")
+    @GetMapping("/employee-list")
     public ResponseEntity<?> findAllPage(@PageableDefault(value = 5)
                                          @SortDefault(sort = "id", direction = DESC)
                                          Pageable pageable) {
@@ -77,53 +59,63 @@ public class EmployeeController {
         employee.setPosition(new Position(position, null, null));
         return new ResponseEntity<>(employeeService.save(employee), HttpStatus.OK);
     }
-//    Phương thức xóa mềm nhân viên
+
+    //    Phương thức xóa mềm nhân viên
     @PutMapping("/delete-employee/{id}/{status}")
-    public ResponseEntity<?> updateStatus(@PathVariable("id") Long id,@PathVariable("status") Long status) {
+    public ResponseEntity<?> updateStatus(@PathVariable("id") Long id, @PathVariable("status") Long status) {
         Employee employee = employeeService.findById(id).get();
-        employee.setStatus(new Status(status,null));
-        return new ResponseEntity<>(employeeService.save(employee),HttpStatus.OK);
+        employee.setStatus(new Status(status, null));
+        return new ResponseEntity<>(employeeService.save(employee), HttpStatus.OK);
     }
+
     // Phương thức tìm kiếm nhân viên
-    @GetMapping("/search")
-    public ResponseEntity<List<Employee>> findSearch (@RequestParam("search") String search){
-        return new ResponseEntity<>(employeeServices.findAllByNameEmployee(search), HttpStatus.OK);
+    @GetMapping("/searchname")
+    public ResponseEntity<?> findSearch(@RequestParam("searchname") String search,@PageableDefault(value = 5)
+    @SortDefault(sort = "id", direction = DESC)
+    Pageable pageable) {
+        Page<Employee> page = employeeServices.findAllByNameEmployee(search,pageable);
+        if (pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0) {
+            System.out.println("Page Number out range page");
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        }
+
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
+
     @GetMapping("/get-employee/{id}")
-    public ResponseEntity<?>findEmployeeById(@PathVariable("id") Long id){
-            Employee employee =employeeService.findById(id).get();
-            return new ResponseEntity<>(employee,HttpStatus.OK);
+    public ResponseEntity<?> findEmployeeById(@PathVariable("id") Long id) {
+        Employee employee = employeeService.findById(id).get();
+        return new ResponseEntity<>(employee, HttpStatus.OK);
     }
+
     @PostMapping("/add")
-    public ResponseEntity<?> add (@RequestBody Employee employee){
+    public ResponseEntity<?> add(@RequestBody Employee employee) {
         employeeService.createEmployee(employee);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @PostMapping("employees")
-    public Employee createEmployee (@Valid @RequestBody Employee employee){
+    public Employee createEmployee(@Valid @RequestBody Employee employee) {
         return employeeRepository.save(employee);
     }
+
     // XOá thẳng nhân viên khỏi base
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteEmployee (@PathVariable Long id){
+    public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
         employeeRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    //    @GetMapping("/{id}")
-//    public ResponseEntity<?> renderUpdate(@PathVariable Long id){
-//        Employee employee = employeeService.findById(id).get();
-//        EmployeeRender employeeRender = employeeService.render(employee);
-//        return new ResponseEntity<>(employeeRender, HttpStatus.OK);
-//    }
+
     @PutMapping
-    public ResponseEntity<?> update (@RequestBody Employee employee){
+    public ResponseEntity<?> update(@RequestBody Employee employee) {
         employeeService.save(employee);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     // Phương thức update Nhân Viên ( đang giai đoạn kiểm thử)
     @PutMapping("employees/{id}")
-    public ResponseEntity<Employee> updateEmployee (@PathVariable(value = "id") Long id,
-                                                    @Valid @RequestBody Employee employee) throws Exception {
+    public ResponseEntity<Employee> updateEmployee(@PathVariable(value = "id") Long id,
+                                                   @Valid @RequestBody Employee employee) throws Exception {
         Employee employees = employeeRepository.findById(id)
                 .orElseThrow(() -> new ExpressionException("Nhân viên này không tồn tại: " + id));
 
