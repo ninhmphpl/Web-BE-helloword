@@ -9,12 +9,15 @@ import com.spring.web.service.IProductDetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Service
 @Slf4j
+@Transactional
 public class ProductDetailService implements IProductDetailService {
 
     @Autowired
@@ -47,16 +50,24 @@ public class ProductDetailService implements IProductDetailService {
      */
     @Override
     public ProductDetail updateProduct(ProductDetail productDetail){
-        Optional<ProductDetail> productDetail1 = findById(productDetail.getId());
-        if(productDetail1.isPresent()){
-            ProductDetail result = productDetail1.get();
+        Optional<ProductDetail> productBase = findById(productDetail.getId());
+        if (productBase.isPresent()) {
+            ProductDetail result = productBase.get();
             result.setName(productDetail.getName());
             result.setPrice(productDetail.getPrice());
-            result.setSold(productDetail.getSold());
-            result.setAvatar(productDetail.getAvatar());
             result.setDescription(productDetail.getDescription());
             result.setQuantity(productDetail.getQuantity());
-            result.setPicture(productDetail.getPicture());
+
+            if (!productDetail.getPicture().equals(result.getPicture())) {
+                List<Picture> pictureList = new ArrayList<>();
+                for (Picture picture : productDetail.getPicture()){
+                    //>> Loại bỏ trường hợp trùng id trong database gây ra nhầm ảnh
+                    picture.setId(null);
+                    pictureList.add(pictureRepository.save(picture));
+                }
+                result.setPicture(pictureList);
+            }
+            result.setAvatar(result.getPicture().get(0).getName());
             productDetail.setCategory(productDetail.getCategory());
             return repository.save(result);
         }
