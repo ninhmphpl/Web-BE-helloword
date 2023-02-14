@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @RestController
@@ -36,9 +37,7 @@ public class EmployeeController {
 
 
     // Hiển thị toàn bộ emplooyee và phân trang
-    @GetMapping("/employee-list")
-    public ResponseEntity<?> findAllPage(@PageableDefault(value = 5)
-                                         @SortDefault(sort = "id", direction = DESC)
+
         @GetMapping("/employee-list")
     public ResponseEntity<?> findAllPage(@PageableDefault(value = 10)
                                          @SortDefault(sort = "id", direction = ASC)
