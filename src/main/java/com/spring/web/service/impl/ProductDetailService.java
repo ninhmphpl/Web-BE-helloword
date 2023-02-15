@@ -110,7 +110,7 @@ public class ProductDetailService implements IProductDetailService {
 //tìm kiếm theo tên, khoảng giá, khoảng số lượng
     @Override
     public Page<ProductDetail> search(SearchRequestDTO request, Pageable pageable) {
-        Page<ProductDetail> page = repository.getListProduct(request.getKeyword(), request.getFromQuantity(),
+        Page<ProductDetail> page = repository.getListProduct1(request.getKeyword(), request.getFromQuantity(),
                 request.getToQuantity(), request.getFromPrice(), request.getToPrice(), pageable);
 
         return page;
