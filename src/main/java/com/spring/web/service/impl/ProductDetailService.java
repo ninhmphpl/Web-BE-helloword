@@ -2,15 +2,17 @@ package com.spring.web.service.impl;
 
 import com.spring.web.model.Picture;
 import com.spring.web.model.ProductDetail;
+import com.spring.web.model.SearchRequestDTO;
 import com.spring.web.model.Status;
 import com.spring.web.repository.PictureRepository;
 import com.spring.web.repository.ProductDetailRepository;
 import com.spring.web.service.IProductDetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,12 +99,22 @@ public class ProductDetailService implements IProductDetailService {
     }
 
     @Override
-    public ProductDetail deleteProductSetStatus(Long product_id,Status status) {
-        ProductDetail productDetail= repository.findById(product_id).orElse(null);
+    public ProductDetail deleteProductSetStatus(Long product_id, Status status) {
+        ProductDetail productDetail = repository.findById(product_id).orElse(null);
         if (productDetail != null) {
             productDetail.setStatus(status);
             productDetail = repository.save(productDetail);
         }
         return productDetail;
     }
+//tìm kiếm theo tên, khoảng giá, khoảng số lượng
+    @Override
+    public Page<ProductDetail> search(SearchRequestDTO request, Pageable pageable) {
+        Page<ProductDetail> page = repository.getListProduct(request.getKeyword(), request.getFromQuantity(),
+                request.getToQuantity(), request.getFromPrice(), request.getToPrice(), pageable);
+
+        return page;
+    }
+
+
 }

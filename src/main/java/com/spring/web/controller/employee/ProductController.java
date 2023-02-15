@@ -1,9 +1,6 @@
 package com.spring.web.controller.employee;
 
-import com.spring.web.model.Category;
-import com.spring.web.model.ProductDetail;
-import com.spring.web.model.ProductSimple;
-import com.spring.web.model.Status;
+import com.spring.web.model.*;
 import com.spring.web.service.IProductDetailService;
 import com.spring.web.service.IProductSimpleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,6 +107,13 @@ public class ProductController {
                                                    @PageableDefault(value = 10) Pageable pageable){
         Page<ProductSimple> productSimples = productSimpleService.findAllPageAndNameContaining(pageable, search);
         return new ResponseEntity<>(productSimples, HttpStatus.OK);
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<?> search (@RequestBody SearchRequestDTO request,
+                                     @PageableDefault(value = 10) Pageable pageable) {
+        Page<ProductDetail> page = productDetailService.search(request, pageable);
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
 
