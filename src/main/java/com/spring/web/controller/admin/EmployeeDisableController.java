@@ -24,7 +24,7 @@ public class EmployeeDisableController {
     @PutMapping("/{id}/{status}")
     public ResponseEntity<?> activeBlockUser(@PathVariable Long id, @PathVariable Long status) {
         Employee employee = employeeRepository.findById(id).get();
-        employee.setStatus(new Status(status , null));
+        employee.setStatus(new Status(status , null,null));
         employeeRepository.save(employee);
         return new ResponseEntity<>(HttpStatus.OK);
     }

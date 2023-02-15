@@ -66,7 +66,7 @@ public class EmployeeController {
     @PutMapping("/delete-employee/{id}/{status}")
     public ResponseEntity<?> updateStatus(@PathVariable("id") Long id, @PathVariable("status") Long status) {
         Employee employee = employeeService.findById(id).get();
-        employee.setStatus(new Status(status, null));
+        employee.setStatus(new Status(status, null,null));
         return new ResponseEntity<>(employeeService.save(employee), HttpStatus.OK);
     }
 
