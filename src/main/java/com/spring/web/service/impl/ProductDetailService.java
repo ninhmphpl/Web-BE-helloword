@@ -92,7 +92,7 @@ public class ProductDetailService implements IProductDetailService {
         productDetail.setAvatar(pictureList.get(0).getName());
         productDetail.setSold(0);
         //>> mặc định status là 1 (nghĩa là mở)
-        productDetail.setStatus(new Status(1L, null));
+        productDetail.setStatus(new Status(1L, null,null));
         return  repository.save(productDetail);
     }
 

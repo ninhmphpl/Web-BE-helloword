@@ -21,4 +21,7 @@ public class Status {
   @Column(nullable = false)
   private String name;
 
+  @Column(nullable = false)
+  private String type;
+
 }
