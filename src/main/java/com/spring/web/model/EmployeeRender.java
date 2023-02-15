@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmployeeRender {
+//    nhân viên chi tiết
     private List<Gender> genders;
     private List<Position> positions;
     private Employee employee;
