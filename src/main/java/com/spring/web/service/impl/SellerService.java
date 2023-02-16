@@ -33,4 +33,8 @@ public class SellerService implements ISellerService {
         repository.deleteById(aLong);
 
     }
+    public Seller findByUsername(String username) {
+        return repository.findByName(username);
+    }
+
 }
