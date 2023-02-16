@@ -1,5 +1,6 @@
 package com.spring.web.service.impl;
 
+import com.spring.web.model.District;
 import com.spring.web.model.Ward;
 import com.spring.web.repository.AdminRepository;
 import com.spring.web.repository.WardRepository;
@@ -33,5 +34,8 @@ public class WardService implements IWardService {
     public void delete(Long aLong) {
         repository.deleteById(aLong);
 
+    }
+    public List <Ward> findAllWardByDistrict (District district){
+        return repository.findWardsByDistrict(district);
     }
 }

@@ -1,6 +1,7 @@
 package com.spring.web.service.impl;
 
 import com.spring.web.model.District;
+import com.spring.web.model.Province;
 import com.spring.web.repository.DistricRepository;
 import com.spring.web.service.IDistrictService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,11 @@ public class DistrictService implements IDistrictService {
     @Override
     public void delete(Long aLong) {
         repository.deleteById(aLong);
+
+    }
+
+    public List<District> findAllDistrictbyProvince(Province province){
+     return repository.findDistinctByProvince(province);
 
     }
 }
