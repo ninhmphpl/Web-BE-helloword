@@ -31,7 +31,7 @@ public class SellerController {
     @Autowired
     private UserService userService;
 
-
+// check User tồn tại hay chưa
     @GetMapping("/check-user-exist/{username}")
     public boolean checkUser(@PathVariable String username) {
         User user = userService.findByUsername(username);
@@ -41,6 +41,7 @@ public class SellerController {
             return false;
         }
     }
+
     @PostMapping("/seller")
     public ResponseEntity<?> createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
@@ -55,5 +56,10 @@ public class SellerController {
         user.setPassword(user.getPassword());
         userService.save(user);
         return new ResponseEntity<>("lỗi", HttpStatus.CREATED);
+    }
+    //Find Seller theo ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Seller> findById(@PathVariable Long id){
+        return new ResponseEntity<>(sellerService.findById(id).get(),HttpStatus.OK);
     }
 }
