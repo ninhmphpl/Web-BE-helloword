@@ -3,7 +3,7 @@ package com.spring.web.model;
 import lombok.Data;
 
 @Data
-public class SearchRequestDTO {
+public class SearchRequest {
     private String keyword;
     private Integer fromQuantity;
     private Integer toQuantity;

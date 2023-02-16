@@ -2,7 +2,7 @@ package com.spring.web.service.impl;
 
 import com.spring.web.model.Picture;
 import com.spring.web.model.ProductDetail;
-import com.spring.web.model.SearchRequestDTO;
+import com.spring.web.model.SearchRequest;
 import com.spring.web.model.Status;
 import com.spring.web.repository.PictureRepository;
 import com.spring.web.repository.ProductDetailRepository;
@@ -109,8 +109,8 @@ public class ProductDetailService implements IProductDetailService {
     }
 //tìm kiếm theo tên, khoảng giá, khoảng số lượng
     @Override
-    public Page<ProductDetail> search(SearchRequestDTO request, Pageable pageable) {
-        Page<ProductDetail> page = repository.getListProduct1(request.getKeyword(), request.getFromQuantity(),
+    public Page<ProductDetail> search(SearchRequest request, Pageable pageable) {
+        Page<ProductDetail> page = repository.getListProduct(request.getKeyword(), request.getFromQuantity(),
                 request.getToQuantity(), request.getFromPrice(), request.getToPrice(), pageable);
 
         return page;

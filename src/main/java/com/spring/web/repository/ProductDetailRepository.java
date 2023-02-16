@@ -26,24 +26,24 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
                                        Double toPrice,
                                        Pageable pageable);
 // Dùng native query
-    @Query(value = "select * from products a " +
-            "where " +
-            "(:keyword is null or a.name like %:keyword%) and " +
-            "(:fromQuantity is null or a.quantity >= :fromQuantity) and " +
-            "(:toQuantity is null or a.quantity <= :toQuantity) and " +
-            "(:fromPrice is null or a.price >= :fromPrice) and " +
-            "(:toPrice is null or a.price <= :toPrice)",
-            countQuery = "select count(*) from products a " +
-                    " where " +
-                    " (:keyword is null or a.name like %:keyword%) and " +
-                    "  (:fromQuantity is null or a.quantity >= :fromQuantity) and " +
-                    "  (:toQuantity is null or a.quantity <= :toQuantity) and " +
-                    "   (:fromPrice is null or a.price >= :fromPrice) and " +
-                    "   (:toPrice is null or a.price <= :toPrice)", nativeQuery = true)
-    Page<ProductDetail> getListProduct1(String keyword,
-                                        Integer fromQuantity,
-                                        Integer toQuantity,
-                                        Double fromPrice,
-                                        Double toPrice,
-                                        Pageable pageable);
+//    @Query(value = "select * from products a " +
+//            "where " +
+//            "(:keyword is null or a.name like %:keyword%) and " +
+//            "(:fromQuantity is null or a.quantity >= :fromQuantity) and " +
+//            "(:toQuantity is null or a.quantity <= :toQuantity) and " +
+//            "(:fromPrice is null or a.price >= :fromPrice) and " +
+//            "(:toPrice is null or a.price <= :toPrice)",
+//            countQuery = "select count(*) from products a " +
+//                    " where " +
+//                    " (:keyword is null or a.name like %:keyword%) and " +
+//                    "  (:fromQuantity is null or a.quantity >= :fromQuantity) and " +
+//                    "  (:toQuantity is null or a.quantity <= :toQuantity) and " +
+//                    "   (:fromPrice is null or a.price >= :fromPrice) and " +
+//                    "   (:toPrice is null or a.price <= :toPrice)", nativeQuery = true)
+//    Page<ProductDetail> getListProduct1(String keyword,
+//                                        Integer fromQuantity,
+//                                        Integer toQuantity,
+//                                        Double fromPrice,
+//                                        Double toPrice,
+//                                        Pageable pageable);
 }

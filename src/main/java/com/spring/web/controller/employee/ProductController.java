@@ -110,7 +110,7 @@ public class ProductController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<?> search (@RequestBody SearchRequestDTO request,
+    public ResponseEntity<?> search (@RequestBody SearchRequest request,
                                      @PageableDefault(value = 10) Pageable pageable) {
         Page<ProductDetail> page = productDetailService.search(request, pageable);
         return new ResponseEntity<>(page, HttpStatus.OK);
