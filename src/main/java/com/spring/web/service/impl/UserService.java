@@ -1,5 +1,6 @@
 package com.spring.web.service.impl;
 
+import com.spring.web.model.Seller;
 import com.spring.web.model.User;
 import com.spring.web.repository.AddressRepository;
 import com.spring.web.repository.UserRepository;
@@ -36,5 +37,8 @@ public class UserService implements IUserService {
     public void delete(Long aLong) {
         repository.deleteById(aLong);
 
+    }
+    public User findByUsername(String username) {
+        return repository.findUserByUsername(username);
     }
 }
