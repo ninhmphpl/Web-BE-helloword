@@ -6,4 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface IEmployeeService extends CRUDService<Employee , Long> {
     Page<Employee> findAllPage(Pageable pageable);
+    Employee createEmployee(Employee employee);
 }

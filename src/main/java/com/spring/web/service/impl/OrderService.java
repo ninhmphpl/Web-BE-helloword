@@ -1,38 +1,33 @@
 package com.spring.web.service.impl;
 
-import com.spring.web.model.Admin;
-import com.spring.web.repository.AdminRepository;
-import com.spring.web.service.IAdminService;
+import com.spring.web.model.Order;
+import com.spring.web.repository.OrderRepository;
+import com.spring.web.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 @Service
+public class OrderService implements IOrderService {
 
-public class AdminService implements IAdminService {
     @Autowired
-    private AdminRepository repository;
+    public OrderRepository repository;
 
     @Override
-    public Optional<Admin> findById(Long aLong) {
-
+    public Optional<Order> findById(Long aLong) {
         return repository.findById(aLong);
     }
 
     @Override
-    public List<Admin> findAll() {
-
+    public List<Order> findAll() {
         return repository.findAll();
     }
 
     @Override
-    public Admin save(Admin admin) {
-
-        return repository.save(admin);
+    public Order save(Order order) {
+        return repository.save(order);
     }
-
-
 
     @Override
     public void delete(Long aLong) {

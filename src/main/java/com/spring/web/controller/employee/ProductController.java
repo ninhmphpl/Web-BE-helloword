@@ -81,7 +81,7 @@ public class ProductController {
     public ResponseEntity<ProductDetail> delete(@PathVariable("along") Long along) {
         Optional<ProductDetail> productDetail = productDetailService.findById(along);
         if (productDetail.isPresent()) {
-            ProductDetail result = productDetailService.deleteProductSetStatus(along, new Status(3L, null));
+            ProductDetail result = productDetailService.deleteProductSetStatus(along, new Status(3L, null,null));
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);

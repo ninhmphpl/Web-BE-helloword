@@ -9,6 +9,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -29,13 +30,12 @@ public class Employee {
     private LocalDate birth;
 
     @Column(nullable = false)
-   @Max(100)
-    @Min(16)
     @Max(100)
+    @Min(16)
     private Integer age;
 
     @Column(nullable = false)
-    @Pattern(regexp = "[0-9]+")
+    @Pattern(regexp = "^0[0-9]{9}\n")
     @Length(min = 10, max = 10)
     private String phoneNumber;
 
