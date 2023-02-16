@@ -17,6 +17,8 @@ public class UserService implements IUserService {
     private UserRepository repository;
     @Autowired
     private AddressRepository addressRepository;
+    @Autowired
+    private RoleService roleService;
 
     @Override
     public Optional<User> findById(Long aLong) {
@@ -40,5 +42,19 @@ public class UserService implements IUserService {
     }
     public User findByUsername(String username) {
         return repository.findUserByUsername(username);
+    }
+    public boolean signUp(User users) {
+                users.setRole(roleService.findById(2l).get());
+                repository.save(users);
+                return true;
+            }
+    public boolean checkUserExist(User user) {
+        List<User> users = repository.findAll();
+        for (User u : users) {
+            if (user.getUsername().equals(u.getUsername())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

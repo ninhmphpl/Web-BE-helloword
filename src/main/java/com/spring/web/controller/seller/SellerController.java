@@ -42,24 +42,19 @@ public class SellerController {
         }
     }
 
-    @PostMapping("/seller")
-    public ResponseEntity<?> createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
-        if (bindingResult.hasFieldErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        Iterable<User> users = userService.findAll();
-        for (User currentUser : users) {
-            if (currentUser.getId().equals(user.getId())) {
-                return new ResponseEntity<>("Tên người dùng đã tồn tại", HttpStatus.BAD_REQUEST);
-            }
-        }
-        user.setPassword(user.getPassword());
-        userService.save(user);
-        return new ResponseEntity<>("lỗi", HttpStatus.CREATED);
-    }
     //Find Seller theo ID
     @GetMapping("/{id}")
     public ResponseEntity<Seller> findById(@PathVariable Long id){
         return new ResponseEntity<>(sellerService.findById(id).get(),HttpStatus.OK);
     }
-}
+
+    @PostMapping("/seller")
+    public ResponseEntity<String> signUp(@RequestBody User users) {
+        if (userService.signUp(users)) {
+            return new ResponseEntity<>("Sign up successfully!", HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    }
+
+

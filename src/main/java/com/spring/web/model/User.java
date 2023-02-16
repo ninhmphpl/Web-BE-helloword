@@ -27,5 +27,4 @@ public class User {
   @ManyToOne
   @JoinColumn(nullable = false)
   private Role role;
-
 }
