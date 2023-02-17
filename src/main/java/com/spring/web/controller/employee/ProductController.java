@@ -1,6 +1,9 @@
 package com.spring.web.controller.employee;
 
-import com.spring.web.model.*;
+import com.spring.web.model.Category;
+import com.spring.web.model.ProductDetail;
+import com.spring.web.model.ProductSimple;
+import com.spring.web.model.Status;
 import com.spring.web.service.IProductDetailService;
 import com.spring.web.service.IProductSimpleService;
 import com.spring.web.service.impl.ProductSimpleService;
@@ -14,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

@@ -1,9 +1,10 @@
 package com.spring.web.controller.admin;
 
 import com.spring.web.model.*;
-import com.spring.web.repository.EmployeeRepository;
-import com.spring.web.service.IEmployeeService;
-import com.spring.web.service.impl.*;
+import com.spring.web.service.impl.GenderService;
+import com.spring.web.service.impl.PositionService;
+import com.spring.web.service.impl.RoleService;
+import com.spring.web.service.impl.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -17,8 +17,7 @@ import java.util.Optional;
 public class SellerService implements ISellerService {
     @Autowired
     private SellerRepository repository;
-    @Autowired
-    private RoleService roleService;
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -43,24 +42,6 @@ public class SellerService implements ISellerService {
     public void delete(Long aLong) {
         repository.deleteById(aLong);
 
-    }
-    public Seller findByUsername(String username) {
-        return repository.findByName(username);
-    }
-    public boolean signUp(Seller seller) {
-        seller.setUser(userRepository.findById(2l).get());
-        repository.save(seller);
-        return true;
-    }
-    public Seller saveInfoSeller(Seller seller, User user , Address address){
-        Seller seller1 = repository.findSellerByUser(user);
-        seller1.setUser(seller.getUser());
-        seller1.setAddress(seller.getAddress());
-        seller1.setId(seller.getId());
-        seller1.setName(seller.getName());
-        seller1.setDescription(seller.getDescription());
-        seller1.setPhoneNumber(seller.getPhoneNumber());
-        return repository.save(seller1);
     }
 
     public Seller create(Seller seller){

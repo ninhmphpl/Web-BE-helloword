@@ -1,10 +1,10 @@
 package com.spring.web.controller.admin;
 
-import com.spring.web.model.*;
+import com.spring.web.model.Employee;
+import com.spring.web.model.Position;
 import com.spring.web.repository.EmployeeRepository;
 import com.spring.web.service.IEmployeeService;
-import com.spring.web.service.impl.*;
-
+import com.spring.web.service.impl.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;

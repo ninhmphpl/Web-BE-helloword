@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductDetailRepository extends JpaRepository<ProductDetail, Long> {
-    ProductDetail findProductDetailByNameContaining(String name);
+
     
 //     dùng JPQL query tìm kiếm = đối tượng()
 //    @Query("select a from ProductDetail a " +

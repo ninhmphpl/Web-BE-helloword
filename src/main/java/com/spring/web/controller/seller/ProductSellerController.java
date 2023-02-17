@@ -1,8 +1,6 @@
 package com.spring.web.controller.seller;
 
 import com.spring.web.model.Picture;
-import com.spring.web.service.IProductDetailService;
-import com.spring.web.service.IProductSimpleService;
 import com.spring.web.service.impl.PictureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,11 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 @RequestMapping("/product")
 public class ProductSellerController {
-    @Autowired
-    private IProductSimpleService productSimpleService;
 
-    @Autowired
-    private IProductDetailService productDetailService;
     @Autowired
     private PictureService pictureService;
     @PutMapping("/edit-picture")

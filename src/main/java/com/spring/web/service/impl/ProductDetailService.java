@@ -2,15 +2,12 @@ package com.spring.web.service.impl;
 
 import com.spring.web.model.Picture;
 import com.spring.web.model.ProductDetail;
-import com.spring.web.model.SearchRequest;
 import com.spring.web.model.Status;
 import com.spring.web.repository.PictureRepository;
 import com.spring.web.repository.ProductDetailRepository;
 import com.spring.web.service.IProductDetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
