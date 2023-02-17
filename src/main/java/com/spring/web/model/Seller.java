@@ -8,7 +8,6 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -29,10 +28,6 @@ public class Seller {
   @Pattern(regexp = "[0-9]+")
   @Length(min = 10, max = 10)
   private String phoneNumber;
-
-  @ManyToOne
-  @JoinColumn(nullable = false)
-  private Status status;
 
   @ManyToOne
   @JoinColumn(nullable = false)
