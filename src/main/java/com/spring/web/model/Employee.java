@@ -49,10 +49,6 @@ public class Employee {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Status status;
-
-    @ManyToOne
-    @JoinColumn(nullable = false)
     private User user;
 
 
