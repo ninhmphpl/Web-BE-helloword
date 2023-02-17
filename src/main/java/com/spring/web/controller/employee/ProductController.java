@@ -3,8 +3,10 @@ package com.spring.web.controller.employee;
 import com.spring.web.model.*;
 import com.spring.web.service.IProductDetailService;
 import com.spring.web.service.IProductSimpleService;
+import com.spring.web.service.impl.ProductSimpleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
@@ -12,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.data.domain.Sort.Direction.DESC;
@@ -23,7 +27,8 @@ public class ProductController {
 
     @Autowired
     private IProductSimpleService productSimpleService;
-
+    @Autowired
+    ProductSimpleService productSimpleService1;
     @Autowired
     private IProductDetailService productDetailService;
 
@@ -91,7 +96,7 @@ public class ProductController {
      * Tìm tất cả product theo category id
      * Và hển thị theo trang
      */
-    @GetMapping("/prodcut-list/category/{id}")
+    @GetMapping("/product-list/category/{id}")
     public ResponseEntity<?> findAllProductSimpleAndCategory (@PathVariable Long id,
                                                    @PageableDefault(value = 10)
                                                     @SortDefault(sort = "id", direction = DESC) Pageable pageable){
@@ -108,16 +113,42 @@ public class ProductController {
         Page<ProductSimple> productSimples = productSimpleService.findAllPageAndNameContaining(pageable, search);
         return new ResponseEntity<>(productSimples, HttpStatus.OK);
     }
+//tìm kiếm dùng jpql
+//    @PostMapping("/product-search")
+//    public ResponseEntity<?> search (@RequestBody SearchRequest request,
+//                                     @PageableDefault(value = 10) Pageable pageable) {
+//        Page<ProductDetail> page = productDetailService.search(request, pageable);
+//        return new ResponseEntity<>(page, HttpStatus.OK);
+//    }
 
-    @PostMapping("/search")
-    public ResponseEntity<?> search (@RequestBody SearchRequest request,
-                                     @PageableDefault(value = 10) Pageable pageable) {
-        Page<ProductDetail> page = productDetailService.search(request, pageable);
-        return new ResponseEntity<>(page, HttpStatus.OK);
+
+    @GetMapping("/search-price/{priceMin}/{priceMax}")
+    public ResponseEntity<?> findByProductPrice(@PathVariable Double priceMin, @PathVariable Double priceMax,
+  @PageableDefault(value = 10)  Pageable pageable) {
+       List<ProductSimple> productSimpleList=productSimpleService1.findProductByPrice1(priceMin,priceMax);
+        final int start = (int)pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), productSimpleList.size());
+        final Page<ProductSimple> page = new PageImpl<>(productSimpleList.subList(start, end), pageable, productSimpleList.size());
+
+        if(pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0){
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(page , HttpStatus.OK);
     }
 
 
 
+    @GetMapping("/search-quantity/{quantityMin}/{quantityMax}")
+    public ResponseEntity<?> findByProductQuantity(@PathVariable Integer quantityMin, @PathVariable Integer quantityMax,
+                                                                     @PageableDefault(value = 10)  Pageable pageable) {
+        List<ProductSimple> productSimpleList = productSimpleService1.findProductByQuantity1(quantityMin, quantityMax);
+        final int start = (int) pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), productSimpleList.size());
+        final Page<ProductSimple> page = new PageImpl<>(productSimpleList.subList(start, end), pageable, productSimpleList.size());
 
-
+        if (pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        }
+        return new ResponseEntity<>(page, HttpStatus.OK);
+    }
 }
