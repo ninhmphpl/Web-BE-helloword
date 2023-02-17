@@ -34,11 +34,9 @@ public class Seller {
   @JoinColumn(nullable = false)
   private Address address;
 
-   @ManyToMany
+  @ManyToMany
   @JoinColumn(nullable = false)
   private List<ProductSimple> listProduct;
-
-
 
   @Column(nullable = false)
   private String description;
