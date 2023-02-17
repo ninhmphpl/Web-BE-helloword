@@ -3,6 +3,7 @@ package com.spring.web.service.impl;
 import com.spring.web.model.Seller;
 import com.spring.web.model.User;
 import com.spring.web.repository.AddressRepository;
+import com.spring.web.repository.RoleRepository;
 import com.spring.web.repository.UserRepository;
 import com.spring.web.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class UserService implements IUserService {
     private AddressRepository addressRepository;
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public Optional<User> findById(Long aLong) {
@@ -57,4 +60,11 @@ public class UserService implements IUserService {
         }
         return false;
     }
+    public User saveInfoUser(User username){
+        User user1 = repository.findUserByUsername(String.valueOf(username));
+        user1.setUsername(username.getUsername());
+        user1.setPassword(username.getPassword());
+        return repository.save(username);
+    }
+
 }
