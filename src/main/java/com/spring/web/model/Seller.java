@@ -31,10 +31,6 @@ public class Seller {
 
   @ManyToOne
   @JoinColumn(nullable = false)
-  private Status status;
-
-  @ManyToOne
-  @JoinColumn(nullable = false)
   private Address address;
 
    @ManyToMany

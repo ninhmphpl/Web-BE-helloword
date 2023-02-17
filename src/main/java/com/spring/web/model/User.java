@@ -27,4 +27,8 @@ public class User {
   @ManyToOne
   @JoinColumn(nullable = false)
   private Role role;
+
+  @ManyToOne
+  @JoinColumn(nullable = false)
+  private Status status;
 }
