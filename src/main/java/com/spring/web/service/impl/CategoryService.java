@@ -4,6 +4,7 @@ import com.spring.web.model.Category;
 import com.spring.web.repository.CategoryRepository;
 import com.spring.web.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,5 +32,9 @@ public class CategoryService implements ICategoryService {
     @Override
     public void delete(Long aLong) {
         repository.deleteById(aLong);
+    }
+
+    public  List<Category> findCategorybyName(String name){
+        return repository.findAllByNameContaining(name);
     }
 }
