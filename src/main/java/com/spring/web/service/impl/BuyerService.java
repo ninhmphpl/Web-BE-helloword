@@ -48,7 +48,7 @@ public class BuyerService implements IBuyerService {
 
     public Object findAllOrderInCart(Long id, Long quantity) {
 
-        Optional<Buyer> buyer = repository.findById(11L);
+        Optional<Buyer> buyer = repository.findById(1L);
         if (buyer.isPresent()) {
             List<Order> orderLists = buyer.get().getCart();
             Long orderId = 0L;
@@ -79,7 +79,7 @@ public class BuyerService implements IBuyerService {
                 repository.save(buyer.get());
             }
 
-            return repository.findById(11L).get().getCart();
+            return repository.findById(1L).get().getCart();
         } else {
             return "403,không có người dùng";
         }

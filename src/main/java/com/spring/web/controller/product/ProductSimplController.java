@@ -1,8 +1,12 @@
 package com.spring.web.controller.product;
 
 import com.spring.web.model.Category;
+import com.spring.web.model.Picture;
+import com.spring.web.model.ProductDetail;
 import com.spring.web.model.ProductSimple;
+import com.spring.web.repository.ProductDetailRepository;
 import com.spring.web.service.impl.CategoryService;
+import com.spring.web.service.impl.ProductDetailService;
 import com.spring.web.service.impl.ProductSimpleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +32,10 @@ public class ProductSimplController {
     private ProductSimpleService productSimpleService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private ProductDetailService productDetailService;
+    @Autowired
+    private ProductDetailRepository productDetailRepository;
 
     @GetMapping("/filter/{name}")
     public ResponseEntity<?> searchProductBuyNamOrCategory(@PathVariable("name") String name,
@@ -45,9 +53,8 @@ public class ProductSimplController {
         return new ResponseEntity<>(page , HttpStatus.OK);
     }
     @PutMapping("/edit-picture/{id}")
-    public ResponseEntity<?> editImageProduct(@PathVariable("id") Long id, @RequestBody List<Image> imageList) {
-      Optional productEdit= productSimpleService.findById(id);
-//        if(productEdit)
-        return null;
+    public ResponseEntity<?> editImageProduct(@PathVariable("id") Long id, @RequestBody List<Picture> newImageList) {
+
+        return new ResponseEntity<>(productDetailService.updateImage(id, newImageList),HttpStatus.BAD_REQUEST);
     }
 }

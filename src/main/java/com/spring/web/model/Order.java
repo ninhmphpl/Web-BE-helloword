@@ -30,7 +30,7 @@ public class Order {
     private  Double total;
 
     public double getTotal() {
-        return 1;
+        return amount*productSimple.getPrice() ;
     }
 }
 
