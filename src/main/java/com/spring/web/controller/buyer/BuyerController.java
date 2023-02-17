@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Struct;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,42 +30,9 @@ public class BuyerController {
     @PostMapping("/to-cart/{id}/{quantity}")
     public ResponseEntity<?> findAllProductInCart(@PathVariable("id") Long id,
                                                   @PathVariable("quantity") Long quantity) {
+        return new ResponseEntity<>( buyerService.findAllOrderInCart(id, quantity), HttpStatus.OK);
 
-        Optional<Buyer> buyer = buyerService.findById(4L);
-        List<Order> orderLists = buyer.get().getCart();
-        Long orderId = 0L;
-        if (orderLists.size() != 0) {
-            boolean flag = true;
-            for (Order cart : orderLists) {
-                if (cart.getProductSimple().getId().equals(id)) {
-                    orderId = cart.getId();
-                    Order order = orderService.findById(orderId).get();
-                    Long amount = order.getAmount();
-                    order.setAmount(amount + quantity);
-                    orderService.save(order);
-                    flag=false;
-                    return new ResponseEntity<>(buyerService.findById(4L).get().getCart(), HttpStatus.OK);
-                }
-            }
-            if(flag){
-
-                    Order newOrder = new Order(null, productSimpleService.findById(id).get(), quantity, null);
-                    Order orderCreated = orderService.save(newOrder);
-                    orderLists.add(orderCreated);
-                    buyer.get().setCart(orderLists);
-                    buyerService.save(buyer.get());
-                    orderLists = buyerService.findById(4L).get().getCart();
-                    return new ResponseEntity<>(orderLists, HttpStatus.OK);
-            }
-
-        } else {
-            Order newOrder = new Order(null, productSimpleService.findById(id).get(), quantity, null);
-         Order oderCreate =  orderService.save(newOrder);
-         buyer.get().getCart().add(oderCreate);
-         buyerService.save(buyer.get());
-            return new ResponseEntity<>(buyerService.findById(4L).get().getCart(), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(buyerService.findById(4L).get().getCart(), HttpStatus.OK);
     }
+
 }
 
