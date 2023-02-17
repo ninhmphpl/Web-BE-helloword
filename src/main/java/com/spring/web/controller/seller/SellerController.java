@@ -53,8 +53,13 @@ public class SellerController {
     }
 
     @PostMapping("/seller")
-    public ResponseEntity<?> signUp(@RequestBody Seller seller) {
-        Seller seller1 = sellerService.create(seller);
-        return new ResponseEntity<>(seller1,HttpStatus.OK);
+    public ResponseEntity<?> signUp(@RequestBody Seller seller , User user1 , Address address1) {
+        User user = userService.saveInfoUser(user1);
+        Address address = addressService.saveInfoAddress(address1);
+        sellerService.saveInfoSeller( seller, user , address);
+//        if (sellerService.signUp(seller)) {
+//            return new ResponseEntity<>("Sign up successfully!", HttpStatus.CREATED);
+//        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
