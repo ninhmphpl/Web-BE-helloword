@@ -9,8 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductSimpleRepository extends JpaRepository<ProductSimple,Long> {
+public interface ProductSimpleRepository extends JpaRepository<ProductSimple,Long>  {
     Page<ProductSimple> findAllByCategory(Pageable pageable, Category category);
     Page<ProductSimple> findAllByNameContaining(Pageable pageable, String name);
+    Page<ProductSimple> findAllByCategoryNameContaining(Pageable pageable, String name);
+
+
+    @Query(nativeQuery = true,value = "SELECT * FROM products WHERE name LIKE concat('%',:name,'%') AND category_name LIKE concat('%',:name,'%') ")
+    Page<ProductSimple> findProductByCategoryAndName(String name );
 
 }

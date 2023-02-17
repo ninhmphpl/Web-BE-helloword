@@ -66,4 +66,11 @@ public class ProductSimpleService implements IProductSimpleService {
     public Page<ProductSimple> findAllPageAndNameContaining(Pageable pageable, String name) {
         return repository.findAllByNameContaining(pageable, name);
     }
+
+//    public Page<ProductSimple> findAllByCategoryName(Pageable pageable, String name) {
+//        return repository.findAllByCategoryNameContaining(pageable, name);
+//    }
+    public Page<ProductSimple> findAllByCategoryName(Pageable pageable, String name) {
+        return repository.findProductByCategoryAndName(name);
+    }
 }

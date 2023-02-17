@@ -31,8 +31,8 @@ public class BuyerController {
     public ResponseEntity<?> findAllProductInCart(@PathVariable("id") Long id,
                                                   @PathVariable("quantity") Long quantity) {
         return new ResponseEntity<>( buyerService.findAllOrderInCart(id, quantity), HttpStatus.OK);
-
     }
+
 
 }
 

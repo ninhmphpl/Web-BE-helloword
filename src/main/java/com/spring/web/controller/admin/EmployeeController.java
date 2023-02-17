@@ -40,12 +40,9 @@ public class EmployeeController {
 
         @GetMapping("/employee-list")
     public ResponseEntity<?> findAllPage(@PageableDefault(value = 10)
-                                         @SortDefault(sort = "id", direction = ASC)
-                                         Pageable pageable) {
+                                         @SortDefault(sort = "id", direction = ASC) Pageable pageable) {
 
         Page<Employee> page = employeeService.findAllPage(pageable);
-        System.out.println(page);
-
         if (pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0) {
             System.out.println("Page Number out range page");
             return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
