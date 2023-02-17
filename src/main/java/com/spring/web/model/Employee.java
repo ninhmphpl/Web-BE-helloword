@@ -47,6 +47,7 @@ public class Employee {
     @JoinColumn(nullable = false)
     private Gender gender;
 
+
     @ManyToOne
     @JoinColumn(nullable = false)
     private User user;
