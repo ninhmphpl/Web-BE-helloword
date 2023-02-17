@@ -14,7 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 
@@ -41,5 +43,11 @@ public class ProductSimplController {
             return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
         }
         return new ResponseEntity<>(page , HttpStatus.OK);
+    }
+    @PutMapping("/edit-picture/{id}")
+    public ResponseEntity<?> editImageProduct(@PathVariable("id") Long id, @RequestBody List<Image> imageList) {
+      Optional productEdit= productSimpleService.findById(id);
+//        if(productEdit)
+        return null;
     }
 }
