@@ -78,5 +78,20 @@ public class SellerService implements ISellerService {
         return repository.save(seller);
     }
 
+    public Seller create(Seller seller){
+        seller.setId(null);
+        User user1 = seller.getUser();
+        user1.setRole(new Role(1L,null));
+        user1.setStatus(new Status(1L, null,null));
+        user1.setId(null);
+        user1 = userRepository.save(user1);
+
+        Address address1 = addressRepository.save(seller.getAddress());
+        seller.setAddress(address1);
+        seller.setUser(user1);
+        seller.setDescription(" Không có thông tin");
+        return repository.save(seller);
+    }
+
 }
 
