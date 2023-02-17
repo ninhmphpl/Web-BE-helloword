@@ -39,10 +39,6 @@ public class Buyer {
 
   @ManyToOne
   @JoinColumn(nullable = false)
-  private Status status;
-
-  @ManyToOne
-  @JoinColumn(nullable = false)
   private Address address;
 
 
