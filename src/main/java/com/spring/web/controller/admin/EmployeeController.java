@@ -63,7 +63,6 @@ public class EmployeeController {
     @PutMapping("/delete-employee/{id}/{status}")
     public ResponseEntity<?> updateStatus(@PathVariable("id") Long id, @PathVariable("status") Long status) {
         Employee employee = employeeService.findById(id).get();
-        employee.setStatus(new Status(status, null,null));
         return new ResponseEntity<>(employeeService.save(employee), HttpStatus.OK);
     }
 
@@ -123,7 +122,6 @@ public class EmployeeController {
         employee.setBirth(employee.getBirth());
         employee.setId(employee.getId());
         employee.setGender(employee.getGender());
-        employee.setStatus(employee.getStatus());
         employee.setPhoneNumber(employee.getPhoneNumber());
         employee.setPosition(employee.getPosition());
         employee.setUser(employee.getUser());

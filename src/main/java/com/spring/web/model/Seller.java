@@ -8,7 +8,6 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -32,17 +31,11 @@ public class Seller {
 
   @ManyToOne
   @JoinColumn(nullable = false)
-  private Status status;
-
-  @ManyToOne
-  @JoinColumn(nullable = false)
   private Address address;
 
-   @ManyToMany
+  @ManyToMany
   @JoinColumn(nullable = false)
   private List<ProductSimple> listProduct;
-
-
 
   @Column(nullable = false)
   private String description;
