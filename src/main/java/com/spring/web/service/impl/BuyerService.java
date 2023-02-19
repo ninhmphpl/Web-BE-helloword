@@ -115,7 +115,7 @@ public class BuyerService implements IBuyerService {
 
         Buyer buyer = repository.findById(1L).get();
         List<Bill> billList = buyer.getBills();
-        Bill newBill = new Bill(null, orders, LocalDateTime.now(), null, buyer);
+        Bill newBill = new Bill(null, orders, LocalDateTime.now(), null, buyer.getId(),buyer.getName());
         newBill.setTotal(newBill.totalPayment());
         newBill = billService.save(newBill);
         billList.add(newBill);
@@ -124,6 +124,7 @@ public class BuyerService implements IBuyerService {
         for (Order order : orders
         ) {
             setProductDetail(order);
+            setCartAfterPay(order);
         }
         return newBill;
     }
@@ -138,5 +139,13 @@ public class BuyerService implements IBuyerService {
         productDetail.setSold(soldNew + soldOld);
         productDetail.setQuantity(stock - soldNew);
         productDetailRepository.save(productDetail);
+    }
+
+    /// sửa lại giỏ hàng sau khi thanh toán
+    public void setCartAfterPay(Order order){
+        Order beforeCart = orderService.findById(order.getId()).get();
+        Long  afterAmount = beforeCart.getAmount() - order.getAmount();
+        beforeCart.setAmount(afterAmount);
+        orderService.save(beforeCart);
     }
 }

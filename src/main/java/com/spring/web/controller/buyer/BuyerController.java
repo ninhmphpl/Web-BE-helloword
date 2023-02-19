@@ -70,7 +70,7 @@ public class BuyerController {
     }
     @GetMapping("/info")
     public ResponseEntity<?>  getInForBuyer () {
-        return new ResponseEntity<>(buyerService.findById(1L),HttpStatus.OK);
+        return new ResponseEntity<>(buyerService.findById(1L).get(),HttpStatus.OK);
     }
 
 }
