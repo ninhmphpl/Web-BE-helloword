@@ -28,12 +28,27 @@ public class Bill {
     private LocalDateTime timeBuy;
 
     @Transient //>> tổng giá của tất cả các order trong order list
-    private Double total;
+    private Double total ;
+///Không được để buyer có bill và trong bill có buyer dẫn tới đệ qui,khả năng chỉ lấy id của buyer
+//    @ManyToOne
+//    @JoinColumn(nullable = false)
+//    private Buyer buyer;
+    @Column(nullable = false)
+    private Long idBuyer ;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Buyer buyer;
+    @Column(nullable = false)
+    private String nameBuyer ;
+// tổng tiển phải trả của hóa đơn
+    public double totalPayment() {
+        double sum = 0;
+        if (orderList != null) {
+            for (int i = 0; i < orderList.size(); i++) {
+                sum += orderList.get(i).getTotal();
 
+            }
+        }
+        return sum;
+    }
 
 
 }
