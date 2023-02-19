@@ -28,11 +28,21 @@ public class Bill {
     private LocalDateTime timeBuy;
 
     @Transient //>> tổng giá của tất cả các order trong order list
-    private Double total;
+    private Double total ;
 
     @ManyToOne
     @JoinColumn(nullable = false)
     private Buyer buyer;
+// tổng tiển phải trả của hóa đơn
+    public double totalPayment() {
+        double sum = 0;
+        if(orderList!= null) {
+        for (int i = 0; i < orderList.size(); i++) {
+           sum += orderList.get(i).getTotal() ;
+
+        } return sum;
+    }else return 0;
+    }
 
 
 
