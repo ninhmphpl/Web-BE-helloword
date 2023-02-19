@@ -1,7 +1,6 @@
 package com.spring.web.service.impl;
 
-import com.spring.web.model.Buyer;
-import com.spring.web.model.Order;
+import com.spring.web.model.*;
 import com.spring.web.repository.BuyerRepository;
 import com.spring.web.repository.ProductDetailRepository;
 import com.spring.web.service.IBuyerService;
@@ -127,6 +126,26 @@ public class BuyerService implements IBuyerService {
             setCartAfterPay(order);
         }
         return newBill;
+    }
+
+    //    thay đổi quantity và sold của productdetail
+    public void setProductDetail(Order order) {
+        Long idProduct = order.getProductSimple().getId();
+        ProductDetail productDetail = productDetailRepository.findById(idProduct).get();
+        Integer soldOld = productDetail.getSold();
+        Integer soldNew = order.getAmount().intValue();
+        Integer stock = productDetail.getQuantity();
+        productDetail.setSold(soldNew + soldOld);
+        productDetail.setQuantity(stock - soldNew);
+        productDetailRepository.save(productDetail);
+    }
+
+    /// sửa lại giỏ hàng sau khi thanh toán
+    public void setCartAfterPay(Order order){
+        Order beforeCart = orderService.findById(order.getId()).get();
+        Long  afterAmount = beforeCart.getAmount() - order.getAmount();
+        beforeCart.setAmount(afterAmount);
+        orderService.save(beforeCart);
     }
 
 }
