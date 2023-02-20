@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Struct;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,29 +49,51 @@ public class BuyerController {
     }
 
     @GetMapping("/check-quantity")
-    public ResponseEntity<ResultCheck> checkStockOrder(@RequestBody Order order) {
-        return new ResponseEntity<>(buyerService.checkOrderQuantity(order), HttpStatus.OK);
+    public ResponseEntity<?> checkStockOrder(@RequestBody Order order) {
+        Boolean result = buyerService.checkOrderQuantity(order).isStatus();
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("cart/edit-amount/{idOrder}/{amount}")
+    public ResponseEntity<?> checkStockOrderAfterEditCart(@PathVariable("idOrder") Long idOrder,
+                                                          @PathVariable("amount") Long amount){
+        Order oder = orderService.findById(idOrder).get();
+        oder.setAmount(amount);
+        Boolean result = buyerService.checkOrderQuantity(oder).isStatus();
+        if (result) {
+            orderService.save(oder);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 
     @PutMapping("cart/buy")
-    public ResponseEntity<?> makePayment(@RequestBody List<Order> orderList) {
+    public ResponseEntity<?> makePayment(@RequestBody List<ResultFE> orderList) {
+        List<Order> orderArrayList = new ArrayList<>();
+        for (ResultFE oder : orderList
+        ) {
+            Order order1 = orderService.findById(oder.getId()).get();
+            order1.setAmount(oder.getAmount());
+            order1.setTotal(order1.getAmount() * order1.getProductSimple().getPrice());
+            orderArrayList.add(order1);
+        }
         boolean flag = true;
-        ResultCheck resultCheck = new ResultCheck();
-        for (Order oder : orderList) {
-            if (!checkStockOrder(oder).getBody().isStatus()) {
+        for (Order oder : orderArrayList) {
+            if (buyerService.checkOrderQuantity(oder).isStatus()) {
                 flag = false;
-                resultCheck = checkStockOrder(oder).getBody();
             }
         }
         if (flag) {
-           Bill billPayment = buyerService.makeOnePayment(orderList) ;
+            Bill billPayment = buyerService.makeOnePayment(orderArrayList);
             return new ResponseEntity<>(billPayment, HttpStatus.OK);
-        } else{ return new ResponseEntity<>(resultCheck,HttpStatus.OK);}
+        } else {
+            return new ResponseEntity<>("Số lượng sản phẩm đặt hàng vượt quá tồn kho", HttpStatus.BAD_REQUEST);
+        }
     }
+
     @GetMapping("/info")
-    public ResponseEntity<?>  getInForBuyer () {
-        return new ResponseEntity<>(buyerService.findById(1L).get(),HttpStatus.OK);
+    public ResponseEntity<?> getInForBuyer() {
+        return new ResponseEntity<>(buyerService.findById(1L).get(), HttpStatus.OK);
     }
 
 }
