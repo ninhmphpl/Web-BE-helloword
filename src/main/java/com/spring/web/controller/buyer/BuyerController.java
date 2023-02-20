@@ -80,7 +80,7 @@ public class BuyerController {
         }
         boolean flag = true;
         for (Order oder : orderArrayList) {
-            if (buyerService.checkOrderQuantity(oder).isStatus()) {
+            if (!buyerService.checkOrderQuantity(oder).isStatus()) {
                 flag = false;
             }
         }
