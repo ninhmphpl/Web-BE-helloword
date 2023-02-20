@@ -1,7 +1,6 @@
 package com.spring.web.service.impl;
 
-import com.spring.web.model.Category;
-import com.spring.web.model.ProductSimple;
+import com.spring.web.model.*;
 import com.spring.web.repository.ProductSimpleRepository;
 import com.spring.web.service.IProductSimpleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,3 +79,4 @@ public List<ProductSimple>findProductByQuantity1(Integer min, Integer max){
     }
 
 }
+
