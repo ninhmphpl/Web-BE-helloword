@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.List;
 
 @Repository
-public interface ProductSimpleRepository extends JpaRepository<ProductSimple, Long> {
 public interface ProductSimpleRepository extends JpaRepository<ProductSimple,Long>  {
     Page<ProductSimple> findAllByCategory(Pageable pageable, Category category);
 

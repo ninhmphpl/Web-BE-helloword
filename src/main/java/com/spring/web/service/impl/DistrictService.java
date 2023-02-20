@@ -35,9 +35,6 @@ public class DistrictService implements IDistrictService {
     public void delete(Long aLong) {
         repository.deleteById(aLong);
     }
-    public List<District>findAllDistrictByProvince(Province province){
-        return repository.findDistrictByProvince(province);
-    }
 
     public List<District> findAllDistrictbyProvince(Province province){
      return repository.findDistinctByProvince(province);
