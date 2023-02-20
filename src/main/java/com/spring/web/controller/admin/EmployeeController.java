@@ -70,11 +70,6 @@ public class EmployeeController {
     @SortDefault(sort = "id", direction = DESC)
     Pageable pageable) {
         Page<Employee> page = employeeServices.findAllByNameEmployee(search,pageable);
-        if (pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0) {
-            System.out.println("Page Number out range page");
-            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
-        }
-
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
