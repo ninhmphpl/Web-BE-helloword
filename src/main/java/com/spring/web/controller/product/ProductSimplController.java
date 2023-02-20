@@ -5,6 +5,7 @@ import com.spring.web.model.Picture;
 import com.spring.web.model.ProductDetail;
 import com.spring.web.model.ProductSimple;
 import com.spring.web.repository.ProductDetailRepository;
+import com.spring.web.service.ISellerService;
 import com.spring.web.service.impl.CategoryService;
 import com.spring.web.service.impl.ProductDetailService;
 import com.spring.web.service.impl.ProductSimpleService;
@@ -31,7 +32,7 @@ public class ProductSimplController {
     @Autowired
     private ProductSimpleService productSimpleService;
     @Autowired
-    private CategoryService categoryService;
+    private ISellerService sellerService;
     @Autowired
     private ProductDetailService productDetailService;
     @Autowired
@@ -56,5 +57,11 @@ public class ProductSimplController {
     public ResponseEntity<?> editImageProduct(@PathVariable("id") Long id, @RequestBody List<Picture> newImageList) {
 
         return new ResponseEntity<>(productDetailService.updateImage(id, newImageList),HttpStatus.OK);
+    }
+
+    @GetMapping("/seller/{id}")
+    public ResponseEntity<?> findSellerByProduct(@PathVariable Long id){
+        return new ResponseEntity<>(sellerService.findByProductSimpleContaining(
+                new ProductSimple(id, null, null,null,null,null,null)), HttpStatus.OK);
     }
 }

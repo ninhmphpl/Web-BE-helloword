@@ -98,7 +98,7 @@ public class ProductController {
      * Tìm tất cả product theo category id
      * Và hển thị theo trang
      */
-    @GetMapping("/product-list/category/{id}")
+    @GetMapping("/list/category/{id}")
     public ResponseEntity<?> findAllProductSimpleAndCategory (@PathVariable Long id,
                                                    @PageableDefault(value = 10)
                                                     @SortDefault(sort = "id", direction = DESC) Pageable pageable){
@@ -124,17 +124,13 @@ public class ProductController {
 //    }
 
 
-    @GetMapping("/search-price/{priceMin}/{priceMax}")
+    @GetMapping("/price/{priceMin}/{priceMax}")
     public ResponseEntity<?> findByProductPrice(@PathVariable Double priceMin, @PathVariable Double priceMax,
   @PageableDefault(value = 10)  Pageable pageable) {
-       List<ProductSimple> productSimpleList=productSimpleService1.findProductByPrice1(priceMin,priceMax);
+       List<ProductSimple> productSimpleList = productSimpleService1.findProductByPrice1(priceMin,priceMax);
         final int start = (int)pageable.getOffset();
         final int end = Math.min((start + pageable.getPageSize()), productSimpleList.size());
         final Page<ProductSimple> page = new PageImpl<>(productSimpleList.subList(start, end), pageable, productSimpleList.size());
-
-        if(pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0){
-            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
-        }
         return new ResponseEntity<>(page , HttpStatus.OK);
     }
 
@@ -147,10 +143,6 @@ public class ProductController {
         final int start = (int) pageable.getOffset();
         final int end = Math.min((start + pageable.getPageSize()), productSimpleList.size());
         final Page<ProductSimple> page = new PageImpl<>(productSimpleList.subList(start, end), pageable, productSimpleList.size());
-
-        if (pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0) {
-            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
-        }
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 }

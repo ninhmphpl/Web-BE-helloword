@@ -84,5 +84,10 @@ public class SellerService implements ISellerService {
         return repository.findAll(pageable);
     }
 
+    @Override
+    public Seller findByProductSimpleContaining(ProductSimple productSimple) {
+        return repository.findByListProductContaining(productSimple);
     }
+
+}
 
