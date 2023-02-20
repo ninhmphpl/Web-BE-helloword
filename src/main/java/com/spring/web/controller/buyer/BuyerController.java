@@ -104,6 +104,7 @@ public class BuyerController {
        List<Order> orderList = buyer.getCart();
        orderList.remove(order);
        buyer.setCart(orderList);
+       buyerService.save(buyer);
        return new ResponseEntity<>(orderList,HttpStatus.OK);
     }
 }
