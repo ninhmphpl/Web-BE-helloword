@@ -132,11 +132,18 @@ public class BuyerService implements IBuyerService {
         newBill = billService.save(newBill);
         billList.add(newBill);
         buyer.setBills(billList);
+
+
+
+        for (Order order : orders){
+            buyer.getCart().remove(order);
+        }
         repository.save(buyer);
+
 //  oders là list khách gửi về
         for (Order order : orders) {
             setProductDetail(order);
-            setCartAfterPay(order);
+            deleteCartAfterPay(order);
         }
         return newBill;
     }
@@ -154,10 +161,7 @@ public class BuyerService implements IBuyerService {
     }
 
     /// sửa lại giỏ hàng sau khi thanh toán
-    public void setCartAfterPay(Order order) {
-        Order beforeCart = orderService.findById(order.getId()).get();
-        Long afterAmount = beforeCart.getAmount() - order.getAmount();
-        beforeCart.setAmount(afterAmount);
-        orderService.save(beforeCart);
+    public void deleteCartAfterPay(Order order) {
+   orderService.delete(order.getId());
     }
 }
