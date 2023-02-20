@@ -38,7 +38,7 @@ public class BuyerController {
             if (productDetail.get().getQuantity() > quantity) {
                 return new ResponseEntity<>(buyerService.findAllOrderInCart(id, quantity), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("Số lượng vượt quá tồn kho,vui lòng sửa số lương", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("400, Số lượng vượt quá tồn kho vui lòng sửa số lương", HttpStatus.OK);
             }
 
         } else {
@@ -88,7 +88,7 @@ public class BuyerController {
             Bill billPayment = buyerService.makeOnePayment(orderArrayList);
             return new ResponseEntity<>(billPayment, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Số lượng sản phẩm đặt hàng vượt quá tồn kho", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Số lượng sản phẩm đặt hàng vượt quá tồn kho", HttpStatus.OK);
         }
     }
 
