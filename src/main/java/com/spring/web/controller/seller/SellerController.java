@@ -1,28 +1,26 @@
 package com.spring.web.controller.seller;
 
-import com.spring.web.model.Address;
-import com.spring.web.model.Role;
+import com.spring.web.model.Employee;
+import com.spring.web.model.ProductDetail;
 import com.spring.web.model.Seller;
-import com.spring.web.model.User;
-import com.spring.web.repository.RoleRepository;
 import com.spring.web.repository.SellerRepository;
-import com.spring.web.service.impl.AddressService;
-import com.spring.web.service.impl.RoleService;
-import com.spring.web.service.impl.SellerService;
-import com.spring.web.service.impl.UserService;
+import com.spring.web.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+
+import static org.springframework.data.domain.Sort.Direction.ASC;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/sigin")
+@RequestMapping("/seller")
 public class SellerController {
     @Autowired
     private SellerService sellerService;
@@ -34,29 +32,24 @@ public class SellerController {
     private UserService userService;
     @Autowired
     private AddressService addressService;
+    @Autowired
+    private ProductDetailService productDetailService;
+    @GetMapping("/list")
+    public ResponseEntity<?> findAllSellerPage(@PageableDefault(value = 10)
+                                         @SortDefault(sort = "id", direction = ASC) Pageable pageable) {
 
-    // check User tồn tại hay chưa
-    @GetMapping("/check-user-exist/{username}")
-    public boolean checkUser(@PathVariable String username) {
-        User user = userService.findByUsername(username);
-        if (user != null) {
-            return true;
-        } else {
-            return false;
+        Page<Seller> page = sellerService.findAllSellerPage(pageable);
+        if (pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0) {
+            System.out.println("Page Number out range page");
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
         }
-    }
 
-    //Find Seller theo ID
-    @GetMapping("/seller/{id}")
-    public ResponseEntity<Seller> findById(@PathVariable Long id) {
-        return new ResponseEntity<>(sellerService.findById(id).get(), HttpStatus.OK);
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
-
-    @PostMapping("/seller")
-    public ResponseEntity<?> signUp(@RequestBody Seller seller) {
-        Object seller1 = sellerService.create(seller);
-        return new ResponseEntity<>(seller1,HttpStatus.OK);
+    // Tạo Sản Phảm mới từ Sellet
+    @PostMapping("/create-product")
+    public ResponseEntity<ProductDetail> create(@RequestBody ProductDetail productDetail){
+        ProductDetail productResult = productDetailService.createProduct(productDetail);
+        return new ResponseEntity<>(productResult, HttpStatus.OK);
     }
-//    @PostMapping("/sellet/create-product")
-
 }

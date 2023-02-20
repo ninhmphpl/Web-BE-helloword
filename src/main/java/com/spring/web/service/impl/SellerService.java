@@ -6,6 +6,8 @@ import com.spring.web.repository.SellerRepository;
 import com.spring.web.repository.UserRepository;
 import com.spring.web.service.ISellerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,6 +85,11 @@ public class SellerService implements ISellerService {
         seller.setUser(user1);
         seller.setDescription(" Không có thông tin");
         return repository.save(seller);
+    }
+
+    @Override
+    public Page<Seller> findAllSellerPage(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 }
 
