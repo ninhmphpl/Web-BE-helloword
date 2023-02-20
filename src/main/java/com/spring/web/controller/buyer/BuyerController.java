@@ -58,7 +58,8 @@ public class BuyerController {
     public ResponseEntity<?> checkStockOrderAfterEditCart(@PathVariable("idOrder") Long idOrder,
                                                           @PathVariable("amount") Long amount){
         Order oder = orderService.findById(idOrder).get();
-        oder.setAmount(amount);
+        if(amount !=0) {oder.setAmount(amount);}else {oder.setAmount(1L);}
+
         Boolean result = buyerService.checkOrderQuantity(oder).isStatus();
         if (result) {
             orderService.save(oder);
