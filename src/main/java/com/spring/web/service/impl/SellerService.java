@@ -70,7 +70,7 @@ public class SellerService implements ISellerService {
                Seller seller1 : hihi
        )
         if (seller1.getUser().getUsername().equals(seller.getUser().getUsername())) {
-            return "303, Lỗi";
+            return "303, User Đã Bị Trùng";
         }
         seller.setId(null);
         User user1 = seller.getUser();

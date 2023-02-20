@@ -57,4 +57,6 @@ public class SellerController {
         Object seller1 = sellerService.create(seller);
         return new ResponseEntity<>(seller1,HttpStatus.OK);
     }
+//    @PostMapping("/sellet/create-product")
+
 }
