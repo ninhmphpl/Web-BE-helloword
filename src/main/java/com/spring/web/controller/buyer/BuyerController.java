@@ -97,5 +97,14 @@ public class BuyerController {
         return new ResponseEntity<>(buyerService.findById(1L).get(), HttpStatus.OK);
     }
 
+    @PutMapping("cart/delete/{id}")
+    public ResponseEntity<?> deleteOrderInCart(@PathVariable("id") Long id){
+       Buyer buyer = buyerService.findById(1L).get();
+       Order order = orderService.findById(id).get();
+       List<Order> orderList = buyer.getCart();
+       orderList.remove(order);
+       buyer.setCart(orderList);
+       return new ResponseEntity<>(orderList,HttpStatus.OK);
+    }
 }
 
