@@ -2,6 +2,7 @@ package com.spring.web.service.impl;
 
 import com.spring.web.model.Picture;
 import com.spring.web.model.ProductDetail;
+import com.spring.web.model.Status;
 import com.spring.web.repository.PictureRepository;
 import com.spring.web.service.IPictureService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import java.util.Optional;
 public class PictureService implements IPictureService {
     @Autowired
     private PictureRepository repository;
+    @Autowired
+    private ProductDetailService productDetailService;
 
     @Override
     public Optional<Picture> findById(Long aLong) {
@@ -43,6 +46,7 @@ public class PictureService implements IPictureService {
             result.setName(picture.getName());
             return repository.save(result);
         }
-        return picture;
+        return null;
     }
+
 }

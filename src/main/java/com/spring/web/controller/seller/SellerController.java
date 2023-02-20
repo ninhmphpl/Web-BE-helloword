@@ -54,7 +54,7 @@ public class SellerController {
 
     @PostMapping("/seller")
     public ResponseEntity<?> signUp(@RequestBody Seller seller) {
-        Seller seller1 = sellerService.create(seller);
+        Object seller1 = sellerService.create(seller);
         return new ResponseEntity<>(seller1,HttpStatus.OK);
     }
 }
