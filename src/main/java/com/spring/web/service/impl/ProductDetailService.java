@@ -129,14 +129,6 @@ public class ProductDetailService implements IProductDetailService {
         }
         return productDetail;
     }
-//tìm kiếm theo tên, khoảng giá, khoảng số lượng = body
-//    @Override
-//    public Page<ProductDetail> search(SearchRequest request, Pageable pageable) {
-//        Page<ProductDetail> page = repository.getListProduct(request.getKeyword(), request.getFromQuantity(),
-//                request.getToQuantity(), request.getFromPrice(), request.getToPrice(), pageable);
-//
-//        return page;
-//    }
 
 
 }
