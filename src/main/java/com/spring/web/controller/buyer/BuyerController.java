@@ -88,7 +88,7 @@ public class BuyerController {
             Bill billPayment = buyerService.makeOnePayment(orderArrayList);
             return new ResponseEntity<>(billPayment, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Số lượng sản phẩm đặt hàng vượt quá tồn kho", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Số lượng sản phẩm đặt hàng vượt quá tồn kho", HttpStatus.OK);
         }
     }
 
@@ -97,5 +97,14 @@ public class BuyerController {
         return new ResponseEntity<>(buyerService.findById(1L).get(), HttpStatus.OK);
     }
 
+    @PutMapping("cart/delete/{id}")
+    public ResponseEntity<?> deleteOrderInCart(@PathVariable("id") Long id){
+       Buyer buyer = buyerService.findById(1L).get();
+       Order order = orderService.findById(id).get();
+       List<Order> orderList = buyer.getCart();
+       orderList.remove(order);
+       buyer.setCart(orderList);
+       return new ResponseEntity<>(orderList,HttpStatus.OK);
+    }
 }
 
