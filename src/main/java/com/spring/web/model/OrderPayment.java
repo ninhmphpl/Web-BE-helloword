@@ -8,12 +8,12 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "orders")
+@Table
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Order {
+public class OrderPayment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -27,10 +27,9 @@ public class Order {
     private  Long amount;
 
     @Transient //>> tổng giá của sản phẩm hiện tại dựa trên số lượng và giá của sản phẩm
-    private  Double total;
+    private  Double totalPrice;
 
-    public double getTotal() {
+    public double funtionTotalPrice() {
         return amount*productSimple.getPrice() ;
     }
 }
-

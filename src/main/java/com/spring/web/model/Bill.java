@@ -22,18 +22,29 @@ public class Bill {
     private Long id;
 
     @ManyToMany
-    private List<Order> orderList;
+    private List<OrderPayment> orderPayments;
 
     @Column(nullable = false)
     private LocalDateTime timeBuy;
 
     @Transient //>> tổng giá của tất cả các order trong order list
-    private Double total;
+    private Double total ;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Buyer buyer;
+    @Column(nullable = false)
+    private Long idBuyer ;
 
+    @Column(nullable = false)
+    private String nameBuyer ;
+// tổng tiển phải trả của hóa đơn
+    public double totalPayment() {
+        double sum = 0;
+        if (orderPayments != null) {
+            for (int i = 0; i < orderPayments.size(); i++) {
+                sum += orderPayments.get(i).getTotalPrice();
+            }
+        }
+        return sum;
+    }
 
 
 }

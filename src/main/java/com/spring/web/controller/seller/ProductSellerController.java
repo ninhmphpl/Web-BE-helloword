@@ -13,8 +13,8 @@ public class ProductSellerController {
 
     @Autowired
     private PictureService pictureService;
-    @PutMapping("/edit-picture")
-    public ResponseEntity<Picture>edit(@PathVariable("{along}") Long id ,@RequestBody Picture picture ){
+    @PutMapping("/edit-picture/{along}")
+    public ResponseEntity<Picture>edit(@RequestBody Picture picture ){
         Picture picture1 = pictureService.updatePicture(picture);
         return new ResponseEntity<>(picture1, HttpStatus.OK);
     }

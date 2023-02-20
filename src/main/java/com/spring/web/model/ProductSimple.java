@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 
 @Entity
 @Table(name = "products")
@@ -30,6 +31,10 @@ public class ProductSimple {
 
     @Column(nullable = false)
     private String avatar;
+
+    @Column(nullable = false)
+    @Min(0)
+    private Integer quantity;
 
     @ManyToOne
     @JoinColumn(nullable = false)

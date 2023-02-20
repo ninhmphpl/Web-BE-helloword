@@ -38,4 +38,9 @@ public class DistrictService implements IDistrictService {
     public List<District>findAllDistrictByProvince(Province province){
         return repository.findDistrictByProvince(province);
     }
+
+    public List<District> findAllDistrictbyProvince(Province province){
+     return repository.findDistinctByProvince(province);
+
+    }
 }

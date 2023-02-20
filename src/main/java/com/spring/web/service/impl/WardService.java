@@ -35,8 +35,7 @@ public class WardService implements IWardService {
         repository.deleteById(aLong);
 
     }
-
-    public List<Ward>findAllWardByDistrict(District district){
+    public List <Ward> findAllWardByDistrict (District district){
         return repository.findWardsByDistrict(district);
     }
 }

@@ -29,20 +29,20 @@ public class ProductSimpleService implements IProductSimpleService {
 
     @Override
     public ProductSimple save(ProductSimple productSimple) {
-        if (productSimple.getName() == null){
+        if (productSimple.getName() == null) {
             productSimple.setName("Tên Trống");
         }
-        if (productSimple.getSold()==null){
+        if (productSimple.getSold() == null) {
             productSimple.setSold(0);
         }
-        if (productSimple.getPrice() == null){
+        if (productSimple.getPrice() == null) {
             productSimple.setPrice(0D);
         }
-        if (productSimple.getAvatar() == null){
+        if (productSimple.getAvatar() == null) {
             productSimple.setAvatar("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-J0cRr6ptVPnQ-DZqDJxxbjowBwIbP6l1Gsau43jbVRCWbYkB2-lC9cL1T_5WCf680pc&usqp=CAU");
         }
-        if (productSimple.getCategory() == null){
-            productSimple.setCategory(new Category(1L,null));
+        if (productSimple.getCategory() == null) {
+            productSimple.setCategory(new Category(1L, null));
         }
         return repository.save(productSimple);
     }
@@ -74,4 +74,8 @@ public class ProductSimpleService implements IProductSimpleService {
 public List<ProductSimple>findProductByQuantity1(Integer min, Integer max){
         return repository.findProductByQuantity(min,max);
 }
+    public List<ProductSimple> findAllByCategoryName(String name) {
+        return repository.findProductByCategoryAndName(name);
+    }
+
 }
