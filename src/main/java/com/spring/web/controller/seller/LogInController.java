@@ -49,7 +49,4 @@ public class LogInController {
         Object seller1 = sellerService.create(seller);
         return new ResponseEntity<>(seller1,HttpStatus.OK);
     }
-
-
-
 }

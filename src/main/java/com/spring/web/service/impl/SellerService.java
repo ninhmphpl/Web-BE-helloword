@@ -2,6 +2,7 @@ package com.spring.web.service.impl;
 
 import com.spring.web.model.*;
 import com.spring.web.repository.AddressRepository;
+import com.spring.web.repository.PictureRepository;
 import com.spring.web.repository.SellerRepository;
 import com.spring.web.repository.UserRepository;
 import com.spring.web.service.ISellerService;
@@ -11,8 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -29,8 +30,14 @@ public class SellerService implements ISellerService {
     private AddressRepository addressRepository;
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private ProductDetailService productSimple;
+    @Autowired
+    private PictureService pictureService;
+    @Autowired
+    private PictureRepository pictureRepository;
     @Override
+
     public Optional<Seller> findById(Long aLong) {
         return repository.findById(aLong);
     }
@@ -91,5 +98,6 @@ public class SellerService implements ISellerService {
     public Page<Seller> findAllSellerPage(Pageable pageable) {
         return repository.findAll(pageable);
     }
-}
+
+    }
 
