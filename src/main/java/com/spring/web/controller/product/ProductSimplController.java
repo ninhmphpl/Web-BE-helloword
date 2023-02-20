@@ -55,6 +55,6 @@ public class ProductSimplController {
     @PutMapping("/edit-picture/{id}")
     public ResponseEntity<?> editImageProduct(@PathVariable("id") Long id, @RequestBody List<Picture> newImageList) {
 
-        return new ResponseEntity<>(productDetailService.updateImage(id, newImageList),HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(productDetailService.updateImage(id, newImageList),HttpStatus.OK);
     }
 }
