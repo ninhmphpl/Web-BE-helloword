@@ -52,7 +52,7 @@ public class ProductSimplController {
         }
         return new ResponseEntity<>(page , HttpStatus.OK);
     }
-    @PutMapping("/edit-picture/{id}")
+    @PutMapping("/editPicture/{id}")
     public ResponseEntity<?> editImageProduct(@PathVariable("id") Long id, @RequestBody List<Picture> newImageList) {
 
         return new ResponseEntity<>(productDetailService.updateImage(id, newImageList),HttpStatus.OK);
