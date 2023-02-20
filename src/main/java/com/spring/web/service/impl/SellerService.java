@@ -1,5 +1,6 @@
 package com.spring.web.service.impl;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.spring.web.model.*;
 import com.spring.web.repository.AddressRepository;
 import com.spring.web.repository.PictureRepository;
@@ -87,6 +88,12 @@ public class SellerService implements ISellerService {
     @Override
     public Seller findByProductSimpleContaining(ProductSimple productSimple) {
         return repository.findByListProductContaining(productSimple);
+    }
+
+    @Override
+    public List<Seller> finaAllSellerByNameContaining(String name) {
+        List<Seller> sellerList =  repository.findAllByNameContaining(name);
+        return  sellerList;
     }
 
 }

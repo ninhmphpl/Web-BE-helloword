@@ -76,7 +76,18 @@ public class SellerController {
         productSimpleList.add(productSimple1);
         seller1.setListProduct(productSimpleList);
         sellerService.save(seller1);
-        return new ResponseEntity<>(seller1, HttpStatus.OK);
+        return new ResponseEntity<>(productDetail1, HttpStatus.OK);
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<?> findAllSellerByNameContaining(@PathVariable String name){
+        List<Seller> sellerList = sellerService.finaAllSellerByNameContaining(name);
+        for (Seller seller : sellerList){
+            seller.setAddress(null);
+            seller.setListProduct(null);
+            seller.setUser(null);
+        }
+        return new ResponseEntity<>(sellerList, HttpStatus.OK);
     }
 
 }
