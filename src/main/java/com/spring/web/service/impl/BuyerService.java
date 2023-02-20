@@ -2,6 +2,7 @@ package com.spring.web.service.impl;
 
 import com.spring.web.model.*;
 import com.spring.web.repository.BuyerRepository;
+import com.spring.web.repository.OrderPaymentRepository;
 import com.spring.web.repository.ProductDetailRepository;
 import com.spring.web.service.IBuyerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class BuyerService implements IBuyerService {
     private ProductDetailRepository productDetailRepository;
     @Autowired
     private BillService billService;
+
+    @Autowired
+    private OrderPaymentRepository orderPaymentRepository;
 
     @Override
     public Optional<Buyer> findById(Long aLong) {
@@ -111,17 +115,25 @@ public class BuyerService implements IBuyerService {
 
     //tạo hóa đơn và thay đổi giỏ hàng
     public Bill makeOnePayment(List<Order> orders) {
+//        orderPayments list order
+        List<OrderPayment> orderPayments = new ArrayList<>(orders.size());
+        for (int i = 0; i < orders.size(); i++) {
+            OrderPayment  orderPayment = new OrderPayment(orders.get(i).getId(), orders.get(i).getProductSimple(), orders.get(i).getAmount(), orders.get(i).getTotal());
+               orderPaymentRepository.save(orderPayment);
+                orderPayments.add(orderPayment);
+
+        }
 
         Buyer buyer = repository.findById(1L).get();
         List<Bill> billList = buyer.getBills();
-        Bill newBill = new Bill(null, orders, LocalDateTime.now(), null, buyer.getId(),buyer.getName());
+        Bill newBill = new Bill(null, orderPayments, LocalDateTime.now(), null, buyer.getId(), buyer.getName());
         newBill.setTotal(newBill.totalPayment());
         newBill = billService.save(newBill);
         billList.add(newBill);
         buyer.setBills(billList);
         repository.save(buyer);
-        for (Order order : orders
-        ) {
+//  oders là list khách gửi về
+        for (Order order : orders) {
             setProductDetail(order);
             setCartAfterPay(order);
         }
@@ -141,9 +153,9 @@ public class BuyerService implements IBuyerService {
     }
 
     /// sửa lại giỏ hàng sau khi thanh toán
-    public void setCartAfterPay(Order order){
+    public void setCartAfterPay(Order order) {
         Order beforeCart = orderService.findById(order.getId()).get();
-        Long  afterAmount = beforeCart.getAmount() - order.getAmount();
+        Long afterAmount = beforeCart.getAmount() - order.getAmount();
         beforeCart.setAmount(afterAmount);
         orderService.save(beforeCart);
     }
