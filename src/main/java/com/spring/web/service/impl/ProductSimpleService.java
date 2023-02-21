@@ -58,6 +58,11 @@ public class ProductSimpleService implements IProductSimpleService {
     }
 
     @Override
+    public Page<ProductSimple> findAllPageByStatus(Pageable pageable) {
+        return repository.findAllByStatus(new Status(1L, null, null) , pageable);
+    }
+
+    @Override
     public Page<ProductSimple> findAllPageAndCategory(Pageable pageable, Category category) {
         return repository.findAllByCategory(pageable, category);
     }

@@ -62,6 +62,6 @@ public class ProductSimplController {
     @GetMapping("/seller/{id}")
     public ResponseEntity<?> findSellerByProduct(@PathVariable Long id){
         return new ResponseEntity<>(sellerService.findByProductSimpleContaining(
-                new ProductSimple(id, null, null,null,null,null,null)), HttpStatus.OK);
+                new ProductSimple(id, null, null,null,null,null,null,null)), HttpStatus.OK);
     }
 }

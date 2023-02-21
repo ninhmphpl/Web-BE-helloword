@@ -42,7 +42,7 @@ public class ProductController {
                                              @SortDefault(sort = "id", direction = DESC)
                                              Pageable pageable){
 
-        Page<ProductSimple> page = productSimpleService.findAllPage(pageable);
+        Page<ProductSimple> page = productSimpleService.findAllPageByStatus(pageable);
 
         if(pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0){
             System.out.println("Page Number out range page");
@@ -85,13 +85,13 @@ public class ProductController {
      * Xóa 1 sản phẩm bằng cách sửa trạng thái của nó về startus có id = 2
      */
     @DeleteMapping("/product-delete/{along}")
-    public ResponseEntity<ProductDetail> delete(@PathVariable("along") Long along) {
+    public Object delete(@PathVariable("along") Long along) {
         Optional<ProductDetail> productDetail = productDetailService.findById(along);
         if (productDetail.isPresent()) {
-            ProductDetail result = productDetailService.deleteProductSetStatus(along, new Status(3L, null,null));
+            ProductDetail result = productDetailService.deleteProductSetStatus(along, new Status(2L, null,null));
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        return "404, không tìm thấy sản phẩm";
     }
 
     /**

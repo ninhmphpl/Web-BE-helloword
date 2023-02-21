@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface IProductSimpleService extends CRUDService<ProductSimple, Long> {
     Page<ProductSimple> findAllPage(Pageable pageable);
+    Page<ProductSimple> findAllPageByStatus(Pageable pageable);
+
     Page<ProductSimple> findAllPageAndCategory(Pageable pageable, Category category);
     Page<ProductSimple> findAllPageAndNameContaining(Pageable pageable, String name);
 
