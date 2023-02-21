@@ -1,11 +1,17 @@
 package com.spring.web.model;
 
+import com.spring.web.model.pojo.Cart;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.bytebuddy.TypeCache;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -21,16 +27,16 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private ProductSimple productSimple;
+    private ProductDetail productDetail;
 
     @Column(nullable = false)
-    private  Long amount;
+    private Long amount;
 
     @Transient //>> tổng giá của sản phẩm hiện tại dựa trên số lượng và giá của sản phẩm
-    private  Double total;
+    private Double total;
 
     public double getTotal() {
-        return amount*productSimple.getPrice() ;
+        return amount * productDetail.getPrice();
     }
 }
 

@@ -86,9 +86,10 @@ public class SellerService implements ISellerService {
     }
 
     @Override
-    public Seller findByProductSimpleContaining(ProductSimple productSimple) {
-        return repository.findByListProductContaining(productSimple);
+    public Seller findByProductDetailContaining(ProductDetail productDetail) {
+        return repository.findByListProductContaining(productDetail);
     }
+
 
     @Override
     public List<Seller> finaAllSellerByNameContaining(String name) {

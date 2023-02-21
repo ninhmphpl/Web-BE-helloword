@@ -1,5 +1,6 @@
 package com.spring.web.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,9 +35,9 @@ public class Seller {
   @JoinColumn(nullable = false)
   private Address address;
 
-  @ManyToMany
-  @JoinColumn(nullable = false)
-  private List<ProductSimple> listProduct;
+  @JsonIgnore
+  @OneToMany(mappedBy = "seller")
+  private List<ProductDetail> listProduct;
 
   @Column(nullable = false)
   private String description;

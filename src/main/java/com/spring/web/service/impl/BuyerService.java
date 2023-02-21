@@ -24,8 +24,6 @@ public class BuyerService implements IBuyerService {
     @Autowired
     private OrderService orderService;
     @Autowired
-    private ProductSimpleService productSimpleService;
-    @Autowired
     private ProductDetailRepository productDetailRepository;
     @Autowired
     private BillService billService;
@@ -35,7 +33,6 @@ public class BuyerService implements IBuyerService {
 
     @Override
     public Optional<Buyer> findById(Long aLong) {
-
         return repository.findById(aLong);
     }
 
@@ -66,7 +63,7 @@ public class BuyerService implements IBuyerService {
             if (orderLists.size() != 0) {
                 boolean flag = true;
                 for (Order cart : orderLists) {
-                    if (cart.getProductSimple().getId().equals(id)) {
+                    if (cart.getProductDetail().getId().equals(id)) {
                         orderId = cart.getId();
                         Order order = orderService.findById(orderId).get();
                         Long amount = order.getAmount();
@@ -77,14 +74,14 @@ public class BuyerService implements IBuyerService {
                 }
                 if (flag) {
 
-                    Order newOrder = new Order(null, productSimpleService.findById(id).get(), quantity, null);
+                    Order newOrder = new Order(null, productDetailRepository.findById(id).get(), quantity, null);
                     Order orderCreated = orderService.save(newOrder);
                     orderLists.add(orderCreated);
                     buyer.get().setCart(orderLists);
                     repository.save(buyer.get());
                 }
             } else {
-                Order newOrder = new Order(null, productSimpleService.findById(id).get(), quantity, null);
+                Order newOrder = new Order(null, productDetailRepository.findById(id).get(), quantity, null);
                 Order oderCreate = orderService.save(newOrder);
                 buyer.get().getCart().add(oderCreate);
                 repository.save(buyer.get());
@@ -99,7 +96,7 @@ public class BuyerService implements IBuyerService {
     public ResultCheck checkOrderQuantity(Order order) {
         Optional<Buyer> buyer = repository.findById(1L);
         if (buyer.isPresent()) {
-            Long idProduct = order.getProductSimple().getId();
+            Long idProduct = order.getProductDetail().getId();
             Integer stock = productDetailRepository.findById(idProduct).get().getQuantity();
             String nameProduct = productDetailRepository.findById(idProduct).get().getName();
             if (stock >= order.getAmount()) {
@@ -118,7 +115,7 @@ public class BuyerService implements IBuyerService {
 //        orderPayments list order
         List<OrderPayment> orderPayments = new ArrayList<>(orders.size());
         for (int i = 0; i < orders.size(); i++) {
-            OrderPayment  orderPayment = new OrderPayment(orders.get(i).getId(), orders.get(i).getProductSimple(), orders.get(i).getAmount(), orders.get(i).getTotal());
+            OrderPayment  orderPayment = new OrderPayment(orders.get(i).getId(), orders.get(i).getProductDetail(), orders.get(i).getAmount(), orders.get(i).getTotal());
                orderPaymentRepository.save(orderPayment);
                 orderPayments.add(orderPayment);
 
@@ -149,7 +146,7 @@ public class BuyerService implements IBuyerService {
 
     //    thay đổi quantity và sold của productdetail
     public void setProductDetail(Order order) {
-        Long idProduct = order.getProductSimple().getId();
+        Long idProduct = order.getProductDetail().getId();
         ProductDetail productDetail = productDetailRepository.findById(idProduct).get();
         Integer soldOld = productDetail.getSold();
         Integer soldNew = order.getAmount().intValue();

@@ -1,10 +1,8 @@
 package com.spring.web.controller.seller;
 
 import com.spring.web.model.ProductDetail;
-import com.spring.web.model.ProductSimple;
 import com.spring.web.model.Seller;
 import com.spring.web.model.User;
-import com.spring.web.repository.SellerRepository;
 import com.spring.web.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 
@@ -29,8 +28,6 @@ public class SellerController {
     private UserService userService;
     @Autowired
     private ProductDetailService productDetailService;
-    @Autowired
-    private ProductSimpleService productSimpleService;
 
 
     // check User tồn tại hay chưa
@@ -67,16 +64,11 @@ public class SellerController {
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
     @PostMapping("/create-product/{id}")
-    public ResponseEntity<?> create(@RequestBody ProductDetail productDetail,
+    public Object createProduct(@RequestBody ProductDetail productDetail,
                                     @PathVariable Long id){
-        Seller seller1= sellerService.findById(id).get();
-        ProductDetail productDetail1 = productDetailService.createProduct(productDetail);
-        ProductSimple productSimple1 = productSimpleService.findById(productDetail1.getId()).get();
-        List<ProductSimple> productSimpleList = seller1.getListProduct();
-        productSimpleList.add(productSimple1);
-        seller1.setListProduct(productSimpleList);
-        sellerService.save(seller1);
-        return new ResponseEntity<>(productDetail1, HttpStatus.OK);
+        Optional<Seller> seller = sellerService.findById(id);
+        if(!seller.isPresent()) return "404, Người bán này không còn tồn tại trong hệ thống";
+        return productDetailService.createProductByEmployee(productDetail, id);
     }
 
     @GetMapping("/name/{name}")

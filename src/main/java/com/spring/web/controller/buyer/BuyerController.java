@@ -1,19 +1,13 @@
 package com.spring.web.controller.buyer;
 
 import com.spring.web.model.*;
-import com.spring.web.repository.BuyerRepository;
-import com.spring.web.repository.OrderRepository;
-import com.spring.web.service.impl.BuyerService;
-import com.spring.web.service.impl.OrderService;
-import com.spring.web.service.impl.ProductDetailService;
-import com.spring.web.service.impl.ProductSimpleService;
+import com.spring.web.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Struct;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +22,8 @@ public class BuyerController {
     public OrderService orderService;
     @Autowired
     public ProductDetailService productDetailService;
+    @Autowired
+    CartService cartService;
 
 
     @PostMapping("/to-cart/{id}/{quantity}")
@@ -75,7 +71,7 @@ public class BuyerController {
         ) {
             Order order1 = orderService.findById(oder.getId()).get();
             order1.setAmount(oder.getAmount());
-            order1.setTotal(order1.getAmount() * order1.getProductSimple().getPrice());
+            order1.setTotal(order1.getAmount() * order1.getProductDetail().getPrice());
             orderArrayList.add(order1);
         }
         boolean flag = true;
@@ -93,8 +89,10 @@ public class BuyerController {
     }
 
     @GetMapping("/info")
-    public ResponseEntity<?> getInForBuyer() {
-        return new ResponseEntity<>(buyerService.findById(1L).get(), HttpStatus.OK);
+    public Object getInForBuyer() {
+        Optional<Buyer> buyer = buyerService.findById(1L);
+        if(!buyer.isPresent()) return "404, Người mua không tồn tại";
+        return new ResponseEntity<>(buyer.get(), HttpStatus.OK);
     }
 
     @PutMapping("cart/delete/{id}")
@@ -106,6 +104,15 @@ public class BuyerController {
        buyer.setCart(orderList);
        buyerService.save(buyer);
        return new ResponseEntity<>(orderList,HttpStatus.OK);
+    }
+
+    @GetMapping("/cart")
+    public Object getCart(){
+        Optional<Buyer> buyer = buyerService.findById(1L);
+        if(buyer.isPresent()){
+            return new ResponseEntity<>(cartService.getCart(buyer.get()), HttpStatus.OK) ;
+        }
+        return "404, Người mua này không còn tồn tại";
     }
 }
 

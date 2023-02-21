@@ -21,7 +21,7 @@ public class OrderPayment {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private ProductSimple productSimple;
+    private ProductDetail productDetail;
 
     @Column(nullable = false)
     private  Long amount;
@@ -30,6 +30,6 @@ public class OrderPayment {
     private  Double totalPrice;
 
     public double funtionTotalPrice() {
-        return amount*productSimple.getPrice() ;
+        return amount*productDetail.getPrice() ;
     }
 }

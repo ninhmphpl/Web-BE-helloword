@@ -1,14 +1,10 @@
 package com.spring.web.controller.product;
 
-import com.spring.web.model.Category;
 import com.spring.web.model.Picture;
 import com.spring.web.model.ProductDetail;
-import com.spring.web.model.ProductSimple;
 import com.spring.web.repository.ProductDetailRepository;
 import com.spring.web.service.ISellerService;
-import com.spring.web.service.impl.CategoryService;
 import com.spring.web.service.impl.ProductDetailService;
-import com.spring.web.service.impl.ProductSimpleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,9 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 
@@ -29,8 +23,6 @@ import static org.springframework.data.domain.Sort.Direction.ASC;
 @CrossOrigin("*")
 @RequestMapping("/product")
 public class ProductSimplController {
-    @Autowired
-    private ProductSimpleService productSimpleService;
     @Autowired
     private ISellerService sellerService;
     @Autowired
@@ -41,27 +33,29 @@ public class ProductSimplController {
     @GetMapping("/filter/{name}")
     public ResponseEntity<?> searchProductBuyNamOrCategory(@PathVariable("name") String name,
                                                            @PageableDefault(value = 10)
-                                                                   @SortDefault(sort = "id",direction = ASC) Pageable pageable) {
-        List<ProductSimple> productSimpleList = productSimpleService.findAllByCategoryName("%" + name + "%");
+                                                           @SortDefault(sort = "id", direction = ASC) Pageable pageable) {
+        List<ProductDetail> productSimpleList = productDetailService.findAllByCategoryName("%" + name + "%");
 //       Chuyển đổi từ List sang Page
-        final int start = (int)pageable.getOffset();
+        final int start = (int) pageable.getOffset();
         final int end = Math.min((start + pageable.getPageSize()), productSimpleList.size());
-        final Page<ProductSimple> page = new PageImpl<>(productSimpleList.subList(start, end), pageable, productSimpleList.size());
+        final Page<ProductDetail> page = new PageImpl<>(productSimpleList.subList(start, end), pageable, productSimpleList.size());
 //
-        if(pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0){
+        if (pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0) {
             return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
         }
-        return new ResponseEntity<>(page , HttpStatus.OK);
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
+
     @PutMapping("/editPicture/{id}")
     public ResponseEntity<?> editImageProduct(@PathVariable("id") Long id, @RequestBody List<Picture> newImageList) {
 
-        return new ResponseEntity<>(productDetailService.updateImage(id, newImageList),HttpStatus.OK);
+        return new ResponseEntity<>(productDetailService.updateImage(id, newImageList), HttpStatus.OK);
     }
 
     @GetMapping("/seller/{id}")
-    public ResponseEntity<?> findSellerByProduct(@PathVariable Long id){
-        return new ResponseEntity<>(sellerService.findByProductSimpleContaining(
-                new ProductSimple(id, null, null,null,null,null,null,null)), HttpStatus.OK);
+    public ResponseEntity<?> findSellerByProduct(@PathVariable Long id) {
+        ProductDetail productDetail = new ProductDetail();
+        productDetail.setId(id);
+        return new ResponseEntity<>(sellerService.findByProductDetailContaining(productDetail), HttpStatus.OK);
     }
 }
