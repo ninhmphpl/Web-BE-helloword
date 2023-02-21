@@ -72,7 +72,7 @@ public class ProductDetailService implements IProductDetailService {
                 result.setPicture(pictureList);
             }
             result.setAvatar(result.getPicture().get(0).getName());
-            productDetail.setCategory(productDetail.getCategory());
+            result.setCategory(productDetail.getCategory());
             return repository.save(result);
         }
         return null;
