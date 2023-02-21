@@ -25,6 +25,8 @@ public class Order {
 
     @Column(nullable = false)
     private  Long amount;
+    @Column(nullable = false)
+    private  Long idbuyer;
 
     @Transient //>> tổng giá của sản phẩm hiện tại dựa trên số lượng và giá của sản phẩm
     private  Double total;

@@ -39,4 +39,6 @@ public class ProductSimple {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Category category;
+
+
 }
