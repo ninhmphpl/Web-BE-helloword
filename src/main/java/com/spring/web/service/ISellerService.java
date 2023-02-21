@@ -12,4 +12,6 @@ public interface ISellerService extends CRUDService<Seller , Long>{
     Seller findByProductDetailContaining(ProductDetail productDetail);
     List<Seller> finaAllSellerByNameContaining(String name);
 
+    public Object create(Seller seller);
+
 }

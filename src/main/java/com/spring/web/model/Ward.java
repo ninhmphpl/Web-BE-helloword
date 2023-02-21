@@ -21,7 +21,6 @@ public class Ward {
   @Column(nullable = false)
   private Long id;
 
-  @JsonIgnore
   @Column(nullable = false, name = "_name")
   private String name;
 
@@ -30,6 +29,7 @@ public class Ward {
   @JoinColumn(name = "_district_id")
   private District district;
 
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "_province_id")
   private Province province;

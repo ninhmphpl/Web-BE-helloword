@@ -43,10 +43,4 @@ public class LogInController {
     public ResponseEntity<Seller> findById(@PathVariable Long id) {
         return new ResponseEntity<>(sellerService.findById(id).get(), HttpStatus.OK);
     }
-    // Tạo Nick Mới
-    @PostMapping("/seller")
-    public ResponseEntity<?> signUp(@RequestBody Seller seller) {
-        Object seller1 = sellerService.create(seller);
-        return new ResponseEntity<>(seller1,HttpStatus.OK);
-    }
 }

@@ -35,6 +35,9 @@ public class Order {
     @Transient //>> tổng giá của sản phẩm hiện tại dựa trên số lượng và giá của sản phẩm
     private Double total;
 
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Buyer buyer;
     public double getTotal() {
         return amount * productDetail.getPrice();
     }

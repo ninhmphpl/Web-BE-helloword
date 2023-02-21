@@ -21,8 +21,7 @@ public class ProductDetail{
     @Column(nullable = false)
     private String description ;
 
-    @ManyToMany
-    @JoinColumn(nullable = false)
+    @OneToMany(mappedBy = "productDetail")
     private List<Picture> picture;
 
     @JsonIgnore

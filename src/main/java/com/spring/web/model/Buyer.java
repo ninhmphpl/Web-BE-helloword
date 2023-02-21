@@ -48,8 +48,7 @@ public class Buyer {
   @ManyToOne
   private User user;
 
-  @JoinColumn(nullable = false)
-  @ManyToMany
+  @OneToMany(mappedBy = "buyer")
   private List<Order> cart;
 
  @Column(nullable = false)

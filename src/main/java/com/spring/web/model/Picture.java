@@ -1,5 +1,6 @@
 package com.spring.web.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,10 @@ public class Picture {
 
     @Column(nullable = false)
     private String name;
+
+    @JsonIgnore
+    @ManyToOne
+    ProductDetail productDetail;
 
 
 }

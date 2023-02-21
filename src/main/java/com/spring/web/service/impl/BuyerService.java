@@ -74,14 +74,14 @@ public class BuyerService implements IBuyerService {
                 }
                 if (flag) {
 
-                    Order newOrder = new Order(null, productDetailRepository.findById(id).get(), quantity, null);
+                    Order newOrder = new Order(null, productDetailRepository.findById(id).get(), quantity, null, null);
                     Order orderCreated = orderService.save(newOrder);
                     orderLists.add(orderCreated);
                     buyer.get().setCart(orderLists);
                     repository.save(buyer.get());
                 }
             } else {
-                Order newOrder = new Order(null, productDetailRepository.findById(id).get(), quantity, null);
+                Order newOrder = new Order(null, productDetailRepository.findById(id).get(), quantity, null, null);
                 Order oderCreate = orderService.save(newOrder);
                 buyer.get().getCart().add(oderCreate);
                 repository.save(buyer.get());
