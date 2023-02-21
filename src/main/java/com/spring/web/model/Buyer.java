@@ -1,5 +1,6 @@
 package com.spring.web.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,7 +43,7 @@ public class Buyer {
   @JoinColumn(nullable = false)
   private Address address;
 
-
+  @JsonIgnore
   @JoinColumn(nullable = false)
   @ManyToOne
   private User user;

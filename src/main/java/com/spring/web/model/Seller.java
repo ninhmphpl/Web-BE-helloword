@@ -42,6 +42,7 @@ public class Seller {
   @Column(nullable = false)
   private String description;
 
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(nullable = false)
   private User user;
