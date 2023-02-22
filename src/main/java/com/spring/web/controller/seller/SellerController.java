@@ -47,12 +47,6 @@ public class SellerController {
         return new ResponseEntity<>(sellerService.findById(id).get(), HttpStatus.OK);
     }
 
-    @PostMapping("/seller")
-    public ResponseEntity<?> signUp(@RequestBody Seller seller) {
-        Object seller1 = sellerService.create(seller);
-        return new ResponseEntity<>(seller1,HttpStatus.OK);
-    }
-
     @GetMapping("/list")
     public ResponseEntity<?> findAllSellerPage(@PageableDefault(value = 10)
                                                @SortDefault(sort = "id", direction = ASC) Pageable pageable) {

@@ -4,10 +4,13 @@ import com.spring.web.model.*;
 import com.spring.web.repository.BuyerRepository;
 import com.spring.web.repository.OrderPaymentRepository;
 import com.spring.web.repository.ProductDetailRepository;
+import com.spring.web.service.IAddressService;
 import com.spring.web.service.IBuyerService;
+import com.spring.web.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -30,6 +33,15 @@ public class BuyerService implements IBuyerService {
 
     @Autowired
     private OrderPaymentRepository orderPaymentRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private IAddressService addressService;
 
     @Override
     public Optional<Buyer> findById(Long aLong) {
@@ -161,4 +173,27 @@ public class BuyerService implements IBuyerService {
    orderService.delete(order.getId());
     }
 
+    @Override
+    public Object createBuyer(Buyer buyer, String username, String password) {
+        Iterable<Buyer> buyers = repository.findAll();
+        for (Buyer buyer1 : buyers) {
+            if (buyer1.getUser().getUsername().equals(username)) {
+                return new ResponseEntity<>("Username đã tồn tại trong hệ thống", HttpStatus.BAD_REQUEST);
+            }
+        }
+        buyer.setId(null);
+        User user1 = new User();
+        user1.setRole(new Role(1L, null));
+        user1.setStatus(new Status(1L, null, null));
+        user1.setId(null);
+        user1.setUsername(username);
+        user1.setPassword(passwordEncoder.encode(password));
+        user1 = userService.save(user1);
+        Address address1 = addressService.save(buyer.getAddress());
+        buyer.setAddress(address1);
+        buyer.setUser(user1);
+        buyer.setAvatar("https://th.bing.com/th/id/R.06703a8fbf9fc3f5883d874e8dfb098f?rik=FWCoLrReRMwU1Q&pid=ImgRaw&r=0");
+        buyer.setDescription(" Không có thông tin");
+        return repository.save(buyer);
+    }
 }

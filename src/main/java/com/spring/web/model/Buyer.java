@@ -58,5 +58,7 @@ public class Buyer {
   @ManyToMany
   private List<Bill> bills;
 
+  @Column(nullable = false)
+  private String description;
 
 }
