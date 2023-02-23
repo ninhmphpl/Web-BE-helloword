@@ -28,12 +28,12 @@ SET time_zone = "+00:00";
 -- Table structure for table `district`
 --
 
-CREATE TABLE `district` (
-  `id` bigint  NOT NULL,
-  `_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `_prefix` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `_province_id` bigint  DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+-- CREATE TABLE `district` (
+--   `id` bigint  NOT NULL,
+--   `_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+--   `_prefix` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+--   `_province_id` bigint  DEFAULT NULL
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `district`
@@ -756,14 +756,14 @@ INSERT INTO `district` (`id`, `_name`, `_prefix`, `_province_id`) VALUES
 -- Table structure for table `project`
 --
 
-CREATE TABLE `project` (
-  `id` bigint  NOT NULL,
-  `_name` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `_province_id` bigint  DEFAULT NULL,
-  `_district_id` bigint  DEFAULT NULL,
-  `_lat` double  DEFAULT NULL,
-  `_lng` double  DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+# CREATE TABLE `project` (
+#   `id` bigint  NOT NULL,
+#   `_name` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+#   `_province_id` bigint  DEFAULT NULL,
+#   `_district_id` bigint  DEFAULT NULL,
+#   `_lat` double  DEFAULT NULL,
+#   `_lng` double  DEFAULT NULL
+# ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `project`
@@ -3849,11 +3849,11 @@ INSERT INTO `project` (`id`, `_name`, `_province_id`, `_district_id`, `_lat`, `_
 -- Table structure for table `province`
 --
 
-CREATE TABLE `province` (
-  `id` bigint  NOT NULL,
-  `_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `_code` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+# CREATE TABLE `province` (
+#   `id` bigint  NOT NULL,
+#   `_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+#   `_code` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL
+# ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `province`
@@ -3930,13 +3930,13 @@ INSERT INTO `province` (`id`, `_name`, `_code`) VALUES
 -- Table structure for table `street`
 --
 
-CREATE TABLE `street` (
-  `id` bigint  NOT NULL,
-  `_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `_prefix` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `_province_id` bigint  DEFAULT NULL,
-  `_district_id` bigint  DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+# CREATE TABLE `street` (
+#   `id` bigint  NOT NULL,
+#   `_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+#   `_prefix` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+#   `_province_id` bigint  DEFAULT NULL,
+#   `_district_id` bigint  DEFAULT NULL
+# ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `street`
@@ -35617,13 +35617,13 @@ INSERT INTO `street` (`id`, `_name`, `_prefix`, `_province_id`, `_district_id`) 
 -- Table structure for table `ward`
 --
 
-CREATE TABLE `ward` (
-  `id` bigint  NOT NULL,
-  `_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `_prefix` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `_province_id` bigint  DEFAULT NULL,
-  `_district_id` bigint  DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+-- CREATE TABLE `ward` (
+--   `id` bigint  NOT NULL,
+--   `_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+--   `_prefix` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+--   `_province_id` bigint  DEFAULT NULL,
+--   `_district_id` bigint  DEFAULT NULL
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `ward`
