@@ -18,11 +18,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/product")
-public class ProductSimplController {
+public class ProductController {
     @Autowired
     private ISellerService sellerService;
     @Autowired
@@ -43,6 +44,24 @@ public class ProductSimplController {
         if (pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0) {
             return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
         }
+        return new ResponseEntity<>(page, HttpStatus.OK);
+    }
+
+    /**
+     * Tìm tất cả sản phẩm ở trang tùy chọn
+     */
+    @GetMapping("/list")
+    public ResponseEntity<?> findAllPage(@PageableDefault(value = 10)
+                                         @SortDefault(sort = "id", direction = DESC)
+                                         Pageable pageable) {
+
+        Page<ProductDetail> page = productDetailService.findAllPageByStatus(pageable);
+
+        if (pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0) {
+            System.out.println("Page Number out range page");
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        }
+
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 

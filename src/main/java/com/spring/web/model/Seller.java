@@ -35,7 +35,7 @@ public class Seller {
   @JoinColumn(nullable = false)
   private Address address;
 
-//  @JsonIgnore
+  @JsonIgnore
   @OneToMany(mappedBy = "seller")
   private List<ProductDetail> listProduct;
 

@@ -63,7 +63,7 @@ public class SellerService implements ISellerService {
         }
         seller.setId(null);
         User user1 = new User();
-        user1.setRole(new Role(1L, null));
+        user1.setRole(new Role(3L, null));
         user1.setStatus(new Status(1L, null, null));
         user1.setId(null);
         user1.setUsername(username);

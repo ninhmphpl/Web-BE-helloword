@@ -10,6 +10,8 @@ import com.spring.web.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +45,7 @@ public class BuyerService implements IBuyerService {
     @Autowired
     private IAddressService addressService;
 
+
     @Override
     public Optional<Buyer> findById(Long aLong) {
         return repository.findById(aLong);
@@ -67,42 +70,59 @@ public class BuyerService implements IBuyerService {
     }
 
     public Object findAllOrderInCart(Long id, Long quantity) {
+        Optional<Buyer> buyer = getBuyer();
+        Optional<ProductDetail> productDetail = productDetailRepository.findById(id);
+        if (productDetail.isPresent() && buyer.isPresent()) {
 
-        Optional<Buyer> buyer = repository.findById(1L);
-        if (buyer.isPresent()) {
-            List<Order> orderLists = buyer.get().getCart();
-            Long orderId = 0L;
-            if (orderLists.size() != 0) {
-                boolean flag = true;
-                for (Order cart : orderLists) {
-                    if (cart.getProductDetail().getId().equals(id)) {
-                        orderId = cart.getId();
-                        Order order = orderService.findById(orderId).get();
-                        Long amount = order.getAmount();
-                        order.setAmount(amount + quantity);
-                        orderService.save(order);
-                        flag = false;
-                    }
-                }
-                if (flag) {
-
-                    Order newOrder = new Order(null, productDetailRepository.findById(id).get(), quantity, null, null);
-                    Order orderCreated = orderService.save(newOrder);
-                    orderLists.add(orderCreated);
-                    buyer.get().setCart(orderLists);
-                    repository.save(buyer.get());
-                }
-            } else {
-                Order newOrder = new Order(null, productDetailRepository.findById(id).get(), quantity, null, null);
-                Order oderCreate = orderService.save(newOrder);
-                buyer.get().getCart().add(oderCreate);
-                repository.save(buyer.get());
+            if (productDetail.get().getStatus().getId() != 1L ){
+                return new ResponseEntity<>("Sản phẩm này hiện đã ngừng kinh doanh", HttpStatus.BAD_REQUEST);
             }
-
-            return repository.findById(1L).get().getCart();
-        } else {
-            return "403,không có người dùng";
+            for (Order order : buyer.get().getCart()){
+                if(productDetail.get().getId() == order.getId()){
+                    order.setAmount(order.getAmount() + quantity);
+                    return orderService.save(order);
+                }
+            }
+            Order order = new Order(null, productDetail.get(), quantity, 0D, buyer.get());
+            return orderService.save(order);
         }
+
+
+//        if (buyer.isPresent()) {
+//            List<Order> orderLists = buyer.get().getCart();
+//            Long orderId = 0L;
+//            if (orderLists.size() != 0) {
+//                boolean flag = true;
+//                for (Order cart : orderLists) {
+//                    if (cart.getProductDetail().getId().equals(id)) {
+//                        orderId = cart.getId();
+//                        Order order = orderService.findById(orderId).get();
+//                        Long amount = order.getAmount();
+//                        order.setAmount(amount + quantity);
+//                        orderService.save(order);
+//                        flag = false;
+//                    }
+//                }
+//                if (flag) {
+//
+//                    Order newOrder = new Order(null, productDetailRepository.findById(id).get(), quantity, null, null);
+//                    Order orderCreated = orderService.save(newOrder);
+//                    orderLists.add(orderCreated);
+//                    buyer.get().setCart(orderLists);
+//                    repository.save(buyer.get());
+//                }
+//            } else {
+//                Order newOrder = new Order(null, productDetailRepository.findById(id).get(), quantity, null, null);
+//                Order oderCreate = orderService.save(newOrder);
+//                buyer.get().getCart().add(oderCreate);
+//                repository.save(buyer.get());
+//            }
+//
+//            return repository.findById(1L).get().getCart();
+//        } else {
+//            return "403,không có người dùng";
+//        }
+        return new ResponseEntity<>("Người dùng hoặc sản phẩm không tồn tại", HttpStatus.BAD_REQUEST);
     }
 
     public ResultCheck checkOrderQuantity(Order order) {
@@ -127,9 +147,9 @@ public class BuyerService implements IBuyerService {
 //        orderPayments list order
         List<OrderPayment> orderPayments = new ArrayList<>(orders.size());
         for (int i = 0; i < orders.size(); i++) {
-            OrderPayment  orderPayment = new OrderPayment(orders.get(i).getId(), orders.get(i).getProductDetail(), orders.get(i).getAmount(), orders.get(i).getTotal());
-               orderPaymentRepository.save(orderPayment);
-                orderPayments.add(orderPayment);
+            OrderPayment orderPayment = new OrderPayment(orders.get(i).getId(), orders.get(i).getProductDetail(), orders.get(i).getAmount(), orders.get(i).getTotal());
+            orderPaymentRepository.save(orderPayment);
+            orderPayments.add(orderPayment);
 
         }
 
@@ -142,8 +162,7 @@ public class BuyerService implements IBuyerService {
         buyer.setBills(billList);
 
 
-
-        for (Order order : orders){
+        for (Order order : orders) {
             buyer.getCart().remove(order);
         }
         repository.save(buyer);
@@ -170,7 +189,7 @@ public class BuyerService implements IBuyerService {
 
     /// sửa lại giỏ hàng sau khi thanh toán
     public void deleteCartAfterPay(Order order) {
-   orderService.delete(order.getId());
+        orderService.delete(order.getId());
     }
 
     @Override
@@ -183,7 +202,7 @@ public class BuyerService implements IBuyerService {
         }
         buyer.setId(null);
         User user1 = new User();
-        user1.setRole(new Role(1L, null));
+        user1.setRole(new Role(4L, null));
         user1.setStatus(new Status(1L, null, null));
         user1.setId(null);
         user1.setUsername(username);
@@ -195,5 +214,13 @@ public class BuyerService implements IBuyerService {
         buyer.setAvatar("https://th.bing.com/th/id/R.06703a8fbf9fc3f5883d874e8dfb098f?rik=FWCoLrReRMwU1Q&pid=ImgRaw&r=0");
         buyer.setDescription(" Không có thông tin");
         return repository.save(buyer);
+    }
+
+    @Override
+    public Optional<Buyer> getBuyer() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userService.findByUsername(username);
+        return repository.findByUser(user);
     }
 }

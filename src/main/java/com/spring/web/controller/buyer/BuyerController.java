@@ -1,6 +1,7 @@
 package com.spring.web.controller.buyer;
 
 import com.spring.web.model.*;
+import com.spring.web.model.pojo.Cart;
 import com.spring.web.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,7 @@ public class BuyerController {
     public ResponseEntity<?> findAllProductInCart(@PathVariable("id") Long id,
                                                   @PathVariable("quantity") Long quantity) {
         Optional<ProductDetail> productDetail = productDetailService.findById(id);
+
         if (productDetail.isPresent()) {
             if (productDetail.get().getQuantity() > quantity) {
                 return new ResponseEntity<>(buyerService.findAllOrderInCart(id, quantity), HttpStatus.OK);
@@ -52,9 +54,13 @@ public class BuyerController {
 
     @GetMapping("cart/edit-amount/{idOrder}/{amount}")
     public ResponseEntity<?> checkStockOrderAfterEditCart(@PathVariable("idOrder") Long idOrder,
-                                                          @PathVariable("amount") Long amount){
+                                                          @PathVariable("amount") Long amount) {
         Order oder = orderService.findById(idOrder).get();
-        if(amount !=0) {oder.setAmount(amount);}else {oder.setAmount(1L);}
+        if (amount != 0) {
+            oder.setAmount(amount);
+        } else {
+            oder.setAmount(1L);
+        }
 
         Boolean result = buyerService.checkOrderQuantity(oder).isStatus();
         if (result) {
@@ -88,31 +94,38 @@ public class BuyerController {
         }
     }
 
+    public Object buyCart(Cart cart){
+        return null;
+    }
+
     @GetMapping("/info")
     public Object getInForBuyer() {
-        Optional<Buyer> buyer = buyerService.findById(1L);
-        if(!buyer.isPresent()) return "404, Người mua không tồn tại";
+        Optional<Buyer> buyer = buyerService.getBuyer();
+        if (!buyer.isPresent()) return "404, Người mua không tồn tại";
         return new ResponseEntity<>(buyer.get(), HttpStatus.OK);
     }
 
+    // xoa cart khoi nguoi dung
     @PutMapping("cart/delete/{id}")
-    public ResponseEntity<?> deleteOrderInCart(@PathVariable("id") Long id){
-       Buyer buyer = buyerService.findById(1L).get();
-       Order order = orderService.findById(id).get();
-       List<Order> orderList = buyer.getCart();
-       orderList.remove(order);
-       buyer.setCart(orderList);
-       buyerService.save(buyer);
-       return new ResponseEntity<>(orderList,HttpStatus.OK);
+    public ResponseEntity<?> deleteOrderInCart(@PathVariable("id") Long id) {
+        Optional<Buyer> buyer = buyerService.getBuyer();
+        if(buyer.isPresent()){
+            Object delete = orderService.deleteOderOfBuyer(buyer.get(), id);
+            if(delete == null){
+                return new ResponseEntity<>(HttpStatus.OK);
+            }return new ResponseEntity<>(delete, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("Buyer not found", HttpStatus.BAD_REQUEST);
+
     }
 
     @GetMapping("/cart")
-    public Object getCart(){
-        Optional<Buyer> buyer = buyerService.findById(1L);
-        if(buyer.isPresent()){
-            return new ResponseEntity<>(cartService.getCart(buyer.get()), HttpStatus.OK) ;
+    public Object getCart() {
+        Optional<Buyer> buyer = buyerService.getBuyer();
+        if (buyer.isPresent()) {
+            return new ResponseEntity<>(cartService.getCart(buyer.get()), HttpStatus.OK);
         }
-        return "404, Người mua này không còn tồn tại";
+        return new ResponseEntity<>("Người mua không tồn tại", HttpStatus.BAD_REQUEST);
     }
 }
 

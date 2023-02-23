@@ -1,5 +1,6 @@
 package com.spring.web.service.impl;
 
+import com.spring.web.model.Buyer;
 import com.spring.web.model.Order;
 import com.spring.web.repository.OrderRepository;
 import com.spring.web.service.IOrderService;
@@ -32,6 +33,15 @@ public class OrderService implements IOrderService {
     @Override
     public void delete(Long aLong) {
         repository.deleteById(aLong);
+    }
 
+    public Object deleteOderOfBuyer(Buyer buyer, Long orderId){
+        Optional<Order> order = repository.findById(orderId);
+        if(order.isPresent()){
+            if(order.get().getBuyer().getId() == buyer.getId()){
+                repository.delete(order.get());
+                return null;
+            }return "Order not of buyer";
+        } return "Order not fount";
     }
 }
