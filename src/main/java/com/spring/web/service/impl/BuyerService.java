@@ -82,7 +82,7 @@ public class BuyerService implements IBuyerService {
                 return new ResponseEntity<>("The product is locked", HttpStatus.BAD_REQUEST);
             }
             for (Order order : buyer.get().getCart()){
-                if(productDetail.get().getId() == order.getId()){
+                if(productDetail.get().getId() == order.getProductDetail().getId()){
                     order.setAmount(order.getAmount() + quantity);
                     return orderService.save(order);
                 }
