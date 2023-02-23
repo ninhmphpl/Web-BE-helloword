@@ -1,6 +1,8 @@
 package com.spring.web.service.impl;
 
 import com.spring.web.model.Employee;
+import com.spring.web.model.Role;
+import com.spring.web.model.Status;
 import com.spring.web.model.User;
 import com.spring.web.repository.EmployeeRepository;
 import com.spring.web.repository.UserRepository;
@@ -51,14 +53,14 @@ public class EmployeeService implements IEmployeeService {
     public Employee createEmployee(Employee employee) {
         employee.setId(null);
         employee.getUser().setId(null);
+        employee.getUser().setRole(new Role(2L,null));
+        employee.getUser().setStatus(new Status(1L, null, null));
         User user = userRepository.save(employee.getUser());
         employee.setUser(user);
         LocalDate localDate =employee.getBirth();
         int age = calculateAge(localDate);
-        System.out.println(age);
         employee.setAge(age);
-        Employee result = repository.save(employee);
-        return result;
+        return repository.save(employee);
     }
     public int calculateAge(
             LocalDate birthDate) {

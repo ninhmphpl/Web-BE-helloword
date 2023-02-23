@@ -1,6 +1,7 @@
 package com.spring.web.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,43 +17,46 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDetail {
+public class ProductDetail{
+    @Column(nullable = false)
+    private String description ;
+
+    @OneToMany(mappedBy = "productDetail")
+    private List<Picture> picture;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Seller seller;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
+    @Column(nullable = false)
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    @Min(0)
     private Double price;
 
     @Column(nullable = false)
-    @Min(0)
     private Integer sold;
 
     @Column(nullable = false)
     private String avatar;
 
     @Column(nullable = false)
-    private String description ;
-
-    @Column(nullable = false)
     @Min(0)
     private Integer quantity;
 
-    @ManyToMany
-    @JoinColumn(nullable = false)
-    private List<Picture> picture;
-
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Category category;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Status status;
-
 }
 
 

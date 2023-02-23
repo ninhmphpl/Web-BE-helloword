@@ -1,15 +1,15 @@
 package com.spring.web.service.impl;
 
-import com.spring.web.model.Picture;
-import com.spring.web.model.ProductDetail;
-import com.spring.web.model.Status;
+import com.spring.web.model.*;
 import com.spring.web.repository.PictureRepository;
 import com.spring.web.repository.ProductDetailRepository;
-import com.spring.web.repository.ProductSimpleRepository;
 import com.spring.web.service.IProductDetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,9 +21,6 @@ import java.util.Optional;
 @Slf4j
 @Transactional
 public class ProductDetailService implements IProductDetailService {
-    @Autowired
-    private ProductSimpleRepository productSimpleRepository;
-
     @Autowired
     private ProductDetailRepository repository;
     @Autowired
@@ -40,14 +37,6 @@ public class ProductDetailService implements IProductDetailService {
         return null;
     }
 
-    @Override
-    public ProductDetail save(ProductDetail productDetail) {
-        return repository.save(productDetail);
-    }
-
-    @Override
-    public void delete(Long aLong) {
-    }
 
     /**
      * Sửa thông tin cua sản phâm và lưu nó vào database
@@ -72,7 +61,7 @@ public class ProductDetailService implements IProductDetailService {
                 result.setPicture(pictureList);
             }
             result.setAvatar(result.getPicture().get(0).getName());
-            productDetail.setCategory(productDetail.getCategory());
+            result.setCategory(productDetail.getCategory());
             return repository.save(result);
         }
         return null;
@@ -90,12 +79,11 @@ public class ProductDetailService implements IProductDetailService {
             }
             result.setPicture(newpictureList);
             result.setAvatar(result.getPicture().get(0).getName());
-           return repository.save(result);
-        }return ("Không tim thấy sản phẩm");
+            return repository.save(result);
+        }
+        return ("Không tim thấy sản phẩm");
 
     }
-
-
 
 
     /**
@@ -129,14 +117,87 @@ public class ProductDetailService implements IProductDetailService {
         }
         return productDetail;
     }
-//tìm kiếm theo tên, khoảng giá, khoảng số lượng = body
-//    @Override
-//    public Page<ProductDetail> search(SearchRequest request, Pageable pageable) {
-//        Page<ProductDetail> page = repository.getListProduct(request.getKeyword(), request.getFromQuantity(),
-//                request.getToQuantity(), request.getFromPrice(), request.getToPrice(), pageable);
-//
-//        return page;
-//    }
+
+    public Object createProductByEmployee(ProductDetail productDetail, Long sellerId) {
+        //>> tim seller bang id va set lai seller
+        Seller seller = new Seller();
+        seller.setId(sellerId);
+        productDetail.setSeller(seller);
+        //>> lưu ảnh mới vào trong database và gán lại id sau khi lưu vào cho nó
+        List<Picture> pictureList = new ArrayList<>();
+        for (Picture picture : productDetail.getPicture()) {
+            //>> Loại bỏ trường hợp trùng id trong database gây ra nhầm ảnh
+            picture.setId(null);
+            pictureList.add(pictureRepository.save(picture));
+        }
+        productDetail.setId(null);
+        productDetail.setPicture(pictureList);
+        //>> đặt avata là ảnh đầu tiên của picture
+        productDetail.setAvatar(pictureList.get(0).getName());
+        productDetail.setSold(0);
+        //>> mặc định status là 1 (nghĩa là mở)
+        productDetail.setStatus(new Status(1L, null, null));
+        return new ResponseEntity<>(repository.save(productDetail), HttpStatus.OK);
+    }
+
+
+
+    @Override
+    public ProductDetail save(ProductDetail productSimple) {
+        if (productSimple.getName() == null) {
+            productSimple.setName("Tên Trống");
+        }
+        if (productSimple.getSold() == null) {
+            productSimple.setSold(0);
+        }
+        if (productSimple.getPrice() == null) {
+            productSimple.setPrice(0D);
+        }
+        if (productSimple.getAvatar() == null) {
+            productSimple.setAvatar("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-J0cRr6ptVPnQ-DZqDJxxbjowBwIbP6l1Gsau43jbVRCWbYkB2-lC9cL1T_5WCf680pc&usqp=CAU");
+        }
+        if (productSimple.getCategory() == null) {
+            productSimple.setCategory(new Category(1L, null));
+        }
+        return repository.save(productSimple);
+    }
+
+    @Override
+    public void delete(Long aLong) {
+        repository.deleteById(aLong);
+    }
+
+    @Override
+    public Page<ProductDetail> findAllPage(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
+    @Override
+    public Page<ProductDetail> findAllPageByStatus(Pageable pageable) {
+        return repository.findAllByStatus(new Status(1L, null, null), pageable);
+    }
+
+    @Override
+    public Page<ProductDetail> findAllPageAndCategory(Pageable pageable, Category category) {
+        return repository.findAllByCategory(pageable, category);
+    }
+
+    @Override
+    public Page<ProductDetail> findAllPageAndNameContaining(Pageable pageable, String name) {
+        return repository.findAllByNameContaining(pageable, name);
+    }
+
+    public List<ProductDetail> findProductByPrice(Double min, Double max) {
+        return repository.findProductByPrice(min, max);
+    }
+
+    public List<ProductDetail> findProductByQuantity1(Integer min, Integer max) {
+        return repository.findProductByQuantity(min, max);
+    }
+
+    public List<ProductDetail> findAllByCategoryName(String name) {
+        return repository.findProductByCategoryAndName(name);
+    }
 
 
 }

@@ -35,7 +35,7 @@ public class Employee {
     private Integer age;
 
     @Column(nullable = false)
-    @Pattern(regexp = "^0[0-9]{9}\n")
+    @Pattern(regexp = "^0[0-9]{9}")
     @Length(min = 10, max = 10)
     private String phoneNumber;
 

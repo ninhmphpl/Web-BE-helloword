@@ -1,19 +1,14 @@
 package com.spring.web.controller.buyer;
 
 import com.spring.web.model.*;
-import com.spring.web.repository.BuyerRepository;
-import com.spring.web.repository.OrderRepository;
-import com.spring.web.service.impl.BuyerService;
-import com.spring.web.service.impl.OrderService;
-import com.spring.web.service.impl.ProductDetailService;
-import com.spring.web.service.impl.ProductSimpleService;
+import com.spring.web.model.pojo.Cart;
+import com.spring.web.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Struct;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,17 +23,20 @@ public class BuyerController {
     public OrderService orderService;
     @Autowired
     public ProductDetailService productDetailService;
+    @Autowired
+    CartService cartService;
 
 
     @PostMapping("/to-cart/{id}/{quantity}")
     public ResponseEntity<?> findAllProductInCart(@PathVariable("id") Long id,
                                                   @PathVariable("quantity") Long quantity) {
         Optional<ProductDetail> productDetail = productDetailService.findById(id);
+
         if (productDetail.isPresent()) {
             if (productDetail.get().getQuantity() > quantity) {
                 return new ResponseEntity<>(buyerService.findAllOrderInCart(id, quantity), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("Số lượng vượt quá tồn kho,vui lòng sửa số lương", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("400, Số lượng vượt quá tồn kho vui lòng sửa số lương", HttpStatus.OK);
             }
 
         } else {
@@ -56,15 +54,31 @@ public class BuyerController {
 
     @GetMapping("cart/edit-amount/{idOrder}/{amount}")
     public ResponseEntity<?> checkStockOrderAfterEditCart(@PathVariable("idOrder") Long idOrder,
-                                                          @PathVariable("amount") Long amount){
-        Order oder = orderService.findById(idOrder).get();
-        if(amount !=0) {oder.setAmount(amount);}else {oder.setAmount(1L);}
+                                                          @PathVariable("amount") Long amount) {
 
-        Boolean result = buyerService.checkOrderQuantity(oder).isStatus();
-        if (result) {
-            orderService.save(oder);
-        }
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        Optional<Buyer> buyer = buyerService.getBuyer();
+        Optional<Order> order = orderService.findById(idOrder);
+        if(!buyer.isPresent()) return new ResponseEntity<>("Buyer Not Found", HttpStatus.BAD_REQUEST);
+        if(!order.isPresent()) return new ResponseEntity<>("Order Not Found", HttpStatus.BAD_REQUEST);
+        if(order.get().getBuyer().getId() == buyer.get().getId()){
+            Order result = orderService.addOder(order.get(), buyer.get(), amount);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }return new ResponseEntity<>("Order is not of Buyer", HttpStatus.BAD_REQUEST);
+
+
+//
+//        Order oder = orderService.findById(idOrder).get();
+//        if (amount != 0) {
+//            oder.setAmount(amount);
+//        } else {
+//            oder.setAmount(1L);
+//        }
+//
+//        Boolean result = buyerService.checkOrderQuantity(oder).isStatus();
+//        if (result) {
+//            orderService.save(oder);
+//        }
+//        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 
@@ -75,12 +89,12 @@ public class BuyerController {
         ) {
             Order order1 = orderService.findById(oder.getId()).get();
             order1.setAmount(oder.getAmount());
-            order1.setTotal(order1.getAmount() * order1.getProductSimple().getPrice());
+            order1.setTotal(order1.getAmount() * order1.getProductDetail().getPrice());
             orderArrayList.add(order1);
         }
         boolean flag = true;
         for (Order oder : orderArrayList) {
-            if (buyerService.checkOrderQuantity(oder).isStatus()) {
+            if (!buyerService.checkOrderQuantity(oder).isStatus()) {
                 flag = false;
             }
         }
@@ -88,14 +102,42 @@ public class BuyerController {
             Bill billPayment = buyerService.makeOnePayment(orderArrayList);
             return new ResponseEntity<>(billPayment, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Số lượng sản phẩm đặt hàng vượt quá tồn kho", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Số lượng sản phẩm đặt hàng vượt quá tồn kho", HttpStatus.OK);
         }
     }
 
-    @GetMapping("/info")
-    public ResponseEntity<?> getInForBuyer() {
-        return new ResponseEntity<>(buyerService.findById(1L).get(), HttpStatus.OK);
+    public Object buyCart(Cart cart){
+        return null;
     }
 
+    @GetMapping("/info")
+    public Object getInForBuyer() {
+        Optional<Buyer> buyer = buyerService.getBuyer();
+        if (!buyer.isPresent()) return "404, Người mua không tồn tại";
+        return new ResponseEntity<>(buyer.get(), HttpStatus.OK);
+    }
+
+    // xoa cart khoi nguoi dung
+    @PutMapping("cart/delete/{id}")
+    public ResponseEntity<?> deleteOrderInCart(@PathVariable("id") Long id) {
+        Optional<Buyer> buyer = buyerService.getBuyer();
+        if(buyer.isPresent()){
+            Object delete = orderService.deleteOderOfBuyer(buyer.get(), id);
+            if(delete == null){
+                return new ResponseEntity<>(HttpStatus.OK);
+            }return new ResponseEntity<>(delete, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("Buyer not found", HttpStatus.BAD_REQUEST);
+
+    }
+
+    @GetMapping("/cart")
+    public Object getCart() {
+        Optional<Buyer> buyer = buyerService.getBuyer();
+        if (buyer.isPresent()) {
+            return new ResponseEntity<>(cartService.getCart(buyer.get()), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Người mua không tồn tại", HttpStatus.BAD_REQUEST);
+    }
 }
 

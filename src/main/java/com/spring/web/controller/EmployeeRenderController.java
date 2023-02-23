@@ -1,4 +1,4 @@
-package com.spring.web.controller.admin;
+package com.spring.web.controller;
 
 import com.spring.web.model.*;
 import com.spring.web.service.impl.GenderService;

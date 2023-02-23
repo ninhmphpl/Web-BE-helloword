@@ -1,5 +1,6 @@
 package com.spring.web.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,18 +19,21 @@ public class OrderPayment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-
     @ManyToOne
     @JoinColumn(nullable = false)
-    private ProductSimple productSimple;
+    private ProductDetail productDetail;
 
     @Column(nullable = false)
     private  Long amount;
+
+    @JsonIgnore
+    @ManyToOne
+    private Bill bill;
 
     @Transient //>> tổng giá của sản phẩm hiện tại dựa trên số lượng và giá của sản phẩm
     private  Double totalPrice;
 
     public double funtionTotalPrice() {
-        return amount*productSimple.getPrice() ;
+        return amount*productDetail.getPrice() ;
     }
 }
