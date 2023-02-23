@@ -20,16 +20,16 @@ public class SellerController {
     private UserService userService;
 
 
-    // check User tồn tại hay chưa
-    @GetMapping("/check-user-exist/{username}")
-    public boolean checkUser(@PathVariable String username) {
-        User user = userService.findByUsername(username);
-        if (user != null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+//    // check User tồn tại hay chưa
+//    @GetMapping("/check-user-exist/{username}")
+//    public boolean checkUser(@PathVariable String username) {
+//        User user = userService.findByUsername(username);
+//        if (user != null) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 
     //Find Seller theo ID
     @GetMapping("/seller/{id}")
