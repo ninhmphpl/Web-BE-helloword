@@ -4,6 +4,7 @@ import com.spring.web.model.*;
 import com.spring.web.repository.BuyerRepository;
 import com.spring.web.repository.OrderPaymentRepository;
 import com.spring.web.repository.ProductDetailRepository;
+import com.spring.web.repository.SellerRepository;
 import com.spring.web.service.IAddressService;
 import com.spring.web.service.IBuyerService;
 import com.spring.web.service.IUserService;
@@ -72,10 +73,13 @@ public class BuyerService implements IBuyerService {
     public Object findAllOrderInCart(Long id, Long quantity) {
         Optional<Buyer> buyer = getBuyer();
         Optional<ProductDetail> productDetail = productDetailRepository.findById(id);
+        Status status = productDetail.get().getSeller().getUser().getStatus();
         if (productDetail.isPresent() && buyer.isPresent()) {
-
-            if (productDetail.get().getStatus().getId() != 1L ){
-                return new ResponseEntity<>("Sản phẩm này hiện đã ngừng kinh doanh", HttpStatus.BAD_REQUEST);
+            if(status.getName().equals("Khóa")) {
+                return new ResponseEntity<>("The store is locked", HttpStatus.BAD_REQUEST);
+            }
+            if (productDetail.get().getStatus().getId() != 3L ){
+                return new ResponseEntity<>("The product is locked", HttpStatus.BAD_REQUEST);
             }
             for (Order order : buyer.get().getCart()){
                 if(productDetail.get().getId() == order.getId()){
@@ -84,6 +88,7 @@ public class BuyerService implements IBuyerService {
                 }
             }
             Order order = new Order(null, productDetail.get(), quantity, 0D, buyer.get());
+            order.setTotal(order.getTotal());
             return orderService.save(order);
         }
 
