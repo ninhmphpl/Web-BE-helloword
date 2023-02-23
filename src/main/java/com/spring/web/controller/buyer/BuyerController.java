@@ -55,18 +55,30 @@ public class BuyerController {
     @GetMapping("cart/edit-amount/{idOrder}/{amount}")
     public ResponseEntity<?> checkStockOrderAfterEditCart(@PathVariable("idOrder") Long idOrder,
                                                           @PathVariable("amount") Long amount) {
-        Order oder = orderService.findById(idOrder).get();
-        if (amount != 0) {
-            oder.setAmount(amount);
-        } else {
-            oder.setAmount(1L);
-        }
 
-        Boolean result = buyerService.checkOrderQuantity(oder).isStatus();
-        if (result) {
-            orderService.save(oder);
-        }
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        Optional<Buyer> buyer = buyerService.getBuyer();
+        Optional<Order> order = orderService.findById(idOrder);
+        if(!buyer.isPresent()) return new ResponseEntity<>("Buyer Not Found", HttpStatus.BAD_REQUEST);
+        if(!order.isPresent()) return new ResponseEntity<>("Order Not Found", HttpStatus.BAD_REQUEST);
+        if(order.get().getBuyer().getId() == buyer.get().getId()){
+            Order result = orderService.addOder(order.get(), buyer.get(), amount);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }return new ResponseEntity<>("Order is not of Buyer", HttpStatus.BAD_REQUEST);
+
+
+//
+//        Order oder = orderService.findById(idOrder).get();
+//        if (amount != 0) {
+//            oder.setAmount(amount);
+//        } else {
+//            oder.setAmount(1L);
+//        }
+//
+//        Boolean result = buyerService.checkOrderQuantity(oder).isStatus();
+//        if (result) {
+//            orderService.save(oder);
+//        }
+//        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 

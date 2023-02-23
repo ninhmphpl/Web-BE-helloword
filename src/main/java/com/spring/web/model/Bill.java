@@ -1,5 +1,6 @@
 package com.spring.web.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public class Bill {
     @Column(nullable = false)
     private Long id;
 
-    @ManyToMany
+    @OneToMany(mappedBy = "bill")
     private List<OrderPayment> orderPayments;
 
     @Column(nullable = false)
@@ -30,8 +31,13 @@ public class Bill {
     @Transient //>> tổng giá của tất cả các order trong order list
     private Double total ;
 
-    @Column(nullable = false)
-    private Long idBuyer ;
+    @JsonIgnore
+    @ManyToOne
+    private Buyer buyer;
+
+    @JsonIgnore
+    @ManyToOne
+    private Seller seller;
 
     @Column(nullable = false)
     private String nameBuyer ;

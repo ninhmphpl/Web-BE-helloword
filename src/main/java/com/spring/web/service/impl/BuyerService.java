@@ -147,7 +147,11 @@ public class BuyerService implements IBuyerService {
 //        orderPayments list order
         List<OrderPayment> orderPayments = new ArrayList<>(orders.size());
         for (int i = 0; i < orders.size(); i++) {
-            OrderPayment orderPayment = new OrderPayment(orders.get(i).getId(), orders.get(i).getProductDetail(), orders.get(i).getAmount(), orders.get(i).getTotal());
+            OrderPayment orderPayment = new OrderPayment();
+            orderPayment.setId(orders.get(i).getId());
+            orderPayment.setProductDetail(orders.get(i).getProductDetail());
+            orderPayment.setAmount(orders.get(i).getAmount());
+            orderPayment.setTotalPrice(orders.get(i).getTotal());
             orderPaymentRepository.save(orderPayment);
             orderPayments.add(orderPayment);
 
@@ -155,7 +159,11 @@ public class BuyerService implements IBuyerService {
 
         Buyer buyer = repository.findById(1L).get();
         List<Bill> billList = buyer.getBills();
-        Bill newBill = new Bill(null, orderPayments, LocalDateTime.now(), null, buyer.getId(), buyer.getName());
+        Bill newBill = new Bill();
+        newBill.setOrderPayments(orderPayments);
+        newBill.setTimeBuy(LocalDateTime.now());
+        newBill.setBuyer(buyer);
+        newBill.setNameBuyer(buyer.getName());
         newBill.setTotal(newBill.totalPayment());
         newBill = billService.save(newBill);
         billList.add(newBill);
