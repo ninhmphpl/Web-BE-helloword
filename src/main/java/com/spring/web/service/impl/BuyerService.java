@@ -78,7 +78,7 @@ public class BuyerService implements IBuyerService {
                 return new ResponseEntity<>("Sản phẩm này hiện đã ngừng kinh doanh", HttpStatus.BAD_REQUEST);
             }
             for (Order order : buyer.get().getCart()){
-                if(productDetail.get().getId() == order.getId()){
+                if(productDetail.get().getId() == order.getProductDetail().getId()){
                     order.setAmount(order.getAmount() + quantity);
                     return orderService.save(order);
                 }
