@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/address")
+    @RequestMapping("/address")
 public class AddressController {
     @Autowired
     private IProvinceService provinceService;

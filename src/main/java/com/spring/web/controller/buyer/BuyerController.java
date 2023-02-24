@@ -36,11 +36,11 @@ public class BuyerController {
             if (productDetail.get().getQuantity() > quantity) {
                 return new ResponseEntity<>(buyerService.findAllOrderInCart(id, quantity), HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("400, Số lượng vượt quá tồn kho vui lòng sửa số lương", HttpStatus.OK);
+                return new ResponseEntity<>("400,Quantity Exceeds Stock ", HttpStatus.OK);
             }
 
         } else {
-            return new ResponseEntity<>("Không tìm thấy sản phẩm", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Product is not found", HttpStatus.BAD_REQUEST);
         }
 
 
