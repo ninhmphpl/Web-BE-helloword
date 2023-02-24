@@ -22,7 +22,7 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/employees")
-public class ProductController {
+public class EmployeeController {
 
     @Autowired
     private IProductDetailService productDetailService;

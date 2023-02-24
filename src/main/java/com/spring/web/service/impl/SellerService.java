@@ -54,19 +54,20 @@ public class SellerService implements ISellerService {
     }
 
     @Override
-    public Object create(Seller seller) {
+    public Object create(Seller seller, String username, String password) {
         Iterable<Seller> sellers = repository.findAll();
         for (Seller seller1 : sellers) {
-            if (seller1.getUser().getUsername().equals(seller.getUser().getUsername())) {
+            if (seller1.getUser().getUsername().equals(username)) {
                 return "303, User Đã Bị Trùng";
             }
         }
         seller.setId(null);
-        User user1 = seller.getUser();
-        user1.setRole(new Role(1L, null));
+        User user1 = new User();
+        user1.setRole(new Role(3L, null));
         user1.setStatus(new Status(1L, null, null));
         user1.setId(null);
-        user1.setPassword(passwordEncoder.encode(user1.getPassword()));
+        user1.setUsername(username);
+        user1.setPassword(passwordEncoder.encode(password));
         user1 = userRepository.save(user1);
         Address address1 = addressRepository.save(seller.getAddress());
         seller.setAddress(address1);

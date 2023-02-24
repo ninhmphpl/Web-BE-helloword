@@ -5,6 +5,8 @@ import com.spring.web.model.UserPrinciple;
 import com.spring.web.repository.UserRepository;
 import com.spring.web.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -18,22 +20,18 @@ public class UserService implements IUserService {
     private UserRepository repository;
 
 
-    @Override
     public Optional<User> findById(Long aLong) {
         return repository.findById(aLong);
     }
 
-    @Override
     public List<User> findAll() {
         return repository.findAll();
     }
 
-    @Override
     public User save(User user) {
         return repository.save(user);
     }
 
-    @Override
     public void delete(Long aLong) {
         repository.deleteById(aLong);
 
@@ -44,13 +42,19 @@ public class UserService implements IUserService {
     }
 
 
-    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> userOptional = repository.findByUsername(username);
-        if (!userOptional.isPresent()) {
-            throw new UsernameNotFoundException(username);
-        }
+//        if (!userOptional.isPresent()) {
+//            throw new UsernameNotFoundException(username);
+//        }
         return new UserPrinciple(userOptional.get());
+    }
+
+    @Override
+    public User getUserLogging() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return findByUsername(username);
     }
 
 

@@ -54,9 +54,10 @@ public class Buyer {
  @Column(nullable = false)
   private String avatar;
 
-  @JoinColumn(nullable = false)
-  @ManyToMany
+  @OneToMany(mappedBy = "buyer")
   private List<Bill> bills;
 
+  @Column(nullable = false)
+  private String description;
 
 }

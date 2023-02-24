@@ -47,9 +47,8 @@ public class Seller {
   @JoinColumn(nullable = false)
   private User user;
 
-
-
-
-
+  @JsonIgnore
+  @OneToMany(mappedBy = "seller")
+  private List<Bill> bill;
 
 }

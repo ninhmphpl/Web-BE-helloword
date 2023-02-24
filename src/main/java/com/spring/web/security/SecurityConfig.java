@@ -1,6 +1,5 @@
 package com.spring.web.security;
 
-
 import com.spring.web.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -69,6 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers( "/**").permitAll()
 //                .antMatchers( "/customers**","/api/hello").hasAnyRole("USER")
+//                .antMatchers( "/buyer**").hasAnyRole("BUYER")
                 .anyRequest().authenticated()
                 .and().csrf().disable();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
