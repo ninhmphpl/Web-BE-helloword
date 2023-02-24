@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
@@ -55,15 +56,25 @@ public class ProductController {
                                          @SortDefault(sort = "id", direction = DESC)
                                          Pageable pageable) {
 
-        Page<ProductDetail> page = productDetailService.findAllPageByStatus(pageable);
+        List<ProductDetail> productDetails = productDetailService.findAll();
+        List<ProductDetail> productDetails22 = new ArrayList<>();
+        for (ProductDetail productDetail : productDetails) {
+            boolean seller = productDetail.getSeller().getUser().getStatus().getId() == 1L;
+            boolean product = productDetail.getStatus().getId() == 3L;
+            if (seller && product) {
+                productDetails22.add(productDetail);
+            }
+        }
+        final int start = (int)pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), productDetails22.size());
+        final Page<ProductDetail> page2 = new PageImpl<>(productDetails22.subList(start, end), pageable, productDetails22.size());
 
-
-        if (pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0) {
+        if (pageable.getPageNumber() >= page2.getTotalPages() || pageable.getPageNumber() < 0) {
             System.out.println("Page Number out range page");
             return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
         }
 
-        return new ResponseEntity<>(page, HttpStatus.OK);
+        return new ResponseEntity<>(page2, HttpStatus.OK);
     }
 
     @PutMapping("/editPicture/{id}")

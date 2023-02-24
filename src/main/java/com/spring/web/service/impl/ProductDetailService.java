@@ -34,7 +34,7 @@ public class ProductDetailService implements IProductDetailService {
 
     @Override
     public List<ProductDetail> findAll() {
-        return null;
+        return repository.findAll();
     }
 
 
@@ -174,7 +174,8 @@ public class ProductDetailService implements IProductDetailService {
 
     @Override
     public Page<ProductDetail> findAllPageByStatus(Pageable pageable) {
-        return repository.findAllByStatus(new Status(1L, null, null), pageable);
+      Page<ProductDetail> productDetails=  repository.findAllByStatus(new Status(3L, null, null),pageable);
+        return (productDetails);
     }
 
     @Override
