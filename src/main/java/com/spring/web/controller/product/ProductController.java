@@ -37,15 +37,24 @@ public class ProductController {
                                                            @PageableDefault(value = 10)
                                                            @SortDefault(sort = "id", direction = ASC) Pageable pageable) {
         List<ProductDetail> productSimpleList = productDetailService.findAllByCategoryName("%" + name + "%");
-//       Chuyển đổi từ List sang Page
-        final int start = (int) pageable.getOffset();
-        final int end = Math.min((start + pageable.getPageSize()), productSimpleList.size());
-        final Page<ProductDetail> page = new PageImpl<>(productSimpleList.subList(start, end), pageable, productSimpleList.size());
-//
-        if (pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0) {
+        List<ProductDetail> productDetails22 = new ArrayList<>();
+        for (ProductDetail productDetail : productSimpleList) {
+            boolean seller = productDetail.getSeller().getUser().getStatus().getId() == 1L;
+            boolean product = productDetail.getStatus().getId() == 3L;
+            if (seller && product) {
+                productDetails22.add(productDetail);
+            }
+        }
+        final int start = (int)pageable.getOffset();
+        final int end = Math.min((start + pageable.getPageSize()), productDetails22.size());
+        final Page<ProductDetail> page2 = new PageImpl<>(productDetails22.subList(start, end), pageable, productDetails22.size());
+
+        if (pageable.getPageNumber() >= page2.getTotalPages() || pageable.getPageNumber() < 0) {
+            System.out.println("Page Number out range page");
             return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
         }
-        return new ResponseEntity<>(page, HttpStatus.OK);
+
+        return new ResponseEntity<>(page2, HttpStatus.OK);
     }
 
     /**
