@@ -21,7 +21,15 @@ public class CartService {
     @Autowired
     private IOrderService orderService;
     public List<Cart> getCart(Buyer buyer) {
-        List<Order> orders = buyer.getCart();
+        List<Order> orders1 = buyer.getCart();
+        List<Order> orders = new ArrayList<>();
+        for (Order order: orders1) {
+            boolean seller = order.getProductDetail().getSeller().getUser().getStatus().getId() == 1L;
+            boolean product = order.getProductDetail().getStatus().getId() == 3L;
+            if(seller && product) {
+                orders.add(order);
+            }
+        }
         List<Cart> carts = new ArrayList<>();
         while (orders.size() > 0){
             boolean flag = false;
