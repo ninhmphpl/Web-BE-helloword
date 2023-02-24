@@ -9,31 +9,33 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderPayment {
+public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private ProductDetail productDetail;
 
     @Column(nullable = false)
-    private  Long amount;
-    @Transient //>> tổng giá của sản phẩm hiện tại dựa trên số lượng và giá của sản phẩm
-    private  Double totalPrice;
+    private String name;
 
     @JsonIgnore
     @ManyToOne
-    private Bill bill;
+    private Seller seller;
 
+    @JsonIgnore
+    @ManyToOne
+    private Buyer buyer;
 
-    public double funtionTotalPrice() {
-        return amount*productDetail.getPrice() ;
-    }
+    @JsonIgnore
+    @ManyToOne
+    private Employee employee;
+
+    @JsonIgnore
+    @ManyToOne
+    private  Admin admin;
+
 }

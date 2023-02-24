@@ -41,14 +41,14 @@ public class ProductDetail{
     private Double price;
 
     @Column(nullable = false)
-    private Integer sold;
+    private Long sold;
 
     @Column(nullable = false)
     private String avatar;
 
     @Column(nullable = false)
     @Min(0)
-    private Integer quantity;
+    private Long quantity;
 
     @ManyToOne
     @JoinColumn(nullable = false)

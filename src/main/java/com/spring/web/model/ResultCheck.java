@@ -15,6 +15,6 @@ import java.beans.Transient;
 public class ResultCheck {
    private boolean status;
    private String des ;
-   private Integer  number ;
+   private Long  number ;
 
 }

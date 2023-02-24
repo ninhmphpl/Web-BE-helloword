@@ -7,9 +7,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -52,5 +51,7 @@ public class Employee {
     @JoinColumn(nullable = false)
     private User user;
 
+    @OneToMany(mappedBy = "employee")
+    private List<Notification> notificationList;
 
 }

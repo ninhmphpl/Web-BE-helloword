@@ -40,10 +40,6 @@ public class ProductController {
         final int start = (int) pageable.getOffset();
         final int end = Math.min((start + pageable.getPageSize()), productSimpleList.size());
         final Page<ProductDetail> page = new PageImpl<>(productSimpleList.subList(start, end), pageable, productSimpleList.size());
-//
-        if (pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0) {
-            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
-        }
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
@@ -54,20 +50,12 @@ public class ProductController {
     public ResponseEntity<?> findAllPage(@PageableDefault(value = 10)
                                          @SortDefault(sort = "id", direction = DESC)
                                          Pageable pageable) {
-
         Page<ProductDetail> page = productDetailService.findAllPageByStatus(pageable);
-
-        if (pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0) {
-            System.out.println("Page Number out range page");
-            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
-        }
-
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
     @PutMapping("/editPicture/{id}")
     public ResponseEntity<?> editImageProduct(@PathVariable("id") Long id, @RequestBody List<Picture> newImageList) {
-
         return new ResponseEntity<>(productDetailService.updateImage(id, newImageList), HttpStatus.OK);
     }
 

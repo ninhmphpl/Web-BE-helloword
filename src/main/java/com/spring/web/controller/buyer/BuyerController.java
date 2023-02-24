@@ -58,12 +58,13 @@ public class BuyerController {
 
         Optional<Buyer> buyer = buyerService.getBuyer();
         Optional<Order> order = orderService.findById(idOrder);
-        if(!buyer.isPresent()) return new ResponseEntity<>("Buyer Not Found", HttpStatus.BAD_REQUEST);
-        if(!order.isPresent()) return new ResponseEntity<>("Order Not Found", HttpStatus.BAD_REQUEST);
-        if(order.get().getBuyer().getId() == buyer.get().getId()){
+        if (!buyer.isPresent()) return new ResponseEntity<>("Buyer Not Found", HttpStatus.BAD_REQUEST);
+        if (!order.isPresent()) return new ResponseEntity<>("Order Not Found", HttpStatus.BAD_REQUEST);
+        if (order.get().getBuyer().getId() == buyer.get().getId()) {
             Order result = orderService.addOder(order.get(), buyer.get(), amount);
             return new ResponseEntity<>(result, HttpStatus.OK);
-        }return new ResponseEntity<>("Order is not of Buyer", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("Order is not of Buyer", HttpStatus.BAD_REQUEST);
 
 
 //
@@ -106,7 +107,7 @@ public class BuyerController {
         }
     }
 
-    public Object buyCart(Cart cart){
+    public Object buyCart(Cart cart) {
         return null;
     }
 
@@ -121,11 +122,12 @@ public class BuyerController {
     @PutMapping("cart/delete/{id}")
     public ResponseEntity<?> deleteOrderInCart(@PathVariable("id") Long id) {
         Optional<Buyer> buyer = buyerService.getBuyer();
-        if(buyer.isPresent()){
+        if (buyer.isPresent()) {
             Object delete = orderService.deleteOderOfBuyer(buyer.get(), id);
-            if(delete == null){
+            if (delete == null) {
                 return new ResponseEntity<>(HttpStatus.OK);
-            }return new ResponseEntity<>(delete, HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>(delete, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>("Buyer not found", HttpStatus.BAD_REQUEST);
 
@@ -139,5 +141,20 @@ public class BuyerController {
         }
         return new ResponseEntity<>("Người mua không tồn tại", HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping("/buy")
+    public ResponseEntity<?> buyOnCart(@RequestBody List<Cart> carts){
+        Optional<Buyer> buyer = buyerService.getBuyer();
+        Buyer orderBuyer = carts.get(0).getOrders().get(0).getBuyer();
+        if(buyer.isPresent()){
+            if(buyer.get().getId() == orderBuyer.getId()){
+                cartService.buyCart(carts);
+            }else {
+                return new ResponseEntity<>("Người mua không thể thay đổi giỏ hàng", HttpStatus.BAD_REQUEST);
+            }
+        }
+        return new ResponseEntity<>("Người mua không tồn tại", HttpStatus.BAD_REQUEST);
+     }
+
 }
 

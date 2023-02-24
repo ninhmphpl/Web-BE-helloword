@@ -102,7 +102,7 @@ public class ProductDetailService implements IProductDetailService {
         productDetail.setPicture(pictureList);
         //>> đặt avata là ảnh đầu tiên của picture
         productDetail.setAvatar(pictureList.get(0).getName());
-        productDetail.setSold(0);
+        productDetail.setSold(0L);
         //>> mặc định status là 1 (nghĩa là mở)
         productDetail.setStatus(new Status(1L, null, null));
         return repository.save(productDetail);
@@ -134,7 +134,7 @@ public class ProductDetailService implements IProductDetailService {
         productDetail.setPicture(pictureList);
         //>> đặt avata là ảnh đầu tiên của picture
         productDetail.setAvatar(pictureList.get(0).getName());
-        productDetail.setSold(0);
+        productDetail.setSold(0L);
         //>> mặc định status là 1 (nghĩa là mở)
         productDetail.setStatus(new Status(1L, null, null));
         return new ResponseEntity<>(repository.save(productDetail), HttpStatus.OK);
@@ -148,7 +148,7 @@ public class ProductDetailService implements IProductDetailService {
             productSimple.setName("Tên Trống");
         }
         if (productSimple.getSold() == null) {
-            productSimple.setSold(0);
+            productSimple.setSold(0L);
         }
         if (productSimple.getPrice() == null) {
             productSimple.setPrice(0D);

@@ -51,4 +51,8 @@ public class Seller {
   @OneToMany(mappedBy = "seller")
   private List<Bill> bill;
 
+  @OneToMany(mappedBy = "seller")
+  private List<Notification> notifications;
+
+
 }

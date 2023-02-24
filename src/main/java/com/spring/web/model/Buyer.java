@@ -18,46 +18,49 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Buyer {
-// người mua
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(nullable = false)
-  private Long id;
+    // người mua
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
 
-  @Column(nullable = false)
-  private String name;
+    @Column(nullable = false)
+    private String name;
 
-  @Column(nullable = false)
-  private LocalDate birth;
+    @Column(nullable = false)
+    private LocalDate birth;
 
-  @Column(nullable = false)
-  @Pattern(regexp = "[0-9]+")
-  @Length(min = 10, max = 10)
-  private String phoneNumber;
+    @Column(nullable = false)
+    @Pattern(regexp = "[0-9]+")
+    @Length(min = 10, max = 10)
+    private String phoneNumber;
 
-  @ManyToOne
-  @JoinColumn(nullable = false)
-  private Gender gender;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Gender gender;
 
-  @ManyToOne
-  @JoinColumn(nullable = false)
-  private Address address;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Address address;
 
-  @JsonIgnore
-  @JoinColumn(nullable = false)
-  @ManyToOne
-  private User user;
+    @JsonIgnore
+    @JoinColumn(nullable = false)
+    @ManyToOne
+    private User user;
 
-  @OneToMany(mappedBy = "buyer")
-  private List<Order> cart;
+    @OneToMany(mappedBy = "buyer")
+    private List<Order> cart;
 
- @Column(nullable = false)
-  private String avatar;
+    @Column(nullable = false)
+    private String avatar;
 
-  @OneToMany(mappedBy = "buyer")
-  private List<Bill> bills;
+    @OneToMany(mappedBy = "buyer")
+    private List<Bill> bills;
 
-  @Column(nullable = false)
-  private String description;
+    @Column(nullable = false)
+    private String description;
+
+    @OneToMany(mappedBy = "buyer")
+    private List<Notification> notifications;
 
 }

@@ -129,7 +129,7 @@ public class BuyerService implements IBuyerService {
         Optional<Buyer> buyer = repository.findById(1L);
         if (buyer.isPresent()) {
             Long idProduct = order.getProductDetail().getId();
-            Integer stock = productDetailRepository.findById(idProduct).get().getQuantity();
+            Long stock = productDetailRepository.findById(idProduct).get().getQuantity();
             String nameProduct = productDetailRepository.findById(idProduct).get().getName();
             if (stock >= order.getAmount()) {
                 return new ResultCheck(true, null, null);
@@ -187,9 +187,9 @@ public class BuyerService implements IBuyerService {
     public void setProductDetail(Order order) {
         Long idProduct = order.getProductDetail().getId();
         ProductDetail productDetail = productDetailRepository.findById(idProduct).get();
-        Integer soldOld = productDetail.getSold();
-        Integer soldNew = order.getAmount().intValue();
-        Integer stock = productDetail.getQuantity();
+        Long soldOld = productDetail.getSold();
+        Long soldNew = order.getAmount();
+        Long stock = productDetail.getQuantity();
         productDetail.setSold(soldNew + soldOld);
         productDetail.setQuantity(stock - soldNew);
         productDetailRepository.save(productDetail);

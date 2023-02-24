@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,6 +21,9 @@ public class Admin {
 
   @Column(nullable = false)
   private String name;
+
+  @OneToMany(mappedBy = "admin")
+  private List<Notification> notifications;
 
 
 

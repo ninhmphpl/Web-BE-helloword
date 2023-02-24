@@ -52,6 +52,9 @@ public class Bill {
         return sum;
     }
 
+    @ManyToOne
+    private Status status;
+
 
 
 }
