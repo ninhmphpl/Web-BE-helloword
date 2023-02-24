@@ -57,6 +57,7 @@ public class ProductController {
 
         Page<ProductDetail> page = productDetailService.findAllPageByStatus(pageable);
 
+
         if (pageable.getPageNumber() >= page.getTotalPages() || pageable.getPageNumber() < 0) {
             System.out.println("Page Number out range page");
             return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
