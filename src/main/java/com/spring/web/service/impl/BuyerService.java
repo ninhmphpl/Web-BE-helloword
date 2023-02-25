@@ -75,14 +75,14 @@ public class BuyerService implements IBuyerService {
         Optional<ProductDetail> productDetail = productDetailRepository.findById(id);
         Status status = productDetail.get().getSeller().getUser().getStatus();
         if (productDetail.isPresent() && buyer.isPresent()) {
-            if(status.getName().equals("Ngừng bán")) {
+            if (status.getName().equals("Ngừng bán")) {
                 return new ResponseEntity<>("The store is locked", HttpStatus.BAD_REQUEST);
             }
-            if (productDetail.get().getStatus().getId() != 3L ){
+            if (productDetail.get().getStatus().getId() != 3L) {
                 return new ResponseEntity<>("The product is locked", HttpStatus.BAD_REQUEST);
             }
-            for (Order order : buyer.get().getCart()){
-                if(productDetail.get().getId() == order.getProductDetail().getId()){
+            for (Order order : buyer.get().getCart()) {
+                if (productDetail.get().getId() == order.getProductDetail().getId()) {
                     order.setAmount(order.getAmount() + quantity);
                     return orderService.save(order);
                 }
@@ -234,6 +234,17 @@ public class BuyerService implements IBuyerService {
         String username = authentication.getName();
         User user = userService.findByUsername(username);
         return repository.findByUser(user);
+    }
+
+    public boolean changePassword(String oldPassword, String newPassword, Buyer buyer) {
+        User user = buyer.getUser();
+        String encoderPassword = user.getPassword();
+        boolean matches = passwordEncoder.matches(oldPassword, encoderPassword);
+        if (matches) {
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userService.save(user);
+            return true;
+        }else return false;
     }
 
 

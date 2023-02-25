@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface IBuyerService extends CRUDService<Buyer , Long>{
     Object createBuyer(Buyer buyer, String username, String password);
     Optional<Buyer> getBuyer();
+    boolean changePassword(String oldPassword, String newPassword, Buyer buyer);
 }
