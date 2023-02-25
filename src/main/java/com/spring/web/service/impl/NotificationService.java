@@ -1,5 +1,6 @@
 package com.spring.web.service.impl;
 
+import com.spring.web.model.Buyer;
 import com.spring.web.model.Notification;
 import com.spring.web.repository.NotificationRepository;
 import com.spring.web.service.INotificationService;
@@ -32,5 +33,10 @@ public class NotificationService implements INotificationService {
     @Override
     public void delete(Long aLong) {
         repository.findById(aLong);
+    }
+
+    @Override
+    public List<Notification> findAllByBuyer(Buyer buyer) {
+        return repository.findAllByBuyerOrderByIdDesc(buyer);
     }
 }

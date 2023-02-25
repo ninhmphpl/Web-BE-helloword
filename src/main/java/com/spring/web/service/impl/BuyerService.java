@@ -168,7 +168,6 @@ public class BuyerService implements IBuyerService {
         newBill.setOrderPayments(orderPayments);
         newBill.setTimeBuy(LocalDateTime.now());
         newBill.setBuyer(buyer);
-        newBill.setNameBuyer(buyer.getName());
         newBill.setTotal(newBill.totalPayment());
         newBill = billService.save(newBill);
         billList.add(newBill);
@@ -236,4 +235,6 @@ public class BuyerService implements IBuyerService {
         User user = userService.findByUsername(username);
         return repository.findByUser(user);
     }
+
+
 }

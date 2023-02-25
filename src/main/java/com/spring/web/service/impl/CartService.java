@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -56,38 +57,28 @@ public class CartService {
     }
 
     //>> sau khi có 1 danh sách đơn hàng của buyer gửi lên,
-    public Bill buyCart(List<Cart> carts){
+    public List<Bill> buyCart(List<Cart> carts){
+        List<Bill> bills = new ArrayList<>();
         Buyer buyer = buyerService.getBuyer().orElse(null);
-//        Notification notification = new Notification();
-//        notification.setSeller(carts.get(0).getSeller());
-//        notification.setName("Bạn có 1 đơn hàng từ người mua" + buyer.getName());
         
         for (Cart cart : carts){
-            Bill bill = new Bill();
-            bill.setOrderPayments(new ArrayList<>());
-            bill.setStatus(new Status(5L, null, null)); //>> 5 >> đang chờ xử lý
-            bill.setSeller(cart.getSeller());
-            bill.setBuyer(buyer);
-            
+            Bill bill = createBill(cart.getSeller(),buyer);
             for (Order order : cart.getOrders()){
+
+                //>> check oder co tồn tại trong cart
+                if(!checkOder(order)) continue;
                 //>> tạo order payment
                 OrderPayment orderPayment = new OrderPayment();
                 orderPayment.setProductDetail(order.getProductDetail());
                 orderPayment.setAmount(order.getAmount());
                 orderPayment.setTotalPrice(orderPayment.funtionTotalPrice());
-
                 bill.getOrderPayments().add(orderPayment);
-                //>> trừ số lượng của sản phẩm và cộng số lượng mua
+                //>>kiểm tra sản phẩm có tồn tại không,
+                // sản phẩm có bị khóa không,
+                // người bán sản phẩm có bị khóa không trừ số lượng của sản phẩm và cộng số lượng mua
                 Optional<ProductDetail> productDetail = productDetailService.findById(order.getProductDetail().getId());
-                if(productDetail.isPresent()){
-                    productDetail.get().setQuantity(productDetail.get().getQuantity() - order.getAmount());
-                    productDetail.get().setSold(productDetail.get().getSold() + order.getAmount());
-                    productDetailService.save(productDetail.get());
-                }else{
-                    System.out.println("sản phẩm: " + order.getProductDetail().getId() + "không tồn tại");
-                    return null;
-                }
-                //>> xóa oder
+                if (checkProductExistAndOpenToSave(order, productDetail)) continue;
+                //>> sau khi tạo xóa oder
                 orderService.delete(order.getId());
             }
             //>> Lưu bill
@@ -101,11 +92,52 @@ public class CartService {
             notificationBuyer.setName("Đơn hàng của bạn đang chờ " + cart.getSeller().getName() + "xử lý");
             notificationService.save(notificationBuyer);
             notificationService.save(notificationSeller);
-            return billResult;
+            if(billResult.getOrderPayments().size() > 0){
+                bills.add(billResult);
+            }
+
         }
-        return null;
+        return bills;
     }
 
+    private boolean checkProductExistAndOpenToSave(Order order, Optional<ProductDetail> productDetail) {
+        if (productDetail.isPresent()){
+            if (productDetail.get().getStatus().getId() != 3L){
+                System.out.println("sản phẩm " +  order.getProductDetail().getId() + "bị khóa");
+                return true;
+            }
+            if (productDetail.get().getSeller().getId() != 1L){
+                System.out.println("Người bán sản phẩm " + order.getProductDetail().getId() + "đã ngừng bán");
+            }
+            productDetail.get().setQuantity(productDetail.get().getQuantity() - order.getAmount());
+            productDetail.get().setSold(productDetail.get().getSold() + order.getAmount());
+            productDetailService.save(productDetail.get());
+        }else{
+            System.out.println("sản phẩm: " + order.getProductDetail().getId() + "không tồn tại hoặc ngừng bán");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkOder(Order order){
+        Buyer buyer = buyerService.getBuyer().orElse(null);
+        for(Order order1 : buyer.getCart()){
+            if(order1.getId() == order.getId()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Bill createBill(Seller seller, Buyer buyer){
+        Bill bill = new Bill();
+        bill.setOrderPayments(new ArrayList<>());
+        bill.setStatus(new Status(5L, null, null)); //>> 5 >> đang chờ xử lý
+        bill.setSeller(seller);
+        bill.setBuyer(buyer);
+        bill.setTimeBuy(LocalDateTime.now());
+        return bill;
+    }
 
 }
 

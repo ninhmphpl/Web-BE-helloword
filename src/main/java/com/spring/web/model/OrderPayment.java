@@ -34,6 +34,6 @@ public class OrderPayment {
 
 
     public double funtionTotalPrice() {
-        return amount*productDetail.getPrice() ;
+        return totalPrice = amount*productDetail.getPrice() ;
     }
 }

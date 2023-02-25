@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -39,21 +38,37 @@ public class Bill {
     @ManyToOne
     private Seller seller;
 
-    @Column(nullable = false)
-    private String nameBuyer ;
 // tổng tiển phải trả của hóa đơn
     public double totalPayment() {
         double sum = 0;
-        if (orderPayments != null) {
+        if (orderPayments != null && orderPayments.size() > 0) {
             for (int i = 0; i < orderPayments.size(); i++) {
+                orderPayments.get(i).funtionTotalPrice();
                 sum += orderPayments.get(i).getTotalPrice();
             }
         }
-        return sum;
+        return total = sum;
     }
 
     @ManyToOne
     private Status status;
+
+    public Bill setBill(){
+        buyer_name = buyer.getName();
+        buyer_id = buyer.getId();
+        seller_name = seller.getName();
+        seller_id = seller.getId();
+        totalPayment();
+        return this;
+    }
+    @Transient
+    String buyer_name;
+    @Transient
+    Long buyer_id;
+    @Transient
+    String seller_name;
+    @Transient
+    Long seller_id;
 
 
 

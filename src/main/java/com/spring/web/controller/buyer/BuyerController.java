@@ -2,6 +2,8 @@ package com.spring.web.controller.buyer;
 
 import com.spring.web.model.*;
 import com.spring.web.model.pojo.Cart;
+import com.spring.web.service.IBillService;
+import com.spring.web.service.INotificationService;
 import com.spring.web.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +26,13 @@ public class BuyerController {
     @Autowired
     public ProductDetailService productDetailService;
     @Autowired
-    CartService cartService;
+    private CartService cartService;
+
+    @Autowired
+    private INotificationService notificationService;
+    @Autowired
+    private IBillService billService;
+
 
 
     @PostMapping("/to-cart/{id}/{quantity}")
@@ -53,8 +61,8 @@ public class BuyerController {
     }
 
     @GetMapping("cart/edit-amount/{idOrder}/{amount}")
-    public ResponseEntity<?> checkStockOrderAfterEditCart(@PathVariable("idOrder") Long idOrder,
-                                                          @PathVariable("amount") Long amount) {
+    public ResponseEntity<?> plusOrder(@PathVariable("idOrder") Long idOrder,
+                                       @PathVariable("amount") Long amount) {
 
         Optional<Buyer> buyer = buyerService.getBuyer();
         Optional<Order> order = orderService.findById(idOrder);
@@ -65,21 +73,28 @@ public class BuyerController {
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
         return new ResponseEntity<>("Order is not of Buyer", HttpStatus.BAD_REQUEST);
+    }
 
+    @GetMapping("/cart/set-amount/{orderId}/{amount}")
+    public ResponseEntity<?> setAmount(@PathVariable("orderId") Long idOrder,
+                                       @PathVariable("amount") Long amount) {
+        Optional<Order> oder = orderService.findById(idOrder);
+        boolean result;
+        if (oder.isPresent()) {
+            if (amount > 0) {
+                oder.get().setAmount(amount);
+            } else {
+                oder.get().setAmount(1L);
+            }
+            result = buyerService.checkOrderQuantity(oder.get()).isStatus();
+            if (result) {
+                orderService.save(oder.get());
+            }
+        } else {
+            return new ResponseEntity<>("Order không tồn tại", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
 
-//
-//        Order oder = orderService.findById(idOrder).get();
-//        if (amount != 0) {
-//            oder.setAmount(amount);
-//        } else {
-//            oder.setAmount(1L);
-//        }
-//
-//        Boolean result = buyerService.checkOrderQuantity(oder).isStatus();
-//        if (result) {
-//            orderService.save(oder);
-//        }
-//        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 
@@ -119,7 +134,7 @@ public class BuyerController {
     }
 
     // xoa cart khoi nguoi dung
-    @PutMapping("cart/delete/{id}")
+    @DeleteMapping("cart/delete/{id}")
     public ResponseEntity<?> deleteOrderInCart(@PathVariable("id") Long id) {
         Optional<Buyer> buyer = buyerService.getBuyer();
         if (buyer.isPresent()) {
@@ -142,19 +157,67 @@ public class BuyerController {
         return new ResponseEntity<>("Người mua không tồn tại", HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/buy")
-    public ResponseEntity<?> buyOnCart(@RequestBody List<Cart> carts){
+    @PostMapping("/buy")
+    public ResponseEntity<?> buyOnCart(@RequestBody List<Cart> carts) {
         Optional<Buyer> buyer = buyerService.getBuyer();
-        Buyer orderBuyer = carts.get(0).getOrders().get(0).getBuyer();
-        if(buyer.isPresent()){
-            if(buyer.get().getId() == orderBuyer.getId()){
-                cartService.buyCart(carts);
-            }else {
-                return new ResponseEntity<>("Người mua không thể thay đổi giỏ hàng", HttpStatus.BAD_REQUEST);
-            }
+        if (buyer.isPresent()) {
+//            if(buyer.get().getId() == orderBuyer.getId()){
+            return new ResponseEntity<>(cartService.buyCart(carts), HttpStatus.OK);
+//            }else {
+//                return new ResponseEntity<>("Người mua không thể thay đổi giỏ hàng", HttpStatus.BAD_REQUEST);
+//            }
+        } else {
+            return new ResponseEntity<>("Người mua không tồn tại", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Người mua không tồn tại", HttpStatus.BAD_REQUEST);
-     }
+    }
+
+    @GetMapping("/notification")
+    public ResponseEntity<?> getNotification(){
+        Optional<Buyer> buyer = buyerService.getBuyer();
+        if(buyer.isPresent()){
+            List<Notification> notificationList = notificationService.findAllByBuyer(buyer.get());
+            return new ResponseEntity<>(notificationList, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>("Người mua không tồn tại", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/bill/{id}")
+    public ResponseEntity<?> getBillBuyId(@PathVariable Long id){
+        Optional<Buyer> buyer = buyerService.getBuyer();
+        if(buyer.isPresent()){
+            Bill bill = billService.checkBillOfBuyer(buyer.get(), id);
+           if( bill != null){
+               return new ResponseEntity<>(bill, HttpStatus.OK);
+           }else return new ResponseEntity<>("Bill không tồn tại", HttpStatus.BAD_REQUEST);
+        }else return new ResponseEntity<>("Người mua không tồn tại", HttpStatus.BAD_REQUEST);
+    }
+    @GetMapping("/bill")
+    public ResponseEntity<?> getAllBillOfBuyer(){
+        Optional<Buyer> buyer = buyerService.getBuyer();
+        if(buyer.isPresent()){
+            List<Bill> bills = billService.getAllBill(buyer.get());
+            return new ResponseEntity<>(bills, HttpStatus.OK);
+        }else return new ResponseEntity<>("Người mua không tồn tại", HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/bill/done")
+    public ResponseEntity<?> getAllBillDoneOfBuyer(){
+        Optional<Buyer> buyer = buyerService.getBuyer();
+        if(buyer.isPresent()){
+            List<Bill> bills = billService.getAllBillDone(buyer.get());
+            return new ResponseEntity<>(bills, HttpStatus.OK);
+        }else return new ResponseEntity<>("Người mua không tồn tại", HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/bill/cancel")
+    public ResponseEntity<?> getAllBillCancelOfBuyer(){
+        Optional<Buyer> buyer = buyerService.getBuyer();
+        if(buyer.isPresent()){
+            List<Bill> bills = billService.getAllBillCancel(buyer.get());
+            return new ResponseEntity<>(bills, HttpStatus.OK);
+        }else return new ResponseEntity<>("Người mua không tồn tại", HttpStatus.BAD_REQUEST);
+    }
 
 }
 

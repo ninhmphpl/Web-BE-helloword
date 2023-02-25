@@ -174,7 +174,7 @@ public class ProductDetailService implements IProductDetailService {
 
     @Override
     public Page<ProductDetail> findAllPageByStatus(Pageable pageable) {
-        return repository.findAllByStatus(new Status(1L, null, null), pageable);
+        return repository.findAllByStatus(new Status(3L, null, null), pageable);
     }
 
     @Override
