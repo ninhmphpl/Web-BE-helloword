@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -140,26 +141,64 @@ public class ProductDetailService implements IProductDetailService {
         return new ResponseEntity<>(repository.save(productDetail), HttpStatus.OK);
     }
 
+    public ProductDetail createProductForSeller(ProductDetail productDetail, Seller seller){
+        productDetail.setId(null);
+        productDetail.setSeller(seller);
+        productDetail.setSold(0L);
+        //>> mặc định status là 3 (nghĩa là đang bán)
+        productDetail.setStatus(new Status(3L));
+        return save(productDetail);
+    }
+
+    public ProductDetail updateProductForSeller(ProductDetail productDetail, Seller seller){
+        ProductDetail productRoot = getProductByListSeller(seller, productDetail.getId());
+        if(productRoot != null){
+            productRoot.setName(productDetail.getName());
+            productRoot.setPicture(productDetail.getPicture());
+            productRoot.setCategory(productDetail.getCategory());
+            productRoot.setDescription(productDetail.getDescription());
+            productRoot.setPrice(productDetail.getPrice());
+            productRoot.setQuantity(productDetail.getQuantity());
+            return save(productRoot);
+        }
+        return null;
+    }
+
+    private ProductDetail getProductByListSeller(Seller seller, Long productId){
+        for(ProductDetail productDetail : seller.getListProduct()){
+            if(Objects.equals(productDetail.getId(), productId)) return productDetail;
+        }
+        return null;
+    }
 
 
     @Override
-    public ProductDetail save(ProductDetail productSimple) {
-        if (productSimple.getName() == null) {
-            productSimple.setName("Tên Trống");
+    public ProductDetail save(ProductDetail product) {
+        if (product.getName() == null) {
+            product.setName("Tên Trống");
         }
-        if (productSimple.getSold() == null) {
-            productSimple.setSold(0L);
+        if (product.getSold() == null) {
+            product.setSold(0L);
         }
-        if (productSimple.getPrice() == null) {
-            productSimple.setPrice(0D);
+        if (product.getPrice() == null) {
+            product.setPrice(0D);
         }
-        if (productSimple.getAvatar() == null) {
-            productSimple.setAvatar("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-J0cRr6ptVPnQ-DZqDJxxbjowBwIbP6l1Gsau43jbVRCWbYkB2-lC9cL1T_5WCf680pc&usqp=CAU");
+        if (product.getPicture().size()==0) {
+            product.setAvatar("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-J0cRr6ptVPnQ-DZqDJxxbjowBwIbP6l1Gsau43jbVRCWbYkB2-lC9cL1T_5WCf680pc&usqp=CAU");
+        }else product.setAvatar(product.getPicture().get(0).getName());
+
+        if (product.getCategory() == null) {
+            product.setCategory(new Category(3L, null));
         }
-        if (productSimple.getCategory() == null) {
-            productSimple.setCategory(new Category(1L, null));
+        //>> lưu ảnh mới vào trong database và gán lại id sau khi lưu vào cho nó
+        List<Picture> pictureList = new ArrayList<>(product.getPicture());
+        ProductDetail productResult = repository.save(product);
+        for (Picture picture : pictureList) {
+            //>> Loại bỏ trường hợp trùng id trong database gây ra nhầm ảnh
+            picture.setProductDetail(productResult);
+            pictureRepository.save(picture);
         }
-        return repository.save(productSimple);
+        return productResult;
     }
 
     @Override

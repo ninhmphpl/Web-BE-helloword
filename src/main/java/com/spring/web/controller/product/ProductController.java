@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
@@ -64,5 +65,16 @@ public class ProductController {
         ProductDetail productDetail = new ProductDetail();
         productDetail.setId(id);
         return new ResponseEntity<>(sellerService.findByProductDetailContaining(productDetail), HttpStatus.OK);
+    }
+
+    /**
+     * Tìm sản phẩm theo id của nó
+     */
+    @GetMapping("/{along}")
+    public ResponseEntity<?> findOne(@PathVariable Long along) {
+        Optional<ProductDetail> productDetail=productDetailService.findById(along);
+        if (productDetail.isPresent()){
+            return new ResponseEntity<>(productDetail.get(), HttpStatus.OK);
+        }else return new ResponseEntity<>("Sản phẩm không còn tồn tại",HttpStatus.BAD_GATEWAY);
     }
 }
