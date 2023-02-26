@@ -193,6 +193,7 @@ public class ProductDetailService implements IProductDetailService {
         //>> lưu ảnh mới vào trong database và gán lại id sau khi lưu vào cho nó
         List<Picture> pictureList = new ArrayList<>(product.getPicture());
         ProductDetail productResult = repository.save(product);
+        pictureRepository.deleteAllByProductDetail(productResult);
         for (Picture picture : pictureList) {
             //>> Loại bỏ trường hợp trùng id trong database gây ra nhầm ảnh
             picture.setProductDetail(productResult);
