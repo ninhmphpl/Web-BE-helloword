@@ -24,4 +24,7 @@ public class Status {
   @Column(nullable = false)
   private String type;
 
+  public Status(Long id) {
+    this.id = id;
+  }
 }

@@ -199,5 +199,10 @@ public class ProductDetailService implements IProductDetailService {
         return repository.findProductByCategoryAndName(name);
     }
 
+    @Override
+    public Page<ProductDetail> findAllBySeller(Seller seller, Pageable pageable) {
+        return repository.findAllBySeller(seller, pageable);
+    }
+
 
 }

@@ -1,9 +1,6 @@
 package com.spring.web.service;
 
-import com.spring.web.model.Category;
-import com.spring.web.model.ProductDetail;
-import com.spring.web.model.SearchRequest;
-import com.spring.web.model.Status;
+import com.spring.web.model.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,7 +16,9 @@ public interface IProductDetailService extends CRUDService<ProductDetail,Long>{
 
     Page<ProductDetail> findAllPageAndCategory(Pageable pageable, Category category);
     Page<ProductDetail> findAllPageAndNameContaining(Pageable pageable, String name);
-    public List<ProductDetail> findProductByPrice(Double min, Double max);
-    public List<ProductDetail> findProductByQuantity1(Integer min, Integer max);
-    public List<ProductDetail> findAllByCategoryName(String name);
+    List<ProductDetail> findProductByPrice(Double min, Double max);
+    List<ProductDetail> findProductByQuantity1(Integer min, Integer max);
+    List<ProductDetail> findAllByCategoryName(String name);
+    Page<ProductDetail> findAllBySeller(Seller seller, Pageable pageable);
+
 }

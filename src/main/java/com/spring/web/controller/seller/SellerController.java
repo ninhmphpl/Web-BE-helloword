@@ -2,7 +2,9 @@ package com.spring.web.controller.seller;
 
 import com.spring.web.model.ProductDetail;
 import com.spring.web.model.Seller;
+import com.spring.web.model.Status;
 import com.spring.web.model.User;
+import com.spring.web.service.ISellerService;
 import com.spring.web.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,7 +25,7 @@ import static org.springframework.data.domain.Sort.Direction.ASC;
 @RequestMapping("/seller")
 public class SellerController {
     @Autowired
-    private SellerService sellerService;
+    private ISellerService sellerService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -75,5 +77,38 @@ public class SellerController {
         }
         return new ResponseEntity<>(sellerList, HttpStatus.OK);
     }
+
+    @GetMapping("/product")
+    public ResponseEntity<?> findAllProductBySellerPage(Pageable pageable){
+        Optional<Seller> seller = sellerService.getSeller();
+        if(seller.isPresent()){
+            Page<ProductDetail> productDetailPage = productDetailService.findAllBySeller(seller.get(), pageable);
+            return new ResponseEntity<>(productDetailPage, HttpStatus.OK);
+        }else return new ResponseEntity<>("Người bán không còn tồn tại", HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<?> stopSellProduct(@PathVariable("id") Long id) {
+        Optional<Seller> seller = sellerService.getSeller();
+        if(seller.isPresent()){
+            ProductDetail productDetail = sellerService.changeStatusProduct(seller.get(), id, 4L);
+            if(productDetail != null){
+                return new ResponseEntity<>(productDetail, HttpStatus.OK);
+            }else return new ResponseEntity<>("Sản phẩm không tại trong danh sách người người bán", HttpStatus.BAD_REQUEST);
+        }else return new ResponseEntity<>("Người mua không tồn tại", HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/product/open/{id}")
+    public ResponseEntity<?> openSellProduct(@PathVariable("id") Long id) {
+        Optional<Seller> seller = sellerService.getSeller();
+        if(seller.isPresent()){
+            ProductDetail productDetail = sellerService.changeStatusProduct(seller.get(), id, 3L);
+            if(productDetail != null){
+                return new ResponseEntity<>(productDetail, HttpStatus.OK);
+            }else return new ResponseEntity<>("Sản phẩm không tại trong danh sách người người bán", HttpStatus.BAD_REQUEST);
+        }else return new ResponseEntity<>("Người mua không tồn tại", HttpStatus.BAD_REQUEST);
+    }
+
+
 
 }

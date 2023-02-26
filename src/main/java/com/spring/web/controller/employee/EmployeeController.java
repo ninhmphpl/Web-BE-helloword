@@ -81,7 +81,7 @@ public class EmployeeController {
     public Object delete(@PathVariable("along") Long along) {
         Optional<ProductDetail> productDetail = productDetailService.findById(along);
         if (productDetail.isPresent()) {
-            ProductDetail result = productDetailService.deleteProductSetStatus(along, new Status(2L, null,null));
+            ProductDetail result = productDetailService.deleteProductSetStatus(along, new Status(4L, null,null));
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
         return "404, không tìm thấy sản phẩm";

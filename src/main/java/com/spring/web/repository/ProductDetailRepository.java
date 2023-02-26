@@ -2,6 +2,7 @@ package com.spring.web.repository;
 
 import com.spring.web.model.Category;
 import com.spring.web.model.ProductDetail;
+import com.spring.web.model.Seller;
 import com.spring.web.model.Status;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,5 +31,7 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
     List<ProductDetail> findProductByQuantity(Integer min,Integer max);
 
     Page<ProductDetail> findAllByStatus(Status status, Pageable pageable);
+
+    Page<ProductDetail> findAllBySeller(Seller seller, Pageable pageable);
 
 }
