@@ -1,11 +1,10 @@
 package com.spring.web.service.impl;
 
-import com.spring.web.model.Bill;
-import com.spring.web.model.Buyer;
-import com.spring.web.model.OrderPayment;
+import com.spring.web.model.*;
 import com.spring.web.repository.BillRepository;
 import com.spring.web.repository.OrderPaymentRepository;
 import com.spring.web.service.IBillService;
+import com.spring.web.service.INotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +16,9 @@ public class BillService implements IBillService {
     private BillRepository billRepository;
     @Autowired
     private OrderPaymentRepository orderPaymentRepository;
+
+    @Autowired
+    private INotificationService notificationService;
     @Override
     public Optional<Bill> findById(Long id) {
         return billRepository.findById(id);
@@ -71,6 +73,29 @@ public class BillService implements IBillService {
 
     public List<Bill> getAllBillCancel(Buyer buyer){
         return getAllByStatus(buyer, 7L);
+    }
+
+    @Override
+    public Bill setStatusBillSeller(Seller seller, Long billId, Long statusId, String note) {
+        Bill bill = findIdBillOnList(seller.getBill(), billId);
+        if(bill != null){
+            bill.setStatus(new Status(statusId));
+            bill.setNote(note);
+            Bill billResult =  billRepository.save(bill);
+            Notification notificationBuyer = new Notification(bill.getBuyer(), billResult);
+            Notification notificationSeller = new Notification(bill.getSeller(), billResult);
+            notificationService.save(notificationSeller);
+            notificationService.save(notificationBuyer);
+            return billResult;
+        }
+        return null;
+    }
+
+    private Bill findIdBillOnList(List<Bill> list, Long id){
+        for (Bill bill : list){
+            if (Objects.equals(bill.getId(), id)) return bill;
+        }
+        return null;
     }
 
     public List<Bill> getAllByStatus(Buyer buyer, long statusId){

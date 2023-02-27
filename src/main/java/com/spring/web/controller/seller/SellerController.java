@@ -1,9 +1,7 @@
 package com.spring.web.controller.seller;
 
-import com.spring.web.model.ProductDetail;
-import com.spring.web.model.Seller;
-import com.spring.web.model.Status;
-import com.spring.web.model.User;
+import com.spring.web.model.*;
+import com.spring.web.service.IBillService;
 import com.spring.web.service.ISellerService;
 import com.spring.web.service.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +30,8 @@ public class SellerController {
     private UserService userService;
     @Autowired
     private ProductDetailService productDetailService;
+    @Autowired
+    private IBillService billService;
 
 
     // check User tồn tại hay chưa
@@ -60,14 +60,6 @@ public class SellerController {
             return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
         }
         return new ResponseEntity<>(page, HttpStatus.OK);
-    }
-
-    @PostMapping("/create-product/{id}")
-    public Object createProduct(@RequestBody ProductDetail productDetail,
-                                @PathVariable Long id) {
-        Optional<Seller> seller = sellerService.findById(id);
-        if (!seller.isPresent()) return "404, Người bán này không còn tồn tại trong hệ thống";
-        return productDetailService.createProductByEmployee(productDetail, id);
     }
 
     @GetMapping("/name/{name}")
@@ -137,6 +129,73 @@ public class SellerController {
             return new ResponseEntity<>(productResult, HttpStatus.OK);
         } else return new ResponseEntity<>("Người bán không tồn tại", HttpStatus.BAD_REQUEST);
     }
+    @PutMapping("/editPicture/{id}")
+    public ResponseEntity<?> editPictureProduct(@RequestBody List<Picture> pictures,@PathVariable Long id){
+        Optional<Seller> seller = sellerService.getSeller();
+        if (seller.isPresent()) {
+            if (!sellerService.checkProductIdOfSeller(id, seller.get())) return new ResponseEntity<>("Người mua không có quyền thay đổi sản phẩm", HttpStatus.BAD_REQUEST);
+            ProductDetail productResult = productDetailService.updateImage(id, pictures);
+            return new ResponseEntity<>(productResult, HttpStatus.OK);
+        } else return new ResponseEntity<>("Người bán không tồn tại", HttpStatus.BAD_REQUEST);
+    }
+    //>> Lấy danh sách đơn hàng của người bán
+    @GetMapping("/bill")
+    public ResponseEntity<?> getAllBill (){
+        Optional<Seller> seller = sellerService.getSeller();
+        if (seller.isPresent()) {
+            List<Bill> bills = sellerService.getAllBillSortDesc(seller.get());
+            return new ResponseEntity<>(bills, HttpStatus.OK);
+        } else return new ResponseEntity<>("Người bán không tồn tại", HttpStatus.BAD_REQUEST);
+
+    }
+    @GetMapping("/bill/wait")
+    public ResponseEntity<?> getAllBillWait (){
+        Optional<Seller> seller = sellerService.getSeller();
+        if (seller.isPresent()) {
+            List<Bill> bills = sellerService.getAllByStatus(seller.get(), 5L);
+            return new ResponseEntity<>(bills, HttpStatus.OK);
+        } else return new ResponseEntity<>("Người bán không tồn tại", HttpStatus.BAD_REQUEST);
+
+    }
+    @GetMapping("/bill/done")
+    public ResponseEntity<?> getAllBillDone (){
+        Optional<Seller> seller = sellerService.getSeller();
+        if (seller.isPresent()) {
+            List<Bill> bills = sellerService.getAllByStatus(seller.get(), 6L);
+            return new ResponseEntity<>(bills, HttpStatus.OK);
+        } else return new ResponseEntity<>("Người bán không tồn tại", HttpStatus.BAD_REQUEST);
+
+    }
+    @GetMapping("/bill/cancel")
+    public ResponseEntity<?> getAllBillCancel (){
+        Optional<Seller> seller = sellerService.getSeller();
+        if (seller.isPresent()) {
+            List<Bill> bills = sellerService.getAllByStatus(seller.get(), 7L);
+            return new ResponseEntity<>(bills, HttpStatus.OK);
+        } else return new ResponseEntity<>("Người bán không tồn tại", HttpStatus.BAD_REQUEST);
+
+    }
+
+    //>> Đồng ý đơn hàng
+    @GetMapping("/bill/done/{id}")
+    public ResponseEntity<?> doneBill (@PathVariable Long id){
+        Optional<Seller> seller = sellerService.getSeller();
+        if (seller.isPresent()) {
+            Bill bill = billService.setStatusBillSeller(seller.get(), id, 6L, null);
+            return new ResponseEntity<>(bill, HttpStatus.OK);
+        } else return new ResponseEntity<>("Người bán không tồn tại", HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/bill/cancel/{id}/{note}")
+    public ResponseEntity<?> cancelBill (@PathVariable Long id, @PathVariable String note){
+        Optional<Seller> seller = sellerService.getSeller();
+        if (seller.isPresent()) {
+            Bill bill = billService.setStatusBillSeller(seller.get(), id, 7L, note);
+            return new ResponseEntity<>(bill, HttpStatus.OK);
+        } else return new ResponseEntity<>("Người bán không tồn tại", HttpStatus.BAD_REQUEST);
+    }
+
+
 
 
 }

@@ -1,6 +1,7 @@
 package com.spring.web.service.impl;
 
 import com.spring.web.model.*;
+import com.spring.web.model.pojo.ArrayTool;
 import com.spring.web.repository.AddressRepository;
 import com.spring.web.repository.SellerRepository;
 import com.spring.web.repository.UserRepository;
@@ -86,6 +87,14 @@ public class SellerService implements ISellerService {
     }
 
     @Override
+    public boolean checkProductIdOfSeller(Long productId, Seller seller) {
+        for(ProductDetail productDetail : seller.getListProduct()){
+            if(Objects.equals(productDetail.getId(), productId)) return true;
+        }
+        return false;
+    }
+
+    @Override
     public ProductDetail changeStatusProduct(Seller seller, Long productId, Long statusId) {
         List<ProductDetail> productDetails = seller.getListProduct();
         for(ProductDetail productDetail : productDetails){
@@ -97,6 +106,24 @@ public class SellerService implements ISellerService {
         return null;
     }
 
+    @Override
+    public List<Bill> getAllBillSortDesc(Seller seller) {
+        for(Bill bill : seller.getBill()){
+            bill.setBill();
+        }
+        return new ArrayTool<Bill>().reverse(seller.getBill());
+    }
+
+    public List<Bill> getAllByStatus(Seller seller, long statusId){
+        List<Bill> bills = getAllBillSortDesc(seller);
+        for(int i = 0 ; i < bills.size() ; i ++){
+            if(bills.get(i).getStatus().getId() != statusId){
+                bills.remove(i);
+                i--;
+            }
+        }
+        return bills;
+    }
 
     @Override
     public Page<Seller> findAllSellerPage(Pageable pageable) {
@@ -111,8 +138,7 @@ public class SellerService implements ISellerService {
 
     @Override
     public List<Seller> finaAllSellerByNameContaining(String name) {
-        List<Seller> sellerList = sellerRepository.findAllByNameContaining(name);
-        return sellerList;
+        return sellerRepository.findAllByNameContaining(name);
     }
 
 }

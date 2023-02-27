@@ -1,5 +1,6 @@
 package com.spring.web.service;
 
+import com.spring.web.model.Bill;
 import com.spring.web.model.ProductDetail;
 import com.spring.web.model.Seller;
 import org.springframework.data.domain.Page;
@@ -15,8 +16,11 @@ public interface ISellerService extends CRUDService<Seller , Long>{
 
     Object create(Seller seller, String username, String password);
     Optional<Seller> getSeller();
+    boolean checkProductIdOfSeller(Long productId, Seller seller);
 
     ProductDetail changeStatusProduct(Seller seller, Long productId, Long statusId);
+    List<Bill> getAllBillSortDesc(Seller seller);
+    List<Bill> getAllByStatus(Seller seller, long statusId);
 
 
 }

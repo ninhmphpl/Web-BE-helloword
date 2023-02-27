@@ -1,12 +1,10 @@
 package com.spring.web.service.impl;
 
-import com.spring.web.model.Employee;
-import com.spring.web.model.Role;
-import com.spring.web.model.Status;
-import com.spring.web.model.User;
+import com.spring.web.model.*;
 import com.spring.web.repository.EmployeeRepository;
 import com.spring.web.repository.UserRepository;
 import com.spring.web.service.IEmployeeService;
+import com.spring.web.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +21,8 @@ public class EmployeeService implements IEmployeeService {
     private EmployeeRepository repository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private IUserService userService;
 
 
     @Override
@@ -70,9 +70,10 @@ public class EmployeeService implements IEmployeeService {
     public Page <Employee> findAllByNameEmployee(String name,Pageable pageable) {
         return repository.findEmployeeByNameContaining(name,pageable);
     }
-//    public EmployeeRender render(Employee employee){
-//        return new EmployeeRender(repository.findAll(),
-//                genderRepository.findAll(), positionRepository.findAll(),
-//                employee);
-//    }
+
+    @Override
+    public Optional<Employee> getEmployee() {
+        User user = userService.getUserLogging();
+        return repository.findByUser(user);
+    }
 }

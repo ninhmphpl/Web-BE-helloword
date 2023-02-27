@@ -30,6 +30,8 @@ public class Bill {
     @Transient //>> tổng giá của tất cả các order trong order list
     private Double total ;
 
+    private String note;
+
     @JsonIgnore
     @ManyToOne
     private Buyer buyer;

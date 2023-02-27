@@ -18,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductDetail{
+
     @Column(nullable = false)
     private String description ;
 
@@ -57,6 +58,10 @@ public class ProductDetail{
     @ManyToOne
     @JoinColumn(nullable = false)
     private Status status;
+
+    public ProductDetail(Long id) {
+        this.id = id;
+    }
 }
 
 
