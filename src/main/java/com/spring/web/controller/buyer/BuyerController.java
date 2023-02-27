@@ -219,5 +219,15 @@ public class BuyerController {
         }else return new ResponseEntity<>("Người mua không tồn tại", HttpStatus.BAD_REQUEST);
     }
 
+    @PostMapping("/password/{old}/{newP}")
+    public ResponseEntity<?> changePassword(@PathVariable String old, @PathVariable String newP){
+        Optional<Buyer> buyer = buyerService.getBuyer();
+        if(buyer.isPresent()){
+            List<Bill> bills = billService.getAllBillCancel(buyer.get());
+            return new ResponseEntity<>(bills, HttpStatus.OK);
+        }else return new ResponseEntity<>("Người mua không tồn tại", HttpStatus.BAD_REQUEST);
+
+    }
+
 }
 
