@@ -4,6 +4,7 @@ import com.spring.web.model.*;
 import com.spring.web.model.pojo.Cart;
 import com.spring.web.service.*;
 import org.aspectj.weaver.ast.Or;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,7 @@ public class CartService {
     
     public List<Cart> getCart(Buyer buyer) {
         List<Order> orders = buyer.getCart();
+        orders = fillterOrder(orders);
         List<Cart> carts = new ArrayList<>();
         while (orders.size() > 0){
             boolean flag = false;
@@ -54,6 +56,20 @@ public class CartService {
             carts.add(cart);
         }
         return carts;
+    }
+
+    @NotNull
+    private static List<Order> fillterOrder(List<Order> orders) {
+        List<Order> ordersOn = new ArrayList<>();
+        for(Order order : orders){
+            boolean checkUser = order.getProductDetail().getSeller().getUser().getStatus().getId() == 1L;
+            boolean checkProduct = order.getProductDetail().getStatus().getId() == 3L;
+            if(checkProduct && checkUser ){
+                ordersOn.add(order);
+            }
+        }
+        orders = ordersOn;
+        return orders;
     }
 
     //>> sau khi có 1 danh sách đơn hàng của buyer gửi lên,

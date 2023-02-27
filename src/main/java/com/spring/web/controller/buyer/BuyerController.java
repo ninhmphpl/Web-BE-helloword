@@ -161,11 +161,7 @@ public class BuyerController {
     public ResponseEntity<?> buyOnCart(@RequestBody List<Cart> carts) {
         Optional<Buyer> buyer = buyerService.getBuyer();
         if (buyer.isPresent()) {
-//            if(buyer.get().getId() == orderBuyer.getId()){
             return new ResponseEntity<>(cartService.buyCart(carts), HttpStatus.OK);
-//            }else {
-//                return new ResponseEntity<>("Người mua không thể thay đổi giỏ hàng", HttpStatus.BAD_REQUEST);
-//            }
         } else {
             return new ResponseEntity<>("Người mua không tồn tại", HttpStatus.BAD_REQUEST);
         }
