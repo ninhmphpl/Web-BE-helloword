@@ -70,7 +70,7 @@ public class BuyerService implements IBuyerService {
 
     }
 
-    public Object findAllOrderInCart(Long id, Long quantity) {
+    public ResponseEntity<?> findAllOrderInCart(Long id, Long quantity) {
         Optional<Buyer> buyer = getBuyer();
         Optional<ProductDetail> productDetail = productDetailRepository.findById(id);
         Status status = productDetail.get().getSeller().getUser().getStatus();
@@ -84,12 +84,12 @@ public class BuyerService implements IBuyerService {
             for (Order order : buyer.get().getCart()) {
                 if (productDetail.get().getId() == order.getProductDetail().getId()) {
                     order.setAmount(order.getAmount() + quantity);
-                    return orderService.save(order);
+                    return new ResponseEntity<>(orderService.save(order), HttpStatus.OK);
                 }
             }
             Order order = new Order(null, productDetail.get(), quantity, 0D, buyer.get());
             order.setTotal(order.getTotal());
-            return orderService.save(order);
+            return new ResponseEntity<>(orderService.save(order), HttpStatus.OK);
         }
 
 

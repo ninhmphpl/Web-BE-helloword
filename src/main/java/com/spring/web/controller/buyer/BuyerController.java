@@ -42,7 +42,7 @@ public class BuyerController {
 
         if (productDetail.isPresent()) {
             if (productDetail.get().getQuantity() > quantity) {
-                return new ResponseEntity<>(buyerService.findAllOrderInCart(id, quantity), HttpStatus.OK);
+                return buyerService.findAllOrderInCart(id, quantity);
             } else {
                 return new ResponseEntity<>("400,Quantity Exceeds Stock ", HttpStatus.OK);
             }
