@@ -153,9 +153,10 @@ public class ProductDetailService implements IProductDetailService {
 
     @Override
     public ProductDetail createProductForSeller(ProductDetail productDetail, Seller seller, Employee employee) {
+        ProductDetail productDetail1 = createProductForSeller(productDetail, seller);
         Notification notificationSeller = new Notification(seller,employee,productDetail, "được tạo");
         notificationService.save(notificationSeller);
-        return createProductForSeller(productDetail, seller);
+        return productDetail1;
     }
     @Override
     public ProductDetail updateProductForSeller(ProductDetail productDetail, Seller seller){
