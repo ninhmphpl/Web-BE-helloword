@@ -1,6 +1,7 @@
 package com.spring.web.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.spring.web.model.pojo.ArrayTool;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -53,6 +55,14 @@ public class Seller {
 
   @OneToMany(mappedBy = "seller")
   private List<Notification> notifications;
+
+  public List<Notification> setValueNotification(){
+    this.notifications = new ArrayTool<Notification>().reverse(notifications);
+    for(Notification notification : notifications){
+      notification.getURL();
+    }
+    return notifications;
+  }
 
 
 }

@@ -72,6 +72,21 @@ public class SellerController {
         }
         return new ResponseEntity<>(sellerList, HttpStatus.OK);
     }
+    @GetMapping("/info")
+    public ResponseEntity<?> getInfoSeller(){
+        Optional<Seller> seller = sellerService.getSeller();
+        if(seller.isPresent()){
+            return new ResponseEntity<>(seller.get(), HttpStatus.OK);
+        }else return new ResponseEntity<>("Người bán này không tồn tại", HttpStatus.BAD_REQUEST);
+    }
+    @GetMapping("/notification")
+    public ResponseEntity<?> getNotification(){
+        Optional<Seller> seller = sellerService.getSeller();
+        if(seller.isPresent()){
+            List<Notification> notifications = seller.get().setValueNotification();
+            return new ResponseEntity<>(notifications, HttpStatus.OK);
+        }else return new ResponseEntity<>("Người bán này không tồn tại", HttpStatus.BAD_REQUEST);
+    }
 
     //>> Lấy danh sách sản phẩm của người bán
     @GetMapping("/product")

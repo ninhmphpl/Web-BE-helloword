@@ -71,12 +71,7 @@ public class Notification {
 
     public String getURL(){
         if(bill != null){
-            if(seller != null){
-                return this.url = "/seller/bill/" + bill.getId();
-            }
-            if(buyer != null){
-                return this.url = "/bill/" + bill.getId();
-            }
+            url = "/bill/" + bill.getId();
         }
         return null;
     }
